@@ -118,6 +118,7 @@
     <Compile Include="Helpers\JsonNetworkIgnoreSerializationAttribute.cs" />
     <Compile Include="Helpers\JsonDCSPropertiesResolver.cs" />
     <Compile Include="Helpers\JsonNetworkPropertiesResolver.cs" />
+    <Compile Include="Helpers\Link16Helper.cs" />
     <Compile Include="Helpers\ListHelper.cs" />
     <Compile Include="Helpers\LoggingHelper.cs" />
     <Compile Include="Helpers\VolumeConversionHelper.cs" />
