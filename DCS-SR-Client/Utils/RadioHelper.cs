@@ -69,74 +69,94 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Utils
             bool inLimit = true;
             const double MHz = 1000000;
 
+            var radio = GetRadio(radioId);
+            
             if (inMHz)
             {
                 frequency = frequency * MHz;
             }
 
-            var radio = GetRadio(radioId);
-
             if (radio != null && radioId > 0)
             {
+                switch (radio)
+                {
+                    case RadioInformation x when x.freqMode == RadioInformation.FreqMode.OVERLAY 
+                                    && x.modulation == RadioInformation.Modulation.DISABLED 
+                                    && x.modulation == RadioInformation.Modulation.INTERCOM:
+                        if (delta)
+                        {
+                            if (GlobalSettingsStore.Instance.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.RotaryStyleIncrement))
+                            {
+                                // Easier to simply shift the decimal place value to the ones position for finding numeral at specific position
+                                double adjustedFrequency = Math.Abs((int)Math.Round(radio.freq / frequency));
+
+                                double deltaPosition = (adjustedFrequency %  10) - (adjustedFrequency % 1) / 1; // calculate the value of the position where the delta will be applied
+                                double rollOverValue = frequency < 0 ? 0 : 9;
+                                double futureValue = frequency + radio.freq; // used for checking 10Mhz increments 
+
+                                if (Math.Abs(frequency) <= 1000000)
+                                {
+                                    frequency = deltaPosition == rollOverValue ? frequency *= -9 : frequency;
+                                }
+                                else if (frequency < 0 && radio.freqMin > futureValue)
+                                {
+                                    frequency = 0;
+                                }
+                                else if (futureValue > radio.freqMax)
+                                {
+                                    frequency = 0;
+                                }
+                            }
+                            
+                            radio.freq = (int)Math.Round(radio.freq + frequency);
+                        }
+                        else
+                        {
+                            radio.freq = (int)Math.Round(frequency);
+                        }
+
+                        //make sure we're not over or under a limit
+                        if (radio.freq > radio.freqMax)
+                        {
+                            inLimit = false;
+                            radio.freq = radio.freqMax;
+                        }
+                        else if (radio.freq < radio.freqMin)
+                        {
+                            inLimit = false;
+                            radio.freq = radio.freqMin;
+                        }
+
+                        //set to no channel
+                        radio.channel = -1;
+
+                        //make radio data stale to force resysnc
+                        ClientStateSingleton.Instance.LastSent = 0;
+                        break;
+                    
+                    case RadioInformation x when x.modulation == RadioInformation.Modulation.MIDS:
+                        
+                        
+                        
+                        //set to no channel
+                        radio.channel = -1;
+
+                        //make radio data stale to force resysnc
+                        ClientStateSingleton.Instance.LastSent = 0;
+                        break;
+                    
+                    default:
+                        break;
+                    
+                }
+                
+                
+                
                 if (radio.modulation != RadioInformation.Modulation.DISABLED
                     && radio.modulation != RadioInformation.Modulation.INTERCOM
                     && radio.freqMode == RadioInformation.FreqMode.OVERLAY)
                 {
-                    if (delta)
-                    {
-                        //ignore as its done via set channel which is not delta
-                        if (radio.modulation == RadioInformation.Modulation.MIDS)
-                        {
-                            return false;
-                        }
-
-                        if (GlobalSettingsStore.Instance.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.RotaryStyleIncrement))
-                        {
-                            // Easier to simply shift the decimal place value to the ones position for finding numeral at specific position
-                            double adjustedFrequency = Math.Abs((int)Math.Round(radio.freq / frequency));
-
-                            double deltaPosition = (adjustedFrequency %  10) - (adjustedFrequency % 1) / 1; // calculate the value of the position where the delta will be applied
-                            double rollOverValue = frequency < 0 ? 0 : 9;
-                            double futureValue = frequency + radio.freq; // used for checking 10Mhz increments 
-
-                            if (Math.Abs(frequency) <= 1000000)
-                            {
-                                frequency = deltaPosition == rollOverValue ? frequency *= -9 : frequency;
-                            }
-                            else if (frequency < 0 && radio.freqMin > futureValue)
-                            {
-                                frequency = 0;
-                            }
-                            else if (futureValue > radio.freqMax)
-                            {
-                                frequency = 0;
-                            }
-                        }
-                        
-                        radio.freq = (int)Math.Round(radio.freq + frequency);
-                    }
-                    else
-                    {
-                        radio.freq = (int)Math.Round(frequency);
-                    }
-
-                    //make sure we're not over or under a limit
-                    if (radio.freq > radio.freqMax)
-                    {
-                        inLimit = false;
-                        radio.freq = radio.freqMax;
-                    }
-                    else if (radio.freq < radio.freqMin)
-                    {
-                        inLimit = false;
-                        radio.freq = radio.freqMin;
-                    }
-
-                    //set to no channel
-                    radio.channel = -1;
-
-                    //make radio data stale to force resysnc
-                    ClientStateSingleton.Instance.LastSent = 0;
+                    
                 }
             }
             return inLimit;
