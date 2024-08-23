@@ -144,43 +144,41 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.RadioOverlayWindow
         {
             if (enable)
             {
+                Up10.Visibility = Visibility.Visible;
+                Up1.Visibility = Visibility.Visible;
+                Up01.Visibility = Visibility.Visible;
+                
+                Down10.Visibility = Visibility.Visible;
+                Down1.Visibility = Visibility.Visible;
+                Down01.Visibility = Visibility.Visible;
+                
+                Up10.IsEnabled = true;
+                Up1.IsEnabled = true;
+                Up01.IsEnabled = true;
+                
+                Down10.IsEnabled = true;
+                Down1.IsEnabled = true;
+                Down01.IsEnabled = true;
+                
                 if (!mids)
                 {
-                    Up10.Visibility = Visibility.Visible;
-                    Up1.Visibility = Visibility.Visible;
-                    Up01.Visibility = Visibility.Visible;
                     Up001.Visibility = Visibility.Visible;
                     Up0001.Visibility = Visibility.Visible;
-
-                    Down10.Visibility = Visibility.Visible;
-                    Down1.Visibility = Visibility.Visible;
-                    Down01.Visibility = Visibility.Visible;
+                    
                     Down001.Visibility = Visibility.Visible;
                     Down0001.Visibility = Visibility.Visible;
-
-                    Up10.IsEnabled = true;
-                    Up1.IsEnabled = true;
-                    Up01.IsEnabled = true;
+                    
                     Up001.IsEnabled = true;
                     Up0001.IsEnabled = true;
-
-                    Down10.IsEnabled = true;
-                    Down1.IsEnabled = true;
-                    Down01.IsEnabled = true;
+                    
                     Down001.IsEnabled = true;
                     Down0001.IsEnabled = true;
                 }
                 else
                 {
-                    Up10.Visibility = Visibility.Hidden;
-                    Up1.Visibility = Visibility.Hidden;
-                    Up01.Visibility = Visibility.Hidden;
                     Up001.Visibility = Visibility.Hidden;
                     Up0001.Visibility = Visibility.Hidden;
-
-                    Down10.Visibility = Visibility.Hidden;
-                    Down1.Visibility = Visibility.Hidden;
-                    Down01.Visibility = Visibility.Hidden;
+                    
                     Down001.Visibility = Visibility.Hidden;
                     Down0001.Visibility = Visibility.Hidden;
                 }

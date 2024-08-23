@@ -105,8 +105,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.AwacsRadioOverlayWindow
                 RadioFrequency.Text = "";
             }
         }
-
-
+        
         private void Up0001_Click(object sender, RoutedEventArgs e)
         {
             RadioHelper.UpdateRadioFrequency(0.001, RadioId);
@@ -197,43 +196,41 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.AwacsRadioOverlayWindow
         {
             if (enable)
             {
+                Up10.Visibility = Visibility.Visible;
+                Up1.Visibility = Visibility.Visible;
+                Up01.Visibility = Visibility.Visible;
+                
+                Down10.Visibility = Visibility.Visible;
+                Down1.Visibility = Visibility.Visible;
+                Down01.Visibility = Visibility.Visible;
+                
+                Up10.IsEnabled = true;
+                Up1.IsEnabled = true;
+                Up01.IsEnabled = true;
+                
+                Down10.IsEnabled = true;
+                Down1.IsEnabled = true;
+                Down01.IsEnabled = true;
+                
                 if (!mids)
                 {
-                    Up10.Visibility = Visibility.Visible;
-                    Up1.Visibility = Visibility.Visible;
-                    Up01.Visibility = Visibility.Visible;
                     Up001.Visibility = Visibility.Visible;
                     Up0001.Visibility = Visibility.Visible;
-
-                    Down10.Visibility = Visibility.Visible;
-                    Down1.Visibility = Visibility.Visible;
-                    Down01.Visibility = Visibility.Visible;
+                    
                     Down001.Visibility = Visibility.Visible;
                     Down0001.Visibility = Visibility.Visible;
-
-                    Up10.IsEnabled = true;
-                    Up1.IsEnabled = true;
-                    Up01.IsEnabled = true;
+                    
                     Up001.IsEnabled = true;
                     Up0001.IsEnabled = true;
-
-                    Down10.IsEnabled = true;
-                    Down1.IsEnabled = true;
-                    Down01.IsEnabled = true;
+                    
                     Down001.IsEnabled = true;
                     Down0001.IsEnabled = true;
                 }
                 else
                 {
-                    Up10.Visibility = Visibility.Hidden;
-                    Up1.Visibility = Visibility.Hidden;
-                    Up01.Visibility = Visibility.Hidden;
                     Up001.Visibility = Visibility.Hidden;
                     Up0001.Visibility = Visibility.Hidden;
-
-                    Down10.Visibility = Visibility.Hidden;
-                    Down1.Visibility = Visibility.Hidden;
-                    Down01.Visibility = Visibility.Hidden;
+                    
                     Down001.Visibility = Visibility.Hidden;
                     Down0001.Visibility = Visibility.Hidden;
                 }
@@ -366,14 +363,13 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.AwacsRadioOverlayWindow
                         RadioActive.Fill = new SolidColorBrush(Colors.Orange);
                     }
                 }
-
+                
                 if (currentRadio == null || currentRadio.modulation == RadioInformation.Modulation.DISABLED) // disabled
                 {
                     RadioActive.Fill = new SolidColorBrush(Colors.Red);
                     RadioLabel.Text = Properties.Resources.OverlayNoRadio;
                     RadioFrequency.Text = Properties.Resources.ValueUnknown;
                     RadioMetaData.Text = "";
-
 
                     RadioVolume.IsEnabled = false;
 
@@ -389,49 +385,35 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.AwacsRadioOverlayWindow
                     RadioFrequency.Text = Properties.Resources.OverlayIntercom;
                     RadioMetaData.Text = "";
                 }
-                else if (currentRadio.modulation == RadioInformation.Modulation.MIDS) //MIDS
-                {
-                    RadioFrequency.Text = Properties.Resources.OverlayMIDS;
-                    if (currentRadio.channel >= 0)
-                    {
-                        RadioMetaData.Text = " " + Client.Properties.Resources.OverlayChannelPrefix + " " + currentRadio.channel;
-                    }
-                    else
-                    {
-                        RadioMetaData.Text = " " + Properties.Resources.ValueOFF;
-                    }
-  
-                }
                 else
                 {
                     if (!RadioFrequency.IsFocused
                         || currentRadio.freqMode == RadioInformation.FreqMode.COCKPIT
                         || currentRadio.modulation == RadioInformation.Modulation.DISABLED)
                     {
-                        RadioFrequency.Text =
-                            (currentRadio.freq / MHz).ToString("0.000",
-                                CultureInfo.InvariantCulture); //make number UK / US style with decimals not commas!
+                        switch (currentRadio.modulation)
+                        {
+                            case RadioInformation.Modulation.MIDS:
+                                RadioFrequency.Text = Link16Helper.FrequencyToLink16(currentRadio.freq).ToString();
+                                break;
+                            
+                            default:
+                                RadioFrequency.Text = (currentRadio.freq / MHz).ToString("0.000",
+                                        CultureInfo.InvariantCulture); //make number UK / US style with decimals not commas!  
+                                break;
+                        }
                     }
 
-                    if (currentRadio.modulation == RadioInformation.Modulation.AM)
+                    
+                    switch(currentRadio.modulation)
                     {
-                        RadioMetaData.Text = "AM";
-                    }
-                    else if (currentRadio.modulation == RadioInformation.Modulation.FM)
-                    {
-                        RadioMetaData.Text = "FM";
-                    }
-                    else if (currentRadio.modulation == RadioInformation.Modulation.SINCGARS)
-                    {
-                        RadioMetaData.Text = "SG";
-                    }
-                    else if (currentRadio.modulation == RadioInformation.Modulation.HAVEQUICK)
-                    {
-                        RadioMetaData.Text = "HQ";
-                    }
-                    else
-                    {
-                        RadioMetaData.Text += "";
+                        case RadioInformation.Modulation.AM: RadioMetaData.Text = "AM"; break;
+                        case RadioInformation.Modulation.FM: RadioMetaData.Text = "FM"; break;
+                        case RadioInformation.Modulation.SINCGARS: RadioMetaData.Text = "SG"; break;
+                        case RadioInformation.Modulation.HAVEQUICK: RadioMetaData.Text = "HQ"; break;
+                        case RadioInformation.Modulation.MIDS: RadioMetaData.Text = "MIDS"; break;
+                        
+                        default: RadioMetaData.Text = ""; break;
                     }
 
                     if (currentRadio.secFreq > 100)
@@ -452,7 +434,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.AwacsRadioOverlayWindow
                     {
                         RadioFrequency.Text += " RX";
                     }
-
                 }
                 RadioLabel.Text = dcsPlayerRadioInfo.radios[RadioId].name;
 
