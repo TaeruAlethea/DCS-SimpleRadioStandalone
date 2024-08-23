@@ -139,7 +139,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.RadioOverlayWindow.Preset
                        {
                            Channel = chn,
                            Text = "MIDS " + chn,
-                           Value = (chn * 100000.0) + (1030.0 * 1000000.0)
+                           Value = (chn * Link16Helper.FreqSeperation) + Link16Helper.BaseFreq
                        });
                    }
 
