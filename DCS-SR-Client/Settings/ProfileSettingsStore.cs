@@ -70,6 +70,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         AMCollisionVolume,
         AmbientCockpitNoiseEffect,
         AmbientCockpitNoiseEffectVolume,
+        AmbientCockpitIntercomNoiseEffect,
+        DisableExpansionRadios
     }
 
     public class ProfileSettingsStore
@@ -141,6 +143,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 
             {ProfileSettingsKeys.AmbientCockpitNoiseEffect.ToString(), "true"},
             {ProfileSettingsKeys.AmbientCockpitNoiseEffectVolume.ToString(), "1.0"}, //relative volume as the incoming volume is variable
+            {ProfileSettingsKeys.AmbientCockpitIntercomNoiseEffect.ToString(), "false"},
+            {ProfileSettingsKeys.DisableExpansionRadios.ToString(), "false"},
         };
 
 

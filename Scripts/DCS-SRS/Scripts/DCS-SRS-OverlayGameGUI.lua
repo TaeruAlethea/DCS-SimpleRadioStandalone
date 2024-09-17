@@ -1,9 +1,9 @@
--- Version 2.1.0.2
+-- Version 2.1.0.10
 -- Make sure you COPY this file to the same location as the Export.lua as well! 
 -- Otherwise the Overlay will not work
 
 
-net.log("Loading - DCS-SRS Overlay GameGUI - Ciribob: 2.1.0.2 ")
+net.log("Loading - DCS-SRS Overlay GameGUI - Ciribob: 2.1.0.10 ")
 
 local base = _G
 
@@ -38,6 +38,7 @@ local _modes = {
     hidden = "hidden",
     minimum = "minimum",
     minimum_vol =  "minimum_vol",
+    txrx_only = "txrx_only",
     full = "full",
 }
 
@@ -176,7 +177,7 @@ function srsOverlay.updateRadio()
         --IFF STATUS{"control":1,"expansion":false,"mode1":51,"mode3":7700,"mode4":1,"status":2}
 
         -- Handle IFF
-        if _radioInfo.iff then
+        if _radioInfo.iff and srsOverlay.getMode() ~= _modes.txrx_only then
 
             if _radioInfo.iff.status == 1 or _radioInfo.iff.status == 2 then
 
@@ -304,6 +305,10 @@ function srsOverlay.updateRadio()
                         fullMessage = fullMessage.." G"
                      end
 
+                     if _radio.rxOnly == true then
+                        fullMessage = fullMessage.." RX"
+                     end
+
                      if _radio.channel >= 0 then
                         fullMessage = fullMessage.." C".._radio.channel
                      end
@@ -338,16 +343,12 @@ function srsOverlay.updateRadio()
                 fullMessage = fullMessage.." *"
             end
 
-            if _radioState.RadioSendingState
-                and _radioState.RadioSendingState.SendingOn == _i -1
-                and _radioState.RadioSendingState.IsSending then
+            local transmitting = _radioState.RadioSendingState and
+                                    _radioState.RadioSendingState.IsSending and
+                                    (_radioState.RadioSendingState.SendingOn == _i-1 or _radio.simul)
+            
 
-                fullMessage = fullMessage.." +TR"
-                
-             elseif _radioState.RadioSendingState 
-                and  _radioState.RadioSendingState.IsSending 
-                and  _radio.simul 
-                then 
+            if transmitting then
                 fullMessage = fullMessage.." +TR"
             end
 
@@ -368,13 +369,20 @@ function srsOverlay.updateRadio()
                 end
             end
 
-            local msg = {message = fullMessage, skin =_skin, height = 20 }
-
-
-            table.insert(_listMessages, msg)
+            if srsOverlay.getMode() ~= _modes.txrx_only or _isReceiving > 0 or transmitting then
+                local msg = {message = fullMessage, skin =_skin, height = 20 }
+                table.insert(_listMessages, msg)
+            end
         end
+    end
 
-        
+    
+    if #_listMessages == 0 and srsOverlay.getMode() == _modes.txrx_only then
+        local message = "⚡"
+        if _radioState.ClientCountConnected then
+            message = string.format("⚡%i", _radioState.ClientCountConnected)
+        end
+        table.insert(_listMessages, { message = message, skin = typesMessage.normal, height = 20 })
     end
 
     srsOverlay.paintRadio()
@@ -532,7 +540,7 @@ function srsOverlay.setMode(mode)
         box:setVisible(true)
         window:setSize(WIDTH, HEIGHT)
 
-        if srsOverlay.config.mode == _modes.minimum or srsOverlay.config.mode == _modes.minimum_vol then
+        if srsOverlay.config.mode == _modes.minimum or srsOverlay.config.mode == _modes.minimum_vol or srsOverlay.config.mode == _modes.txrx_only then
 
             box:setSkin(skinMinimum)
 
@@ -580,6 +588,8 @@ function srsOverlay.onHotkey()
     elseif (srsOverlay.getMode() == _modes.minimum) then
         srsOverlay.setMode(_modes.minimum_vol)
     elseif (srsOverlay.getMode() == _modes.minimum_vol) then
+        srsOverlay.setMode(_modes.txrx_only)
+    elseif (srsOverlay.getMode() == _modes.txrx_only) then
         srsOverlay.setMode(_modes.hidden)
     else
         srsOverlay.setMode(_modes.full)
@@ -694,4 +704,4 @@ end
 
 DCS.setUserCallbacks(srsOverlay)
 
-net.log("Loaded - DCS-SRS Overlay GameGUI - Ciribob: 2.1.0.2 ")
+net.log("Loaded - DCS-SRS Overlay GameGUI - Ciribob: 2.1.0.10 ")

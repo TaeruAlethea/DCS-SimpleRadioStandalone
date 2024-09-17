@@ -772,6 +772,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 _globalSettings.ProfileSettingsStore.GetClientSettingFloat(ProfileSettingsKeys.PTTReleaseDelay);
             PTTReleaseDelay.IsEnabled = true;
 
+            DisableExpansionRadios.IsChecked = _globalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.DisableExpansionRadios);
+
             PTTStartDelay.IsEnabled = false;
             PTTStartDelay.ValueChanged += PushToTalkStartDelay_ValueChanged;
             PTTStartDelay.Value =
@@ -904,6 +906,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
 
             AmbientCockpitEffectToggle.IsChecked = _globalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.AmbientCockpitNoiseEffect);
+            AmbientIntercomEffectToggle.IsChecked = _globalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.AmbientCockpitIntercomNoiseEffect);
 
             AmbientCockpitEffectVolume.IsEnabled = false;
             AmbientCockpitEffectVolume.ValueChanged += (sender, e) =>
@@ -1456,6 +1459,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             if (!enabled)
             {
                 Logger.Info($"Ignored Autoconnect - not Enabled");
+                return;
             }
 
             if (ClientState.IsConnected)
@@ -2135,6 +2139,16 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         private void AmbientCockpitEffectToggle_OnClick(object sender, RoutedEventArgs e)
         {
             _globalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.AmbientCockpitNoiseEffect, (bool)AmbientCockpitEffectToggle.IsChecked);
+        }
+
+        private void AmbientCockpitEffectIntercomToggle_OnClick(object sender, RoutedEventArgs e)
+        {
+            _globalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.AmbientCockpitIntercomNoiseEffect, (bool)AmbientIntercomEffectToggle.IsChecked);
+        }
+
+        private void DisableExpansionRadios_OnClick(object sender, RoutedEventArgs e)
+        {
+            _globalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.DisableExpansionRadios, (bool)DisableExpansionRadios.IsChecked);
         }
     }
 }
