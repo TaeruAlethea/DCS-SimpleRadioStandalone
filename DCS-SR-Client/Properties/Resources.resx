@@ -285,7 +285,7 @@
     <value>Add new configuration</value>
   </data>
   <data name="FavAddServer" xml:space="preserve">
-    <value>ServerAddress</value>
+    <value>Server Address</value>
   </data>
   <data name="FavListDefault" xml:space="preserve">
     <value>Is Default</value>
@@ -1041,7 +1041,7 @@ Requires Tx or Rx Effects On</value>
     <value>Show Tuned Client Count</value>
   </data>
   <data name="Startminimised" xml:space="preserve">
-    <value>Startminimised</value>
+    <value>Start Minimised</value>
   </data>
   <data name="StartStop" xml:space="preserve">
     <value>Connect</value>
@@ -1213,5 +1213,8 @@ Requires Tx or Rx Effects On</value>
   </data>
   <data name="DisableExpansionRadios" xml:space="preserve">
     <value>Disable Expansion Radios</value>
+  </data>
+  <data name="DarkMode" xml:space="preserve">
+    <value>Dark Mode</value>
   </data>
 </root>

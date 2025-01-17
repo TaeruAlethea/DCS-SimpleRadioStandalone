@@ -17,6 +17,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
     {
         MinimiseToTray,
         StartMinimised,
+        DarkMode,
 
         RefocusDCS,
         ExpandControls,

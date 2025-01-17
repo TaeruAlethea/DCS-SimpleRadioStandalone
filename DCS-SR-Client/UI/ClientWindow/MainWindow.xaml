@@ -885,10 +885,37 @@
                                            Grid.Column="0"
                                            HorizontalContentAlignment="Center"
                                            VerticalContentAlignment="Center"
+                                           Content="{x:Static p:Resources.DarkMode}" />
+
+                                    <ToggleButton Name="DarkMode"
+                                                  Grid.Row="5"
+                                                  Grid.Column="1"
+                                                  HorizontalContentAlignment="Center"
+                                                  VerticalContentAlignment="Center"
+                                                  Click="StartMinimised_OnClick">
+                                        <ToggleButton.Style>
+                                            <Style TargetType="{x:Type ToggleButton}">
+                                                <Setter Property="Content" Value="{x:Static p:Resources.ValueON}" />
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsChecked" Value="True">
+                                                        <Setter Property="Content" Value="{x:Static p:Resources.ValueON}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsChecked" Value="False">
+                                                        <Setter Property="Content" Value="{x:Static p:Resources.ValueOFF}" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </ToggleButton.Style>
+                                    </ToggleButton>
+                                    
+                                    <Label Grid.Row="6"
+                                           Grid.Column="0"
+                                           HorizontalContentAlignment="Center"
+                                           VerticalContentAlignment="Center"
                                            Content="{x:Static p:Resources.ShowTransmitterName}" />
 
                                     <ToggleButton Name="ShowTransmitterName"
-                                                  Grid.Row="5"
+                                                  Grid.Row="6"
                                                   Grid.Column="1"
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
