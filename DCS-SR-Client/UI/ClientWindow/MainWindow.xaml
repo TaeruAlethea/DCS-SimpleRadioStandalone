@@ -19,8 +19,10 @@
                       mc:Ignorable="d">
 
     <Window.Resources>
-        <Style x:Key="SrsToggleStyle" TargetType="{x:Type ToggleButton}"
-               BasedOn="{StaticResource MetroFlatToggleButton}">
+        <Style TargetType="{x:Type ToggleButton}"
+               BasedOn="{StaticResource MetroToggleButton}">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="BorderThickness" Value="2" />
             <Setter Property="Content" Value="{x:Static p:Resources.ValueON}" />
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
@@ -31,8 +33,34 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="SrsButtonStyle" TargetType="{x:Type Button}"
-               BasedOn="{StaticResource MetroFlatButton}">
+        <Style TargetType="{x:Type Button}"
+               BasedOn="{StaticResource MetroButton}">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        <Style TargetType="{x:Type ComboBox}"
+               BasedOn="{StaticResource MetroComboBox}">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        <Style TargetType="{x:Type Slider}"
+               BasedOn="{StaticResource MetroSlider}">
+        </Style>
+        <Style TargetType="{x:Type ProgressBar}"
+               BasedOn="{StaticResource MetroProgressBar}">
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        <Style TargetType="{x:Type TextBox}"
+               BasedOn="{StaticResource MetroTextBox}">
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="BorderThickness" Value="2" />
+        </Style>
+        <Style TargetType="{x:Type Label}"
+               BasedOn="{StaticResource MetroLabel}">
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style TargetType="{x:Type GroupBox}"
+               BasedOn="{StaticResource MetroGroupBox}">
         </Style>
     </Window.Resources>
     
