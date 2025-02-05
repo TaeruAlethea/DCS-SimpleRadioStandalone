@@ -106,7 +106,6 @@
                             VerticalAlignment="Top"
                             Click="PreviewAudio"
                             Content="{x:Static p:Resources.PreviewAudio}"
-                            Style="{DynamicResource SquareButtonStyle}"
                             ToolTipService.ShowOnDisabled="True"
                             IsEnabled="{Binding AudioInput.MicrophoneAvailable}"
                             ToolTip="{Binding Path=AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
@@ -210,7 +209,6 @@
                                 HorizontalAlignment="Center"
                                 Command="{Binding Path=ConnectCommand}"
                                 Content="{x:Static p:Resources.StartStop}"
-                                Style="{DynamicResource SquareButtonStyle}"
                                 ToolTip="{Binding Path=AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
                         <Button x:Name="ToggleServerSettings"
                                 Width="125"
@@ -218,8 +216,7 @@
                                 HorizontalAlignment="Center"
                                 Click="ToggleServerSettings_OnClick"
                                 Content="{x:Static p:Resources.ToggleServerSettings}"
-                                IsEnabled="False"
-                                Style="{DynamicResource SquareButtonStyle}" />
+                                IsEnabled="False" />
 
                     </StackPanel>
                     <StackPanel Margin="0"
@@ -230,22 +227,19 @@
                                 Margin="0,15,20,0"
                                 HorizontalAlignment="Center"
                                 Click="ShowOverlay_OnClick"
-                                Content="{x:Static p:Resources.ShowOverlay}"
-                                Style="{DynamicResource SquareButtonStyle}" />
+                                Content="{x:Static p:Resources.ShowOverlay}" />
                         <Button x:Name="ShowAwacsOverlay"
                                 Width="125"
                                 Margin="0,15,20,0"
                                 HorizontalAlignment="Center"
                                 Click="ShowAwacsOverlay_OnClick"
-                                Content="{x:Static p:Resources.ShowAwacsOverlay}"
-                                Style="{DynamicResource SquareButtonStyle}" />
+                                Content="{x:Static p:Resources.ShowAwacsOverlay}" />
                         <Button x:Name="ShowClientList"
                                 Width="125"
                                 Margin="0,15,0,0"
                                 HorizontalAlignment="Center"
                                 Click="ShowClientList_OnClick"
-                                Content="{x:Static p:Resources.ShowClientList}"
-                                Style="{DynamicResource SquareButtonStyle}" />
+                                Content="{x:Static p:Resources.ShowClientList}" />
                     </StackPanel>
                     <StackPanel Margin="0,15,0,0"
                                 Orientation="Horizontal"
@@ -257,8 +251,8 @@
                             <Label x:Name="PresetsFolderLabel" Width="220" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <StackPanel Margin="0" Orientation="Horizontal" HorizontalAlignment="Right" IsEnabled="{Binding Path=ClientState.ExternalAWACSModeConnected, Converter={StaticResource BooleanInverterConverter}}">
-                            <Button x:Name="PresetsFolderBrowseButton" Content="{x:Static p:Resources.PresetsFolderBrowseButton}" Click="PresetsFolderBrowseButton_Click" Style="{DynamicResource SquareButtonStyle}"></Button>
-                            <Button x:Name="PresetsFolderResetButton" Content="{x:Static p:Resources.PresetsFolderResetButton}" Click="PresetsFolderResetButton_Click" Style="{DynamicResource SquareButtonStyle}" Margin="10,0,0,0"></Button>
+                            <Button x:Name="PresetsFolderBrowseButton" Content="{x:Static p:Resources.PresetsFolderBrowseButton}" Click="PresetsFolderBrowseButton_Click"      ></Button>
+                            <Button x:Name="PresetsFolderResetButton" Content="{x:Static p:Resources.PresetsFolderResetButton}" Click="PresetsFolderResetButton_Click"       Margin="10,0,0,0"></Button>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="0,15,0,0"
@@ -317,7 +311,7 @@
                                             Click="ConnectExternalAWACSMode_OnClick"
                                             Content="{x:Static p:Resources.ConnectExternalAWACSMode}"
                                             IsEnabled="False"
-                                            Style="{DynamicResource SquareButtonStyle}" />
+                                                  />
                                 </StackPanel>
                             </StackPanel>
                         </Expander>
@@ -392,8 +386,7 @@
                     <Button Content="{x:Static p:Resources.Donate_OnClick}"
                             Click="Donate_OnClick"
                             Width="220"
-                            Margin="0,5,0,0" controls:ButtonHelper.PreserveTextCase="True"
-                            Style="{StaticResource AccentedSquareButtonStyle}" />
+                            Margin="0,5,0,0" controls:ButtonHelper.PreserveTextCase="True" />
 
                 </StackPanel>
             </GroupBox>
