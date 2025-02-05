@@ -758,8 +758,7 @@
                                    VerticalContentAlignment="Center"
                                    Content="{x:Static p:Resources.ResetRadioOverlay}" />
 
-                                    <Button Grid.Row="0"
-                                            Grid.Column="1"
+                                    <Button Grid.Row="0" Grid.Column="1"
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Click="ResetRadioWindow_Click"
