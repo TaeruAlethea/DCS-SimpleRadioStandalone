@@ -1256,8 +1256,6 @@
                                                   Grid.Row="7" Grid.Column="1"
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
-                                                  Click="AllowXInputController_OnClick_Click"
-                                                  Style="{StaticResource SrsToggleStyle}" />
                                                   Click="AllowXInputController_OnClick_Click"  />
 
                                     <Label Grid.Row="8" Grid.Column="0"
