@@ -141,7 +141,16 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             Analytics.Log("Client", "Startup", _globalSettings.GetClientSetting(GlobalSettingsKeys.ClientIdLong).RawValue);
 
             InitSettingsScreen();
-
+            if (_globalSettings.GetClientSetting(GlobalSettingsKeys.DarkMode).BoolValue)
+            {
+                WPFElementHelper.SetTheme(WPFElementHelper.Themes.Dark);
+            }
+            else
+            {
+                WPFElementHelper.SetTheme(WPFElementHelper.Themes.Light);
+            }
+            
+            
             InitSettingsProfiles();
             ReloadProfile();
 
@@ -678,6 +687,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
             MinimiseToTray.IsChecked = _globalSettings.GetClientSettingBool(GlobalSettingsKeys.MinimiseToTray);
             StartMinimised.IsChecked = _globalSettings.GetClientSettingBool(GlobalSettingsKeys.StartMinimised);
+            DarkMode.IsChecked = _globalSettings.GetClientSettingBool(GlobalSettingsKeys.DarkMode);
 
             MicAGC.IsChecked = _globalSettings.GetClientSettingBool(GlobalSettingsKeys.AGC);
             MicDenoise.IsChecked = _globalSettings.GetClientSettingBool(GlobalSettingsKeys.Denoise);
@@ -2182,6 +2192,19 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         {
             _globalSettings.SetClientSetting(GlobalSettingsKeys.LastPresetsFolder, string.Empty);
             UpdatePresetsFolderLabel();
+        }
+
+        private void DarkMode_OnClick_OnClick(object sender, RoutedEventArgs e)
+        {
+            _globalSettings.SetClientSetting(GlobalSettingsKeys.DarkMode, ((bool)DarkMode.IsChecked).ToString());
+            if (_globalSettings.GetClientSetting(GlobalSettingsKeys.DarkMode).BoolValue)
+            {
+                WPFElementHelper.SetTheme(WPFElementHelper.Themes.Dark);
+            }
+            else
+            {
+                WPFElementHelper.SetTheme(WPFElementHelper.Themes.Light);
+            }
         }
     }
 }

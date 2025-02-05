@@ -826,6 +826,17 @@
                                                   Click="ShowTransmitterName_OnClick_OnClick" 
                                                   Style="{StaticResource SrsToggle}" />
                                     
+                                    <Label Grid.Row="6" Grid.Column="0"
+                                           HorizontalContentAlignment="Center"
+                                           VerticalContentAlignment="Center"
+                                           Content="{x:Static p:Resources.DarkMode}" />
+                                    
+                                    <ToggleButton Name="DarkMode" 
+                                                  Grid.Row="6" Grid.Column="1"
+                                                  HorizontalContentAlignment="Center"
+                                                  VerticalContentAlignment="Center"
+                                                  Click="DarkMode_OnClick_OnClick"
+                                                  Style="{StaticResource SrsToggle}"/>
                                 </Grid>
                             </GroupBox>
 
