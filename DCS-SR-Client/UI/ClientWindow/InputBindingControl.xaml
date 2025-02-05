@@ -10,8 +10,6 @@
              mc:Ignorable="d">
 
     <Grid>
-
-
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="2*" />
@@ -87,6 +85,4 @@
                 Content="{x:Static p:Resources.DeviceClear}" />
 
     </Grid>
-
-
 </UserControl>
