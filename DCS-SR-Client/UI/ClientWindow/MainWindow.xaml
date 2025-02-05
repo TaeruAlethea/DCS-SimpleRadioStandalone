@@ -397,7 +397,7 @@
 
                 <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible">
                     <StackPanel>
-                        <Button Width="150px" Content="{x:Static p:Resources.RescanInputDevices}" Click="RescanInputDevices" />
+                        <Button HorizontalAlignment="Center" Content="{x:Static p:Resources.RescanInputDevices}" Click="RescanInputDevices" />
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
