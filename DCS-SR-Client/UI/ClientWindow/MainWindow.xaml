@@ -219,23 +219,20 @@
                                 IsEnabled="False" />
 
                     </StackPanel>
-                    <StackPanel Margin="0"
+                    <StackPanel Margin="0" 
                                 HorizontalAlignment="Center"
                                 Orientation="Horizontal">
                         <Button x:Name="ShowOverlay"
-                                Width="125"
                                 Margin="0,15,20,0"
                                 HorizontalAlignment="Center"
                                 Click="ShowOverlay_OnClick"
                                 Content="{x:Static p:Resources.ShowOverlay}" />
                         <Button x:Name="ShowAwacsOverlay"
-                                Width="125"
                                 Margin="0,15,20,0"
                                 HorizontalAlignment="Center"
                                 Click="ShowAwacsOverlay_OnClick"
                                 Content="{x:Static p:Resources.ShowAwacsOverlay}" />
                         <Button x:Name="ShowClientList"
-                                Width="125"
                                 Margin="0,15,0,0"
                                 HorizontalAlignment="Center"
                                 Click="ShowClientList_OnClick"
