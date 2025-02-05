@@ -1223,4 +1223,7 @@ Requires Tx or Rx Effects On</value>
   <data name="DisableExpansionRadios" xml:space="preserve">
     <value>Disable Expansion Radios</value>
   </data>
+  <data name="DarkMode" xml:space="preserve">
+    <value>Dark Mode</value>
+  </data>
 </root>

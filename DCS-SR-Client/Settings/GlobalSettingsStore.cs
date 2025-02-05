@@ -22,6 +22,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         ExpandControls,
         AutoConnectPrompt, //message about auto connect
         RadioOverlayTaskbarHide,
+        DarkMode,
 
         AudioInputDeviceId,
         AudioOutputDeviceId,
@@ -387,6 +388,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             {GlobalSettingsKeys.AutoConnectPrompt.ToString(), "false"},
             {GlobalSettingsKeys.AutoConnectMismatchPrompt.ToString(), "true"},
             {GlobalSettingsKeys.RadioOverlayTaskbarHide.ToString(), "false"},
+            {GlobalSettingsKeys.DarkMode.ToString(), "false"},
             {GlobalSettingsKeys.RefocusDCS.ToString(), "false"},
             {GlobalSettingsKeys.ExpandControls.ToString(), "false"},
 
