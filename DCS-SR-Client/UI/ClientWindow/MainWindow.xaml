@@ -19,7 +19,8 @@
                       mc:Ignorable="d">
 
     <Window.Resources>
-        <Style x:Key="SrsToggle" TargetType="{x:Type ToggleButton}">
+        <Style x:Key="SrsToggleStyle" TargetType="{x:Type ToggleButton}"
+               BasedOn="{StaticResource MetroFlatToggleButton}">
             <Setter Property="Content" Value="{x:Static p:Resources.ValueON}" />
             <Style.Triggers>
                 <Trigger Property="IsChecked" Value="True">
@@ -29,6 +30,9 @@
                     <Setter Property="Content" Value="{x:Static p:Resources.ValueOFF}" />
                 </Trigger>
             </Style.Triggers>
+        </Style>
+        <Style x:Key="SrsButtonStyle" TargetType="{x:Type Button}"
+               BasedOn="{StaticResource MetroFlatButton}">
         </Style>
     </Window.Resources>
     
@@ -707,7 +711,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AutoConnectToggle_Click" 
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -719,7 +723,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AutoConnectPromptToggle_Click" 
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                     
                                     <Label Grid.Row="2" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -731,7 +735,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AutoConnectMismatchPromptToggle_Click"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                     
                                 </Grid>
                             </GroupBox>
@@ -761,7 +765,8 @@
                                             HorizontalContentAlignment="Center"
                                             VerticalContentAlignment="Center"
                                             Click="ResetRadioWindow_Click"
-                                            Content="{x:Static p:Resources.Reset}" />
+                                            Content="{x:Static p:Resources.Reset}" 
+                                            Style="{StaticResource SrsButtonStyle}"/>
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -773,7 +778,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="RadioOverlayTaskbarItem_Click" 
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -786,7 +791,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="DCSRefocus_OnClick_Click" 
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                     
                                     <Label Grid.Row="3" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -798,7 +803,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="MinimiseToTray_OnClick" 
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                     
                                     <Label Grid.Row="4" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -810,7 +815,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="StartMinimised_OnClick" 
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="5" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -822,7 +827,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="ShowTransmitterName_OnClick_OnClick" 
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                     
                                     <Label Grid.Row="6" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -834,7 +839,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="DarkMode_OnClick_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
                                 </Grid>
                             </GroupBox>
 
@@ -866,7 +871,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="MicAGC_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -878,7 +883,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="MicDenoise_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                     
                                 </Grid>
                             </GroupBox>
@@ -910,7 +915,7 @@
                                                   Click="VoxEnabled_OnClick"
                                                   ToolTip="{x:Static p:Resources.ToolTipVOXButton}"
                                                   ToolTipService.ShowOnDisabled="True"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1040,7 +1045,7 @@
                                                   VerticalContentAlignment="Center"
                                                   Click="AllowTransmissionsRecord_OnClick"
                                                   ToolTipService.ShowOnDisabled="True"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                     
                                     <Label Grid.Row="1" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1053,7 +1058,7 @@
                                                   VerticalContentAlignment="Center"
                                                   Click="RecordTransmissions_OnClick"
                                                   ToolTipService.ShowOnDisabled="True"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1067,7 +1072,7 @@
                                                   Click="SingleFileMixdown_OnClick"
                                                   ToolTip="{x:Static p:Resources.ToolTipRecordQuality}"
                                                   ToolTipService.ShowOnDisabled="True"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="3" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1109,7 +1114,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="DisallowedAudioTone_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="{x:Static p:Resources.MiscellanousHeader}">
@@ -1171,7 +1176,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AutoSelectInputProfile_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1183,7 +1188,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="CheckForBetaUpdates_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1206,7 +1211,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="RequireAdminToggle_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                     
                                     <Label Grid.Row="4" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1218,7 +1223,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="VAICOMTXInhibit_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="5" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1230,7 +1235,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AllowAnonymousUsage_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="6" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1242,7 +1247,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="ExpandInputDevices_OnClick_Click"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="7" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1254,7 +1259,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AllowXInputController_OnClick_Click"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="8" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1266,7 +1271,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="PlayConnectionSounds_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
                                 </Grid>
                             </GroupBox>
 
@@ -1381,7 +1386,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="RadioSwitchPTT_Click"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1393,7 +1398,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AudioSelectChannel_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1405,7 +1410,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AlwaysAllowHotas_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="3" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1417,7 +1422,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AlwaysAllowTransponderOverlay_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="4" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1429,7 +1434,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AllowDCSPTT_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="5" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1441,7 +1446,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AllowRotaryIncrement_OnClick"
-                                                  Style="{StaticResource SrsToggle}" />
+                                                  Style="{StaticResource SrsToggleStyle}" />
 
                                     <Label Grid.Row="6" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1519,7 +1524,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="DisableExpansionRadios_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
                                 </Grid>
                             </GroupBox>
 
@@ -1571,14 +1576,14 @@
                                                       HorizontalContentAlignment="Center"
                                                       VerticalContentAlignment="Center"
                                                       Click="RadioRxStart_Click"
-                                                      Style="{StaticResource SrsToggle}"/>
+                                                      Style="{StaticResource SrsToggleStyle}"/>
                                         
                                         <Label Content="{x:Static p:Resources.RadioRxEnd}" />
                                         <ToggleButton Name="RadioRxEndToggle"
                                                       HorizontalContentAlignment="Center"
                                                       VerticalContentAlignment="Center"
                                                       Click="RadioRxEnd_Click"
-                                                      Style="{StaticResource SrsToggle}"/>
+                                                      Style="{StaticResource SrsToggleStyle}"/>
                                     </WrapPanel>
 
 
@@ -1598,14 +1603,14 @@
                                                           HorizontalContentAlignment="Center"
                                                           VerticalContentAlignment="Center"
                                                           Click="RadioTxStart_Click"
-                                                          Style="{StaticResource SrsToggle}"/>
+                                                          Style="{StaticResource SrsToggleStyle}"/>
                                             
                                             <Label Content="{x:Static p:Resources.RadioTxEnd}" />
                                             <ToggleButton Name="RadioTxEndToggle"
                                                           HorizontalContentAlignment="Center"
                                                           VerticalContentAlignment="Center"
                                                           Click="RadioTxEnd_Click"
-                                                          Style="{StaticResource SrsToggle}"/>
+                                                          Style="{StaticResource SrsToggleStyle}"/>
                                         </WrapPanel>
 
                                     </WrapPanel>
@@ -1664,7 +1669,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="RadioEncryptionEffects_Click"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
                                     
                                     <Label Grid.Row="7" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1676,7 +1681,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="RadioMIDS_Click"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
 
                                     <Label Grid.Row="8" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1688,7 +1693,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="RadioSoundEffects_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
 
                                     <Label Grid.Row="9" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1700,7 +1705,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="RadioSoundEffectsClipping_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
 
                                     <Label Grid.Row="10" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1712,7 +1717,7 @@
                                                       HorizontalContentAlignment="Center"
                                                       VerticalContentAlignment="Center"
                                                       Click="NATORadioTone_Click"
-                                                      Style="{StaticResource SrsToggle}"/>
+                                                      Style="{StaticResource SrsToggleStyle}"/>
                                         
                                         <Slider x:Name="NATOToneVolume"
                                                 TickPlacement="BottomRight"
@@ -1751,7 +1756,7 @@
                                                       HorizontalContentAlignment="Center"
                                                       VerticalContentAlignment="Center"
                                                       Click="HQEffect_Click"
-                                                      Style="{StaticResource SrsToggle}"/>
+                                                      Style="{StaticResource SrsToggleStyle}"/>
 
                                         <Slider x:Name="HQToneVolume"
                                                 TickPlacement="BottomRight"
@@ -1790,7 +1795,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="BackgroundRadioNoiseToggle_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
 
                                     <Label Grid.Row="13" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1938,7 +1943,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AmbientCockpitEffectToggle_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
                                     
                                     <Label Grid.Row="18" Grid.Column="0"
                                            HorizontalContentAlignment="Center"
@@ -1950,7 +1955,7 @@
                                                   HorizontalContentAlignment="Center"
                                                   VerticalContentAlignment="Center"
                                                   Click="AmbientCockpitEffectIntercomToggle_OnClick"
-                                                  Style="{StaticResource SrsToggle}"/>
+                                                  Style="{StaticResource SrsToggleStyle}"/>
 
                                     <Label Grid.Row="19" Grid.Column="0"
                                                HorizontalContentAlignment="Center"
