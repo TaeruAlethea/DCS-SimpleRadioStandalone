@@ -752,11 +752,10 @@
                                         <RowDefinition />
 
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Row="0"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.ResetRadioOverlay}" />
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           HorizontalContentAlignment="Center"
+                                           VerticalContentAlignment="Center"
+                                           Content="{x:Static p:Resources.ResetRadioOverlay}" />
 
                                     <Button Grid.Row="0" Grid.Column="1"
                                             HorizontalContentAlignment="Center"
