@@ -55,6 +55,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCS-SR-ExternalAudio", "DCS
 		{DA4F02E3-0B5E-42CD-B8D9-5583FA51D66E} = {DA4F02E3-0B5E-42CD-B8D9-5583FA51D66E}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCS-SR-Server", "DCS-SR-Server\DCS-SR-Server.csproj", "{A036F5AE-AECC-460D-94FF-474B3A7E57A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -184,6 +186,18 @@ Global
 		{669389B5-E810-4689-9838-BA1D6DC3871A}.Release|x64.Build.0 = Release|Any CPU
 		{669389B5-E810-4689-9838-BA1D6DC3871A}.Release|x86.ActiveCfg = Release|Any CPU
 		{669389B5-E810-4689-9838-BA1D6DC3871A}.Release|x86.Build.0 = Release|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Debug|x64.Build.0 = Debug|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Debug|x86.Build.0 = Debug|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Release|x64.ActiveCfg = Release|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Release|x64.Build.0 = Release|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Release|x86.ActiveCfg = Release|Any CPU
+		{A036F5AE-AECC-460D-94FF-474B3A7E57A3}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
