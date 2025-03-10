@@ -42,6 +42,11 @@
                     <RowDefinition />
                     <RowDefinition />
                     <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
                 </Grid.RowDefinitions>
 
                 <Button Grid.Row="0"
@@ -315,9 +320,62 @@
                          Height="20"
                          VerticalAlignment="Center"
                          HorizontalAlignment="Center"/>
+                
+                <Label Content="Intercom Group"
+                       Grid.Row="15"
+                       Grid.Column="0" 
+                       Grid.ColumnSpan="2"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Center"/>
+                <UniformGrid Grid.Row="15" Grid.Column="2" Rows="1">
+	                <Label HorizontalAlignment="Left">1</Label>
+	                <Label HorizontalAlignment="Center">2</Label>
+	                <Label HorizontalAlignment="Center">3</Label>
+	                <Label HorizontalAlignment="Right">4</Label>
+                </UniformGrid>
+                
+                <Label Content="Spectators"
+                       Grid.Row="16" Grid.Column="0" Grid.ColumnSpan="2"
+                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Slider Grid.Row="16" Grid.Column="2" 
+                        Value="{Binding SpectatorIntercomGroup}"
+                        VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                        Interval="1" Minimum="0" Maximum="3"
+                        Ticks="0,1,2,3" TickPlacement="TopLeft" IsSnapToTickEnabled="True">
+                </Slider>
+                
+                <Label Content="Artillery Commanders / JTAC"
+                       Grid.Row="17" Grid.Column="0" Grid.ColumnSpan="2"
+                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Slider Grid.Row="17" Grid.Column="2" 
+                        Value="{Binding SpectatorIntercomGroup}"
+                        VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                        Interval="1" Minimum="0" Maximum="3"
+                        Ticks="0,1,2,3" TickPlacement="TopLeft" IsSnapToTickEnabled="True">
+                </Slider>
+                
+                <Label Content="Gamemaster / Observer"
+                       Grid.Row="18" Grid.Column="0" Grid.ColumnSpan="2"
+                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Slider Grid.Row="18" Grid.Column="2" 
+                        Value="{Binding SpectatorIntercomGroup}"
+                        VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                        Interval="1" Minimum="0" Maximum="3"
+                        Ticks="0,1,2,3" TickPlacement="TopLeft" IsSnapToTickEnabled="True">
+                </Slider>
+                
+                <Label Content="External AWACS"
+                       Grid.Row="19" Grid.Column="0" Grid.ColumnSpan="2"
+                       HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Slider Grid.Row="19" Grid.Column="2" 
+                        Value="{Binding SpectatorIntercomGroup}"
+                        VerticalAlignment="Center" HorizontalAlignment="Stretch"
+                        Interval="1" Minimum="0" Maximum="3"
+                        Ticks="0,1,2,3" TickPlacement="TopLeft" IsSnapToTickEnabled="True">
+                </Slider>
 
                 <Label Content="{x:Static p:Resources.LabelTestFreq}"
-                       Grid.Row="15"
+                       Grid.Row="20"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
@@ -326,7 +384,7 @@
                 <TextBox x:Name="TestFrequencies"
                          IsEnabled="True"
                          Text="247.2,120.3"
-                         Grid.Row="15"
+                         Grid.Row="20"
                          Grid.Column="2"
                          Width="75"
                          Height="20"
@@ -335,7 +393,7 @@
 
 
                 <Label Content="{x:Static p:Resources.LabelTunedCount}"
-                       Grid.Row="16"
+                       Grid.Row="21"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
@@ -343,7 +401,7 @@
 
                 <Button x:Name="TunedCountToggle"
                        Content="{Binding TunedCountText}"
-                       Grid.Row="16"
+                       Grid.Row="21"
                        Grid.Column="2"
                        Width="75"
                        Height="20"
@@ -351,7 +409,7 @@
                        HorizontalAlignment="Center"/>
 
                 <Label Content="{x:Static p:Resources.LabelGlobalLobbyFreq}"
-                       Grid.Row="17"
+                       Grid.Row="22"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
@@ -360,7 +418,7 @@
                 <TextBox x:Name="GlobalLobbyFrequencies"
                          IsEnabled="True"
                          Text="241.2,122.3"  
-                         Grid.Row="17"
+                         Grid.Row="22"
                          Grid.Column="2"
                          Width="75"
                          Height="20"
@@ -368,7 +426,7 @@
                          HorizontalAlignment="Center"/>
 
                 <Label Content="{x:Static p:Resources.LabelOverrideEffectsOnGlobal}"
-                       Grid.Row="18"
+                       Grid.Row="23"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
@@ -376,7 +434,7 @@
 
                 <Button x:Name="OverrideEffectsOnGlobalToggle"
                         Content="{Binding OverrideEffectsOnGlobal}"
-                        Grid.Row="18"
+                        Grid.Row="23"
                         Grid.Column="2"
                         Width="75"
                         Height="20"
@@ -384,7 +442,7 @@
                         HorizontalAlignment="Center"/>
 
                 <Label Content="{x:Static p:Resources.LabelLotATCExport}"
-                       Grid.Row="19"
+                       Grid.Row="24"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
@@ -392,7 +450,7 @@
 
                 <Button x:Name="LotATCExportToggle"
                         Content="{Binding LotATCExportText}"
-                        Grid.Row="19"
+                        Grid.Row="24"
                         Grid.Column="2"
                         Width="75"
                         Height="20"
@@ -400,7 +458,7 @@
                         HorizontalAlignment="Center"/>
 
                 <Label Content="{x:Static p:Resources.LabelShowTransmitterName}"
-                       Grid.Row="20"
+                       Grid.Row="25"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
@@ -408,7 +466,7 @@
 
                 <Button x:Name="ShowTransmitterNameToggle"
                         Content="{Binding ShowTransmitterNameText}" 
-                        Grid.Row="20"
+                        Grid.Row="25"
                         Grid.Column="2"
                         Width="75"
                         Height="20"
@@ -416,7 +474,7 @@
                         HorizontalAlignment="Center"/>
 
                 <Label Content="{x:Static p:Resources.LabelTransmissionLog}"
-                       Grid.Row="21"
+                       Grid.Row="26"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
@@ -424,7 +482,7 @@
 
                 <Button x:Name="TransmissionLogEnabledToggle"
                         Content="{Binding TransmissionLogEnabledText}"
-                        Grid.Row="21"
+                        Grid.Row="26"
                         Grid.Column="2"
                         Width="75"
                         Height="20"
@@ -432,14 +490,14 @@
                         HorizontalAlignment="Center"/>
 
                 <Label Content="{x:Static p:Resources.LabelArchiveTime}"
-                       Grid.Row="22"
+                       Grid.Row="27"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"/>
 
                 <StackPanel Orientation="Vertical"
-                            Grid.Row="22"
+                            Grid.Row="27"
                             Grid.Column="2">
                     <Grid  Width="75">
                         <Grid.ColumnDefinitions>
@@ -466,13 +524,13 @@
                 </StackPanel>
 
                 <Label Content="{x:Static p:Resources.LabelRetransmitNodeLimit}"
-                       Grid.Row="23"
+                       Grid.Row="28"
                        Grid.Column="0" 
                        Grid.ColumnSpan="2"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"/>
                 <StackPanel Orientation="Vertical"
-                            Grid.Row="23"
+                            Grid.Row="28"
                             Grid.Column="2">
                     <Grid  Width="75">
                         <Grid.ColumnDefinitions>
