@@ -35,6 +35,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Helpers;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Overlay;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
 using NAudio.CoreAudioApi;
@@ -51,6 +52,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
+        public readonly MainWindowViewModel ViewModel;
         public delegate void ReceivedAutoConnect(string address, int port);
 
         public delegate void ToggleOverlayCallback(bool uiButton, bool awacs);
@@ -86,10 +88,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         /// <remarks>Used in the XAML for DataBinding the connected client count</remarks>
         public ConnectedClientsSingleton Clients { get; } = ConnectedClientsSingleton.Instance;
-
-        /// <remarks>Used in the XAML for DataBinding input audio related UI elements</remarks>
-        public AudioInputSingleton AudioInput { get; } = AudioInputSingleton.Instance;
-
+        
         /// <remarks>Used in the XAML for DataBinding output audio related UI elements</remarks>
         public AudioOutputSingleton AudioOutput { get; } = AudioOutputSingleton.Instance;
 
@@ -97,8 +96,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         public MainWindow()
         {
-            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
-
+            DataContext = ViewModel = new MainWindowViewModel(this);
             InitializeComponent();
 
             // Initialize ToolTip controls
@@ -113,7 +111,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             // Set up tooltips that are always defined
             InitToolTips();
 
-            DataContext = this;
 
             var client = ClientStateSingleton.Instance;
 
@@ -633,24 +630,24 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             if (_audioPreview != null)
             {
                 // Only update mic volume output if an audio input device is available - sometimes the value can still change, leaving the user with the impression their mic is working after all
-                if (AudioInput.MicrophoneAvailable)
+                if (ViewModel.AudioInput.MicrophoneAvailable)
                 {
-                    Mic_VU.Value = _audioPreview.MicMax;
+                    MicVu.Value = _audioPreview.MicMax;
                 }
                 Speaker_VU.Value = _audioPreview.SpeakerMax;
             }
             else if (_audioManager != null)
             {
                 // Only update mic volume output if an audio input device is available - sometimes the value can still change, leaving the user with the impression their mic is working after all
-                if (AudioInput.MicrophoneAvailable)
+                if (ViewModel.AudioInput.MicrophoneAvailable)
                 {
-                    Mic_VU.Value = _audioManager.MicMax;
+                    MicVu.Value = _audioManager.MicMax;
                 }
                 Speaker_VU.Value = _audioManager.SpeakerMax;
             }
             else
             {
-                Mic_VU.Value = -100;
+                MicVu.Value = -100;
                 Speaker_VU.Value = -100;
             }
 
@@ -1127,16 +1124,16 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         {
             //save app settings
             // Only save selected microphone if one is actually available, resulting in a crash otherwise
-            if (AudioInput.MicrophoneAvailable)
+            if (ViewModel.AudioInput.MicrophoneAvailable)
             {
-                if (AudioInput.SelectedAudioInput.Value == null)
+                if (ViewModel.AudioInput.SelectedAudioInput.Value == null)
                 {
                     _globalSettings.SetClientSetting(GlobalSettingsKeys.AudioInputDeviceId, "default");
 
                 }
                 else
                 {
-                    var input = ((MMDevice)AudioInput.SelectedAudioInput.Value).ID;
+                    var input = ((MMDevice)ViewModel.AudioInput.SelectedAudioInput.Value).ID;
                     _globalSettings.SetClientSetting(GlobalSettingsKeys.AudioInputDeviceId, input);
                 }
             }
@@ -1291,7 +1288,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         {
             if (_audioPreview == null)
             {
-                if (!AudioInput.MicrophoneAvailable)
+                if (!ViewModel.AudioInput.MicrophoneAvailable)
                 {
                     Logger.Info("Unable to preview audio, no valid audio input device available or selected");
                     return;

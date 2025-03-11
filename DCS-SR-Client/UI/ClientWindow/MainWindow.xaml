@@ -4,21 +4,23 @@
                       xmlns:clientWindow="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow"
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                      xmlns:devices="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client"
-                      xmlns:input="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Settings"
                       xmlns:local="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.UI"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:settings="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Settings"
                       xmlns:converters="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Utils.ValueConverters"
+                      xmlns:viewModels="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels"
 					  xmlns:p="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Properties"
                       Title="{x:Static p:Resources.ClientWindowTitle}"
                       Width="550"
                       Height="710"
-                      d:DataContext="{d:DesignInstance local:MainWindow}"
                       ResizeMode="CanMinimize"
-                      mc:Ignorable="d">
-
-    <TabControl x:Name="TabControl">
+                      mc:Ignorable="d" 
+                      d:DataContext="{viewModels:MainWindowViewModel}">
+	<controls:MetroWindow.DataContext>
+		<viewModels:MainWindowViewModel />
+	</controls:MetroWindow.DataContext>
+	
+	<TabControl x:Name="TabControl">
         <TabControl.Resources>
             <converters:MicAvailabilityTooltipConverter x:Key="MicAvailabilityTooltipConverter" />
         </TabControl.Resources>
