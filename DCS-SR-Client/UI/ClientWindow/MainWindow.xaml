@@ -16,6 +16,7 @@
                       ResizeMode="CanMinimize"
                       mc:Ignorable="d" 
                       d:DataContext="{viewModels:MainWindowViewModel}">
+	
 	<controls:MetroWindow.DataContext>
 		<viewModels:MainWindowViewModel />
 	</controls:MetroWindow.DataContext>
@@ -131,7 +132,7 @@
                                       Margin="0,0,5,0"
                                       DisplayMemberPath="Name"
                                       ItemsSource="{Binding Path=FavouriteServersViewModel.Addresses}"
-                                      SelectedItem="{Binding Path=ServerAddress}" />
+                                      SelectedItem="{Binding Path=ToBeDepricatedMainWindow.ServerAddress}" />
                             <Button Grid.Column="1"
                                     Click="LaunchAddressTab"
                                     ToolTip="{x:Static p:Resources.ToolTipSavedAddressTab}" >
@@ -151,7 +152,7 @@
                                 Width="140"
                                 Margin="5"
                                 HorizontalAlignment="Center"
-                                Command="{Binding Path=ConnectCommand}"
+                                Command="{Binding Path=ToBeDepricatedMainWindow.ConnectCommand}"
                                 Content="{x:Static p:Resources.StartStop}"
                                 ToolTip="{Binding Path=AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
                         <Button x:Name="ToggleServerSettings"
