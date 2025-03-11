@@ -417,7 +417,7 @@
                             <local:InputBindingControl x:Name="Radio1"
                                                        Grid.Row="1"
                                                        Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch1}"
+                                                       ControlInputBinding="{Binding InputManager.InputBinding.Switch1}"
                                                        InputName="Radio 1" />
                             <local:InputBindingControl x:Name="Radio2"
                                                        Grid.Row="2"
@@ -1297,10 +1297,14 @@
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Top" Margin="5" Padding="5" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CreateProfile}" Command="{Binding CreateProfileCommand}" />
-                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CopyProfile}" Click="CopyProfile" />
-                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.RenameProfile}" Click="RenameProfile" />
-                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.DeleteProfile}" Click="DeleteProfile" />
+                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CreateProfile}" 
+                                        Command="{Binding CreateProfileCommand}" />
+                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CopyProfile}" 
+                                        Command="{Binding CopyProfileCommand}" />
+                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.RenameProfile}" 
+                                        Command="{Binding RenameProfileCommand}" />
+                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.DeleteProfile}" 
+                                        Command="{Binding DeleteProfileCommand}" />
                             </StackPanel>
                         </StackPanel>
                     </GroupBox>

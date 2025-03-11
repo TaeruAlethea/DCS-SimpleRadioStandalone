@@ -73,8 +73,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             ; //intercom used to represent null as we cant
 
         private Settings.GlobalSettingsStore _globalSettings = Settings.GlobalSettingsStore.Instance;
-
-
+        
         public InputDeviceManager(Window window, MainWindow.ToggleOverlayCallback _toggleOverlayCallback)
         {
             _directInput = new DirectInput();

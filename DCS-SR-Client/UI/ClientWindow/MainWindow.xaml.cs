@@ -619,22 +619,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             _viewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.AutoSelectSettingsProfile, ((bool)AutoSelectInputProfile.IsChecked).ToString());
         }
 
-        private void CopyProfile(object sender, RoutedEventArgs e)
-        {
-            var current = ControlsProfile.SelectedValue as string;
-            var inputProfileWindow = new InputProfileWindow.InputProfileWindow(name =>
-            {
-                if (name.Trim().Length > 0)
-                {
-                    _viewModel.GlobalSettings.ProfileSettingsStore.CopyProfile(current, name);
-                    _viewModel.InitSettingsProfiles();
-                }
-            });
-            inputProfileWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            inputProfileWindow.Owner = this;
-            inputProfileWindow.ShowDialog();
-        }
-
         private void VAICOMTXInhibit_OnClick(object sender, RoutedEventArgs e)
         {
             _viewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.VAICOMTXInhibitEnabled, ((bool)VAICOMTXInhibitEnabled.IsChecked).ToString());

@@ -177,6 +177,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
 
 
             CreateProfileCommand = new RelayCommand(CreateProfile);
+            CopyProfileCommand = new RelayCommand(CopyProfile);
+            RenameProfileCommand = new RelayCommand(RenameProfile);
+            DeleteProfileCommand = new RelayCommand(DeleteProfile);
         }
 
         private void CheckWindowVisibility()
@@ -1889,7 +1892,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
             inputProfileWindow.ShowDialog();
         }
 
-        private void DeleteProfile(object sender, RoutedEventArgs e)
+        public ICommand DeleteProfileCommand { get; }
+        private void DeleteProfile()
         {
             var current = ControlsProfile.SelectedValue as string;
 
@@ -1920,7 +1924,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
 
         }
 
-        private void RenameProfile(object sender, RoutedEventArgs e)
+        public ICommand RenameProfileCommand { get; }
+        private void RenameProfile()
         {
 
             var current = ControlsProfile.SelectedValue as string;
@@ -1970,7 +1975,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
             _globalSettings.SetClientSetting(GlobalSettingsKeys.AutoSelectSettingsProfile, ((bool)AutoSelectInputProfile.IsChecked).ToString());
         }
 
-        private void CopyProfile(object sender, RoutedEventArgs e)
+        
+        public ICommand CopyProfileCommand { get; }
+        private void CopyProfile()
         {
             var current = ControlsProfile.SelectedValue as string;
             var inputProfileWindow = new InputProfileWindow.InputProfileWindow(name =>
