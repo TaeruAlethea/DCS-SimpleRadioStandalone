@@ -79,8 +79,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         public MainWindow()
         {
-            InitializeComponent();
             DataContext = ViewModel = new MainWindowViewModel(this);
+            InitializeComponent();
 
             // Initialize ToolTip controls
             ToolTips.Init();

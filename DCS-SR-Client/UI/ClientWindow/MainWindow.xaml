@@ -17,10 +17,6 @@
                       mc:Ignorable="d" 
                       d:DataContext="{viewModels:MainWindowViewModel}">
 	
-	<controls:MetroWindow.DataContext>
-		<viewModels:MainWindowViewModel />
-	</controls:MetroWindow.DataContext>
-	
 	<TabControl x:Name="TabControl">
         <TabControl.Resources>
             <converters:MicAvailabilityTooltipConverter x:Key="MicAvailabilityTooltipConverter" />

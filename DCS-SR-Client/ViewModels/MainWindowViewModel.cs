@@ -11,7 +11,6 @@ public partial class MainWindowViewModel : ObservableObject
 {
 	public MainWindow ToBeDepricatedMainWindow { get; init; }
 	
-
 	/// <remarks>Used in the XAML for DataBinding many things</remarks>
 	public ClientStateSingleton ClientState { get; } = ClientStateSingleton.Instance;
 	/// <remarks>Used in the XAML for DataBinding the connected client count</remarks>
@@ -23,12 +22,16 @@ public partial class MainWindowViewModel : ObservableObject
 
 	public FavouriteServersViewModel FavouriteServersViewModel { get; }
 
-	public MainWindowViewModel(MainWindow mainWindowView = null)
+	public MainWindowViewModel(MainWindow mainWindowView)
 	{
 		ToBeDepricatedMainWindow = mainWindowView;
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
 	}
 
-
+	// Used for Design DataContext
+	public MainWindowViewModel()
+	{
+		ToBeDepricatedMainWindow = new MainWindow();
+	}
 }
