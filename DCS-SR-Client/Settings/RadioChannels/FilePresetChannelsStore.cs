@@ -2,213 +2,187 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.PresetChannels;
-using Newtonsoft.Json.Linq;
 using NLog;
 
-namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings.RadioChannels
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings.RadioChannels;
+
+public class FilePresetChannelsStore : IPresetChannelsStore
 {
-    public class FilePresetChannelsStore : IPresetChannelsStore
-    {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+	private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+	private static readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
 
-        private string PresetsFolder { get
-            {
-                var folder = _globalSettings.GetClientSetting(GlobalSettingsKeys.LastPresetsFolder).RawValue;
-                if (string.IsNullOrWhiteSpace(folder))
-                {
-                    folder = Directory.GetCurrentDirectory();
-                }
+	private string PresetsFolder
+	{
+		get
+		{
+			var folder = _globalSettings.GetClientSetting(GlobalSettingsKeys.LastPresetsFolder).RawValue;
+			if (string.IsNullOrWhiteSpace(folder)) folder = Directory.GetCurrentDirectory();
 
-                return folder;
-            }
-        }
+			return folder;
+		}
+	}
 
-        public IEnumerable<PresetChannel> LoadFromStore(string radioName, bool mids = false)
-        {
-            var file = FindRadioFile(NormaliseString(radioName));
+	public IEnumerable<PresetChannel> LoadFromStore(string radioName, bool mids = false)
+	{
+		var file = FindRadioFile(NormaliseString(radioName));
 
-            if (file != null)
-            {
-                if (mids)
-                {
-                    return ReadMidsFrequenciesFromFile(file);
-                }
-                else
-                {
-                    return ReadFrequenciesFromFile(file);
-                }
-            }
+		if (file != null)
+		{
+			if (mids) return ReadMidsFrequenciesFromFile(file);
 
-            return new List<PresetChannel>();
-        }
+			return ReadFrequenciesFromFile(file);
+		}
 
-        public string CreatePresetFile(string radioName)
-        {
-            var normalisedName = NormaliseString(radioName);
-            var file = FindRadioFile(normalisedName);
+		return new List<PresetChannel>();
+	}
 
-            if (file == null)
-            {
-                var path = Path.ChangeExtension(Path.Combine(PresetsFolder, normalisedName), "txt");
-                try
-                {
-                    File.Create(path);
-                    Logger.Log(LogLevel.Info, $"Created radio file {path} ");
-                    return path;
-                }
-                catch
-                {
-                    Logger.Log(LogLevel.Error, $"Error creating radio file {path} ");
-                }
+	public string CreatePresetFile(string radioName)
+	{
+		var normalisedName = NormaliseString(radioName);
+		var file = FindRadioFile(normalisedName);
 
-                return null;
-            }
+		if (file == null)
+		{
+			var path = Path.ChangeExtension(Path.Combine(PresetsFolder, normalisedName), "txt");
+			try
+			{
+				File.Create(path);
+				Logger.Log(LogLevel.Info, $"Created radio file {path} ");
+				return path;
+			}
+			catch
+			{
+				Logger.Log(LogLevel.Error, $"Error creating radio file {path} ");
+			}
 
-            return file;
-        }
+			return null;
+		}
 
-        private List<PresetChannel> ReadFrequenciesFromFile(string filePath)
-        {
-            List<PresetChannel> channels = new List<PresetChannel>();
-            string[] lines = File.ReadAllLines(filePath);
+		return file;
+	}
 
-            const double MHz = 1000000;
-            if (lines?.Length > 0)
-            {
-                foreach (var line in lines)
-                {
-                    var trimmed = line.Trim();
-                    if (trimmed.Length > 0)
-                    {
-                        try
-                        {
-                            var split =  trimmed.Split('|');
+	private List<PresetChannel> ReadFrequenciesFromFile(string filePath)
+	{
+		var channels = new List<PresetChannel>();
+		var lines = File.ReadAllLines(filePath);
 
-                            var name = "";
-                            double frequency = 0;
-                            if (split.Length >= 2)
-                            {
-                                name = split[0]; 
-                                frequency = Double.Parse(split[1], CultureInfo.InvariantCulture);
-                            }
-                            else
-                            {
-                                name = trimmed;
-                                frequency = Double.Parse(trimmed, CultureInfo.InvariantCulture);
-                            }
+		const double MHz = 1000000;
+		if (lines?.Length > 0)
+			foreach (var line in lines)
+			{
+				var trimmed = line.Trim();
+				if (trimmed.Length > 0)
+					try
+					{
+						var split = trimmed.Split('|');
 
-                            channels.Add(new PresetChannel()
-                            {
-                                Text = name,
-                                Value = frequency * MHz,
-                            });
-                        }
-                        catch (Exception)
-                        {
-                            Logger.Log(LogLevel.Info, "Error parsing frequency  "+trimmed);
-                        }
-                    }
-                }
-            }
+						var name = "";
+						double frequency = 0;
+						if (split.Length >= 2)
+						{
+							name = split[0];
+							frequency = double.Parse(split[1], CultureInfo.InvariantCulture);
+						}
+						else
+						{
+							name = trimmed;
+							frequency = double.Parse(trimmed, CultureInfo.InvariantCulture);
+						}
 
-            int i = 1;
-            foreach (var channel in channels)
-            {
-                channel.Text = i + ": " + channel.Text;
-                i++;
-            }
+						channels.Add(new PresetChannel
+						{
+							Text = name,
+							Value = frequency * MHz
+						});
+					}
+					catch (Exception)
+					{
+						Logger.Log(LogLevel.Info, "Error parsing frequency  " + trimmed);
+					}
+			}
 
-            return channels;
-        }
+		var i = 1;
+		foreach (var channel in channels)
+		{
+			channel.Text = i + ": " + channel.Text;
+			i++;
+		}
 
-        private List<PresetChannel> ReadMidsFrequenciesFromFile(string filePath)
-        {
+		return channels;
+	}
 
-            List<PresetChannel> channels = new List<PresetChannel>();
-            string[] lines = File.ReadAllLines(filePath);
+	private List<PresetChannel> ReadMidsFrequenciesFromFile(string filePath)
+	{
+		var channels = new List<PresetChannel>();
+		var lines = File.ReadAllLines(filePath);
 
-            const double MHz = ( 100000.0);
-            const double MidsOffsetMHz = (1030.0 * 1000000.0);
-            if (lines?.Length > 0)
-            {
-                foreach (var line in lines)
-                {
-                    var trimmed = line.Trim();
-                    if (trimmed.Length > 0)
-                    {
-                        try
-                        {
-                            var split = trimmed.Split('|');
+		const double MHz = 100000.0;
+		const double MidsOffsetMHz = 1030.0 * 1000000.0;
+		if (lines?.Length > 0)
+			foreach (var line in lines)
+			{
+				var trimmed = line.Trim();
+				if (trimmed.Length > 0)
+					try
+					{
+						var split = trimmed.Split('|');
 
-                            var name = "";
-                            int midsChannel = 0;
-                            if (split.Length >= 2)
-                            {
-                                name = split[0];
-                                midsChannel = Int32.Parse(split[1], CultureInfo.InvariantCulture);
-                            }
-                            else
-                            {
-                                name = trimmed;
-                                midsChannel = Int32.Parse(trimmed, CultureInfo.InvariantCulture);
-                            }
+						var name = "";
+						var midsChannel = 0;
+						if (split.Length >= 2)
+						{
+							name = split[0];
+							midsChannel = int.Parse(split[1], CultureInfo.InvariantCulture);
+						}
+						else
+						{
+							name = trimmed;
+							midsChannel = int.Parse(trimmed, CultureInfo.InvariantCulture);
+						}
 
-                            if (midsChannel > 0 && midsChannel < 126)
-                            {
-                                channels.Add(new PresetChannel()
-                                {
-                                    Text = name + " | "+midsChannel,
-                                    Value = (midsChannel * MHz) + MidsOffsetMHz
-                                });
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            Logger.Log(LogLevel.Info, "Error parsing frequency  " + trimmed);
-                        }
-                    }
-                }
-            }
+						if (midsChannel > 0 && midsChannel < 126)
+							channels.Add(new PresetChannel
+							{
+								Text = name + " | " + midsChannel,
+								Value = midsChannel * MHz + MidsOffsetMHz
+							});
+					}
+					catch (Exception)
+					{
+						Logger.Log(LogLevel.Info, "Error parsing frequency  " + trimmed);
+					}
+			}
 
-            int i = 1;
-            foreach (var channel in channels)
-            {
-                channel.Text = i + ": " + channel.Text;
-                i++;
-            }
+		var i = 1;
+		foreach (var channel in channels)
+		{
+			channel.Text = i + ": " + channel.Text;
+			i++;
+		}
 
-            return channels;
-        }
+		return channels;
+	}
 
-        private string FindRadioFile(string radioName)
-        {
-            var files = Directory.EnumerateFiles(PresetsFolder);
+	private string FindRadioFile(string radioName)
+	{
+		var files = Directory.EnumerateFiles(PresetsFolder);
 
-            foreach (var fileAndPath in files)
-            {
-                if (Path.GetExtension(fileAndPath).ToLowerInvariant() == ".txt")
-                {
-                    var name = Path.GetFileNameWithoutExtension(fileAndPath);
+		foreach (var fileAndPath in files)
+			if (Path.GetExtension(fileAndPath).ToLowerInvariant() == ".txt")
+			{
+				var name = Path.GetFileNameWithoutExtension(fileAndPath);
 
-                    if (NormaliseString(name) == radioName)
-                    {
-                        return fileAndPath;
-                    }
-                }
-            }
-            return null;
-        }
+				if (NormaliseString(name) == radioName) return fileAndPath;
+			}
 
-        private string NormaliseString(string str)
-        {
-            //only allow alphanumeric, remove all spaces etc
-            return Regex.Replace(str, "[^a-zA-Z0-9]", "").ToLower();
-        }
-    }
+		return null;
+	}
+
+	private string NormaliseString(string str)
+	{
+		//only allow alphanumeric, remove all spaces etc
+		return Regex.Replace(str, "[^a-zA-Z0-9]", "").ToLower();
+	}
 }

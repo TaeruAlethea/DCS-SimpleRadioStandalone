@@ -1,89 +1,74 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
+﻿using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using NAudio.Wave;
 
-namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Providers
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Providers;
+
+public class CachedLoopingNatoToneAudioProvider : IWaveProvider
 {
-    public class CachedLoopingNatoToneAudioProvider:IWaveProvider
-    {
-        private int _position = 0;
+	private readonly short[] _audioEffectShort;
+	private readonly IWaveProvider source;
+	private int _position;
 
-        private readonly short[] _audioEffectShort;
-        private IWaveProvider source;
+	public CachedLoopingNatoToneAudioProvider(IWaveProvider source, WaveFormat waveFormat)
+	{
+		WaveFormat = waveFormat;
+		var effectDouble = CachedAudioEffectProvider.Instance.NATOTone.AudioEffectFloat;
 
-        public CachedLoopingNatoToneAudioProvider(IWaveProvider source, WaveFormat waveFormat)
-        {
-
-            this.WaveFormat = waveFormat;
-            var effectDouble = CachedAudioEffectProvider.Instance.NATOTone.AudioEffectFloat;
-
-            _audioEffectShort = new short[effectDouble.Length];
-            for (int i = 0; i < effectDouble.Length; i++)
-            {
-                _audioEffectShort[i] = (short) (effectDouble[i] * 32768f);
-            }
+		_audioEffectShort = new short[effectDouble.Length];
+		for (var i = 0; i < effectDouble.Length; i++) _audioEffectShort[i] = (short)(effectDouble[i] * 32768f);
 
 
-            this.source = source;
-        }
+		this.source = source;
+	}
 
-        public WaveFormat WaveFormat { get; }
-        public int Read(byte[] buffer, int offset, int count)
-        {
-            int read = source.Read(buffer, offset, count);
+	public WaveFormat WaveFormat { get; }
 
-            if (!GlobalSettingsStore.Instance.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.NATOTone) || _audioEffectShort == null)
-            {
-                return read;
-            }
+	public int Read(byte[] buffer, int offset, int count)
+	{
+		var read = source.Read(buffer, offset, count);
 
-            var effectBytes = GetEffect(read / 2);
+		if (!GlobalSettingsStore.Instance.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.NATOTone) ||
+		    _audioEffectShort == null) return read;
 
-            //mix together
-            for (int i = 0; i < read / 2; i++)
-            {
-                short audio = ConversionHelpers.ToShort(buffer[(offset + i) * 2], buffer[((i + offset) * 2) + 1]);
+		var effectBytes = GetEffect(read / 2);
 
-                audio = (short)(audio + effectBytes[i]);
+		//mix together
+		for (var i = 0; i < read / 2; i++)
+		{
+			var audio = ConversionHelpers.ToShort(buffer[(offset + i) * 2], buffer[(i + offset) * 2 + 1]);
 
-                //buffer[i + offset] = effectBytes[i]+buffer[i + offset];
+			audio = (short)(audio + effectBytes[i]);
 
-                byte byte1;
-                byte byte2;
-                ConversionHelpers.FromShort(audio, out byte1, out byte2);
+			//buffer[i + offset] = effectBytes[i]+buffer[i + offset];
 
-                buffer[(offset + i) * 2] = byte1;
-                buffer[((i + offset) * 2) + 1] = byte2;
-            }
+			byte byte1;
+			byte byte2;
+			ConversionHelpers.FromShort(audio, out byte1, out byte2);
 
-            return read;
-        }
+			buffer[(offset + i) * 2] = byte1;
+			buffer[(i + offset) * 2 + 1] = byte2;
+		}
 
-        private short[] GetEffect(int count)
-        {
-            short[] loopedEffect = new short[count];
+		return read;
+	}
 
-            var i = 0;
-            while (i < count)
-            {
-                loopedEffect[i] = _audioEffectShort[_position];
-                _position++;
+	private short[] GetEffect(int count)
+	{
+		var loopedEffect = new short[count];
 
-                if (_position == _audioEffectShort.Length)
-                {
-                    _position = 0;
-                }
+		var i = 0;
+		while (i < count)
+		{
+			loopedEffect[i] = _audioEffectShort[_position];
+			_position++;
 
-                i++;
-            }
+			if (_position == _audioEffectShort.Length) _position = 0;
 
-            return loopedEffect;
-        }
-    }
+			i++;
+		}
+
+		return loopedEffect;
+	}
 }

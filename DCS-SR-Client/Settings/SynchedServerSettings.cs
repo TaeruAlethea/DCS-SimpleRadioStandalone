@@ -1,109 +1,95 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Setting;
 using NLog;
 
-namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+
+public class SyncedServerSettings
 {
-    public class SyncedServerSettings
-    {
-        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static SyncedServerSettings instance;
-        private static readonly object _lock = new object();
-        private static readonly Dictionary<string, string> defaults = DefaultServerSettings.Defaults;
+	private static SyncedServerSettings instance;
+	private static readonly object _lock = new();
+	private static readonly Dictionary<string, string> defaults = DefaultServerSettings.Defaults;
 
-        private readonly ConcurrentDictionary<string, string> _settings;
+	private readonly ConcurrentDictionary<string, string> _settings;
 
-        //cache of processed settings as bools to make lookup slightly quicker
-        private readonly ConcurrentDictionary<string, bool> _settingsBool;
+	//cache of processed settings as bools to make lookup slightly quicker
+	private readonly ConcurrentDictionary<string, bool> _settingsBool;
+	private readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public List<double> GlobalFrequencies { get; set; } = new List<double>();
+	public SyncedServerSettings()
+	{
+		_settings = new ConcurrentDictionary<string, string>();
+		_settingsBool = new ConcurrentDictionary<string, bool>();
+	}
 
-        // Node Limit of 0 means no retransmission
-        public int RetransmitNodeLimit { get; set; } = 0;
+	public List<double> GlobalFrequencies { get; set; } = new();
 
-        public SyncedServerSettings()
-        {
-            _settings = new ConcurrentDictionary<string, string>();
-            _settingsBool = new ConcurrentDictionary<string, bool>();
-        }
+	// Node Limit of 0 means no retransmission
+	public int RetransmitNodeLimit { get; set; }
 
-        public static SyncedServerSettings Instance
-        {
-            get
-            {
-                lock (_lock)
-                {
-                    if (instance == null)
-                    {
-                        instance = new SyncedServerSettings();
-                    }
-                }
-                return instance;
-            }
-        }
+	public static SyncedServerSettings Instance
+	{
+		get
+		{
+			lock (_lock)
+			{
+				if (instance == null) instance = new SyncedServerSettings();
+			}
 
-        public string GetSetting(ServerSettingsKeys key)
-        {
-            string setting = key.ToString();
+			return instance;
+		}
+	}
 
-            return _settings.GetOrAdd(setting, defaults.ContainsKey(setting) ? defaults[setting] : "");
-        }
+	public string GetSetting(ServerSettingsKeys key)
+	{
+		var setting = key.ToString();
 
-        public bool GetSettingAsBool(ServerSettingsKeys key)
-        {
-            var strKey = key.ToString();
-            if (_settingsBool.TryGetValue(strKey, out bool res))
-            {
-                return res;
-            }
-            else
-            {
-                res = Convert.ToBoolean(GetSetting(key));
-                _settingsBool[strKey] = res;
-                return res;
-            }
-        }
+		return _settings.GetOrAdd(setting, defaults.ContainsKey(setting) ? defaults[setting] : "");
+	}
 
-        public void Decode(Dictionary<string, string> encoded)
-        {
-            foreach (KeyValuePair<string, string> kvp in encoded)
-            {
-                _settings.AddOrUpdate(kvp.Key, kvp.Value, (key, oldVal) => kvp.Value);
-                
-                if (kvp.Key.Equals(ServerSettingsKeys.GLOBAL_LOBBY_FREQUENCIES.ToString()))
-                {
-                    var freqStringList = kvp.Value.Split(',');
+	public bool GetSettingAsBool(ServerSettingsKeys key)
+	{
+		var strKey = key.ToString();
+		if (_settingsBool.TryGetValue(strKey, out var res)) return res;
 
-                    var newList = new List<double>();
-                    foreach (var freq in freqStringList)
-                    {
-                        if (double.TryParse(freq.Trim(), out var freqDouble))
-                        {
-                            freqDouble *= 1e+6; //convert to Hz from MHz
-                            newList.Add(freqDouble);
-                            Logger.Debug("Adding Server Global Frequency: " + freqDouble);
-                        }
-                    }
+		res = Convert.ToBoolean(GetSetting(key));
+		_settingsBool[strKey] = res;
+		return res;
+	}
 
-                    GlobalFrequencies = newList;
-                }
-                else if(kvp.Key.Equals(ServerSettingsKeys.RETRANSMISSION_NODE_LIMIT.ToString()))
-                {
-                    if (!int.TryParse(kvp.Value, out var nodeLimit))
-                    {
-                        nodeLimit = 0;
-                    }
-                    else
-                    {
-                        RetransmitNodeLimit = nodeLimit;
-                    }
-                }
-            }
-            //cache will be refilled 
-            _settingsBool.Clear();
-        }
-    }
+	public void Decode(Dictionary<string, string> encoded)
+	{
+		foreach (var kvp in encoded)
+		{
+			_settings.AddOrUpdate(kvp.Key, kvp.Value, (key, oldVal) => kvp.Value);
+
+			if (kvp.Key.Equals(ServerSettingsKeys.GLOBAL_LOBBY_FREQUENCIES.ToString()))
+			{
+				var freqStringList = kvp.Value.Split(',');
+
+				var newList = new List<double>();
+				foreach (var freq in freqStringList)
+					if (double.TryParse(freq.Trim(), out var freqDouble))
+					{
+						freqDouble *= 1e+6; //convert to Hz from MHz
+						newList.Add(freqDouble);
+						Logger.Debug("Adding Server Global Frequency: " + freqDouble);
+					}
+
+				GlobalFrequencies = newList;
+			}
+			else if (kvp.Key.Equals(ServerSettingsKeys.RETRANSMISSION_NODE_LIMIT.ToString()))
+			{
+				if (!int.TryParse(kvp.Value, out var nodeLimit))
+					nodeLimit = 0;
+				else
+					RetransmitNodeLimit = nodeLimit;
+			}
+		}
+
+		//cache will be refilled 
+		_settingsBool.Clear();
+	}
 }

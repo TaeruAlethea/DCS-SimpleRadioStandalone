@@ -2,280 +2,230 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
-using Ciribob.DCS.SimpleRadio.Standalone.Common;
 
-namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
+
+internal class CachedAudioEffectProvider
 {
-    class CachedAudioEffectProvider
-    {
-        public List<CachedAudioEffect> RadioTransmissionStart { get; }
-        public List<CachedAudioEffect> RadioTransmissionEnd { get; }
+	private static CachedAudioEffectProvider _instance;
 
-        public List<CachedAudioEffect> IntercomTransmissionStart { get; }
-        public List<CachedAudioEffect> IntercomTransmissionEnd { get; }
+	private readonly string sourceFolder;
 
-        private Dictionary<string, CachedAudioEffect> _ambientAudioEffects { get; } =
-            new Dictionary<string, CachedAudioEffect>();
+	private CachedAudioEffectProvider()
+	{
+		sourceFolder = AppDomain.CurrentDomain.BaseDirectory + "\\AudioEffects\\";
 
+		//init lists
+		RadioTransmissionStart = new List<CachedAudioEffect>();
+		RadioTransmissionEnd = new List<CachedAudioEffect>();
 
+		IntercomTransmissionStart = new List<CachedAudioEffect>();
+		IntercomTransmissionEnd = new List<CachedAudioEffect>();
 
-        private static CachedAudioEffectProvider _instance;
+		LoadRadioStartAndEndEffects();
+		LoadIntercomStartAndEndEffects();
 
-        public static CachedAudioEffectProvider Instance
-        {
-            get
-            {
-                if (_instance == null)
-                {
-                    _instance = new CachedAudioEffectProvider();
+		KY58EncryptionTransmitTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.KY_58_TX);
+		KY58EncryptionEndTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.KY_58_RX);
 
-                    //stops cyclic init
+		NATOTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.NATO_TONE);
 
-                }
-                return _instance;
-            }
-        }
+		MIDSTransmitTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.MIDS_TX);
+		MIDSEndTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.MIDS_TX_END);
 
-        public CachedAudioEffect SelectedRadioTransmissionStartEffect
-        {
-            get
-            {
-                var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
-                    .GetClientSettingString(ProfileSettingsKeys.RadioTransmissionStartSelection).ToLowerInvariant();
+		HAVEQUICKTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.HAVEQUICK_TONE);
 
-                foreach (var startEffect in RadioTransmissionStart)
-                {
-                    if (startEffect.FileName.ToLowerInvariant().Equals(selectedTone))
-                    {
-                        return startEffect;
-                    }
-                }
+		FMNoise = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.FM_NOISE);
+		VHFNoise = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.VHF_NOISE);
+		UHFNoise = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.UHF_NOISE);
+		HFNoise = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.HF_NOISE);
 
-                return RadioTransmissionStart[0];
-            }
-        }
+		//sort out volume (if needed)
+		// CreateAudioEffectDouble(HAVEQUICKTone);
+		// CreateAudioEffectDouble(NATOTone);
+		// CreateAudioEffectDouble(FMNoise);
+		// CreateAudioEffectDouble(UHFNoise);
+		// CreateAudioEffectDouble(VHFNoise);
+		// CreateAudioEffectDouble(HFNoise);
 
-        public CachedAudioEffect SelectedRadioTransmissionEndEffect
-        {
-            get
-            {
-                var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
-                    .GetClientSettingString(ProfileSettingsKeys.RadioTransmissionEndSelection).ToLowerInvariant();
+		AMCollision = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.AM_COLLISION);
+		// CreateAudioEffectDouble(AMCollision);
+	}
 
-                foreach (var endEffect in RadioTransmissionEnd)
-                {
-                    if (endEffect.FileName.ToLowerInvariant().Equals(selectedTone))
-                    {
-                        return endEffect;
-                    }
-                }
+	public List<CachedAudioEffect> RadioTransmissionStart { get; }
+	public List<CachedAudioEffect> RadioTransmissionEnd { get; }
 
-                return RadioTransmissionEnd[0];
-            }
-        }
+	public List<CachedAudioEffect> IntercomTransmissionStart { get; }
+	public List<CachedAudioEffect> IntercomTransmissionEnd { get; }
 
-        public CachedAudioEffect SelectedIntercomTransmissionStartEffect
-        {
-            get
-            {
-                var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
-                    .GetClientSettingString(ProfileSettingsKeys.IntercomTransmissionStartSelection).ToLowerInvariant();
+	private Dictionary<string, CachedAudioEffect> _ambientAudioEffects { get; } = new();
 
-                foreach (var startEffect in IntercomTransmissionStart)
-                {
-                    if (startEffect.FileName.ToLowerInvariant().Equals(selectedTone))
-                    {
-                        return startEffect;
-                    }
-                }
+	public static CachedAudioEffectProvider Instance
+	{
+		get
+		{
+			if (_instance == null) _instance = new CachedAudioEffectProvider();
+			//stops cyclic init
+			return _instance;
+		}
+	}
 
-                return IntercomTransmissionStart[0];
-            }
-        }
+	public CachedAudioEffect SelectedRadioTransmissionStartEffect
+	{
+		get
+		{
+			var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
+				.GetClientSettingString(ProfileSettingsKeys.RadioTransmissionStartSelection).ToLowerInvariant();
 
-        public CachedAudioEffect SelectedIntercomTransmissionEndEffect
-        {
-            get
-            {
-                var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
-                    .GetClientSettingString(ProfileSettingsKeys.IntercomTransmissionEndSelection).ToLowerInvariant();
+			foreach (var startEffect in RadioTransmissionStart)
+				if (startEffect.FileName.ToLowerInvariant().Equals(selectedTone))
+					return startEffect;
 
-                foreach (var endEffect in IntercomTransmissionEnd)
-                {
-                    if (endEffect.FileName.ToLowerInvariant().Equals(selectedTone))
-                    {
-                        return endEffect;
-                    }
-                }
+			return RadioTransmissionStart[0];
+		}
+	}
 
-                return IntercomTransmissionEnd[0];
-            }
-        }
+	public CachedAudioEffect SelectedRadioTransmissionEndEffect
+	{
+		get
+		{
+			var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
+				.GetClientSettingString(ProfileSettingsKeys.RadioTransmissionEndSelection).ToLowerInvariant();
 
-        public CachedAudioEffect KY58EncryptionTransmitTone { get; }
-        public CachedAudioEffect KY58EncryptionEndTone { get; }
-        public CachedAudioEffect NATOTone { get; }
-        public CachedAudioEffect MIDSTransmitTone { get; }
-        public CachedAudioEffect MIDSEndTone { get; }
+			foreach (var endEffect in RadioTransmissionEnd)
+				if (endEffect.FileName.ToLowerInvariant().Equals(selectedTone))
+					return endEffect;
 
-        public CachedAudioEffect HAVEQUICKTone { get; }
+			return RadioTransmissionEnd[0];
+		}
+	}
 
-        public CachedAudioEffect FMNoise { get; }
-        public CachedAudioEffect UHFNoise { get; }
-        public CachedAudioEffect VHFNoise { get; }
-        public CachedAudioEffect HFNoise { get; }
+	public CachedAudioEffect SelectedIntercomTransmissionStartEffect
+	{
+		get
+		{
+			var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
+				.GetClientSettingString(ProfileSettingsKeys.IntercomTransmissionStartSelection).ToLowerInvariant();
 
-        public CachedAudioEffect AMCollision { get; set; }
+			foreach (var startEffect in IntercomTransmissionStart)
+				if (startEffect.FileName.ToLowerInvariant().Equals(selectedTone))
+					return startEffect;
 
-        private readonly string sourceFolder;
+			return IntercomTransmissionStart[0];
+		}
+	}
 
-        private CachedAudioEffectProvider()
-        {
-            sourceFolder = AppDomain.CurrentDomain.BaseDirectory + "\\AudioEffects\\";
-            
-            //init lists
-            RadioTransmissionStart = new List<CachedAudioEffect>();
-            RadioTransmissionEnd = new List<CachedAudioEffect>();
+	public CachedAudioEffect SelectedIntercomTransmissionEndEffect
+	{
+		get
+		{
+			var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
+				.GetClientSettingString(ProfileSettingsKeys.IntercomTransmissionEndSelection).ToLowerInvariant();
 
-            IntercomTransmissionStart = new List<CachedAudioEffect>();
-            IntercomTransmissionEnd = new List<CachedAudioEffect>();
+			foreach (var endEffect in IntercomTransmissionEnd)
+				if (endEffect.FileName.ToLowerInvariant().Equals(selectedTone))
+					return endEffect;
 
-            LoadRadioStartAndEndEffects();
-            LoadIntercomStartAndEndEffects();
+			return IntercomTransmissionEnd[0];
+		}
+	}
 
-            KY58EncryptionTransmitTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.KY_58_TX);
-            KY58EncryptionEndTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.KY_58_RX);
-            
-            NATOTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.NATO_TONE);
-            
-            MIDSTransmitTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.MIDS_TX);
-            MIDSEndTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.MIDS_TX_END);
+	public CachedAudioEffect KY58EncryptionTransmitTone { get; }
+	public CachedAudioEffect KY58EncryptionEndTone { get; }
+	public CachedAudioEffect NATOTone { get; }
+	public CachedAudioEffect MIDSTransmitTone { get; }
+	public CachedAudioEffect MIDSEndTone { get; }
 
-            HAVEQUICKTone = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.HAVEQUICK_TONE);
+	public CachedAudioEffect HAVEQUICKTone { get; }
 
-            FMNoise = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.FM_NOISE);
-            VHFNoise = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.VHF_NOISE);
-            UHFNoise = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.UHF_NOISE);
-            HFNoise = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.HF_NOISE);
+	public CachedAudioEffect FMNoise { get; }
+	public CachedAudioEffect UHFNoise { get; }
+	public CachedAudioEffect VHFNoise { get; }
+	public CachedAudioEffect HFNoise { get; }
 
-            //sort out volume (if needed)
-            // CreateAudioEffectDouble(HAVEQUICKTone);
-            // CreateAudioEffectDouble(NATOTone);
-            // CreateAudioEffectDouble(FMNoise);
-            // CreateAudioEffectDouble(UHFNoise);
-            // CreateAudioEffectDouble(VHFNoise);
-            // CreateAudioEffectDouble(HFNoise);
+	public CachedAudioEffect AMCollision { get; set; }
 
-            AMCollision = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.AM_COLLISION);
-            // CreateAudioEffectDouble(AMCollision);
-        }
+	private void LoadRadioStartAndEndEffects()
+	{
+		var audioEffectsList = Directory.EnumerateFiles(sourceFolder);
 
-        private void LoadRadioStartAndEndEffects()
-        {
-            var audioEffectsList = Directory.EnumerateFiles(sourceFolder);
+		//might need to split the path - we'll see
+		foreach (var effectPath in audioEffectsList)
+		{
+			var effect = effectPath.Split(Path.DirectorySeparatorChar).Last();
 
-            //might need to split the path - we'll see
-            foreach (var effectPath in audioEffectsList)
-            {
-                var effect =  effectPath.Split(Path.DirectorySeparatorChar).Last();
+			if (effect.ToLowerInvariant().StartsWith(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_START
+				    .ToString().ToLowerInvariant()))
+			{
+				var audioEffect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_START, effect,
+					effectPath);
 
-                if (effect.ToLowerInvariant().StartsWith(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_START
-                    .ToString().ToLowerInvariant()))
-                {
-                    var audioEffect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_START, effect, effectPath);
+				if (audioEffect.AudioEffectFloat != null) RadioTransmissionStart.Add(audioEffect);
+			}
+			else if (effect.ToLowerInvariant().StartsWith(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_END
+				         .ToString().ToLowerInvariant()))
+			{
+				var audioEffect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_END, effect,
+					effectPath);
 
-                    if (audioEffect.AudioEffectFloat != null)
-                    {
-                        RadioTransmissionStart.Add(audioEffect);
-                    }
+				if (audioEffect.AudioEffectFloat != null) RadioTransmissionEnd.Add(audioEffect);
+			}
+		}
 
-                }
-                else if (effect.ToLowerInvariant().StartsWith(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_END
-                    .ToString().ToLowerInvariant()))
-                {
-                    var audioEffect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_END, effect,effectPath);
+		//IF the audio folder is missing - to avoid a crash, init with a blank one
+		if (RadioTransmissionStart.Count == 0)
+			RadioTransmissionStart.Add(new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_START));
+		if (RadioTransmissionEnd.Count == 0)
+			RadioTransmissionEnd.Add(new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_END));
+	}
 
-                    if (audioEffect.AudioEffectFloat != null)
-                    {
-                        RadioTransmissionEnd.Add(audioEffect);
-                    }
-                }
-            }
+	private void LoadIntercomStartAndEndEffects()
+	{
+		var audioEffectsList = Directory.EnumerateFiles(sourceFolder);
 
-            //IF the audio folder is missing - to avoid a crash, init with a blank one
-            if (RadioTransmissionStart.Count == 0)
-            {
-                RadioTransmissionStart.Add(new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_START));
-            }
-            if (RadioTransmissionEnd.Count == 0)
-            {
-                RadioTransmissionEnd.Add(new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_END));
-            }
+		//might need to split the path - we'll see
+		foreach (var effectPath in audioEffectsList)
+		{
+			var effect = effectPath.Split(Path.DirectorySeparatorChar).Last();
 
-        }
+			if (effect.ToLowerInvariant().StartsWith(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_START
+				    .ToString().ToLowerInvariant()))
+			{
+				var audioEffect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_START, effect,
+					effectPath);
 
-        private void LoadIntercomStartAndEndEffects()
-        {
-            var audioEffectsList = Directory.EnumerateFiles(sourceFolder);
+				if (audioEffect.AudioEffectFloat != null) IntercomTransmissionStart.Add(audioEffect);
+			}
+			else if (effect.ToLowerInvariant().StartsWith(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_END
+				         .ToString().ToLowerInvariant()))
+			{
+				var audioEffect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_END, effect,
+					effectPath);
 
-            //might need to split the path - we'll see
-            foreach (var effectPath in audioEffectsList)
-            {
-                var effect = effectPath.Split(Path.DirectorySeparatorChar).Last();
+				if (audioEffect.AudioEffectFloat != null) IntercomTransmissionEnd.Add(audioEffect);
+			}
+		}
 
-                if (effect.ToLowerInvariant().StartsWith(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_START
-                    .ToString().ToLowerInvariant()))
-                {
-                    var audioEffect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_START, effect, effectPath);
+		//IF the audio folder is missing - to avoid a crash, init with a blank one
+		if (IntercomTransmissionStart.Count == 0)
+			IntercomTransmissionStart.Add(
+				new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_START));
+		if (IntercomTransmissionEnd.Count == 0)
+			IntercomTransmissionEnd.Add(new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_END));
+	}
 
-                    if (audioEffect.AudioEffectFloat != null)
-                    {
-                        IntercomTransmissionStart.Add(audioEffect);
-                    }
+	//TODO unload ever?
+	public CachedAudioEffect GetAmbientEffect(string name)
+	{
+		name = name.ToLowerInvariant();
+		if (_ambientAudioEffects.TryGetValue(name, out var effect)) return effect;
 
-                }
-                else if (effect.ToLowerInvariant().StartsWith(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_END
-                    .ToString().ToLowerInvariant()))
-                {
-                    var audioEffect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_END, effect, effectPath);
+		effect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.AMBIENT_COCKPIT,
+			name);
 
-                    if (audioEffect.AudioEffectFloat != null)
-                    {
-                        IntercomTransmissionEnd.Add(audioEffect);
-                    }
-                }
-            }
+		_ambientAudioEffects[name] = effect;
 
-            //IF the audio folder is missing - to avoid a crash, init with a blank one
-            if (IntercomTransmissionStart.Count == 0)
-            {
-                IntercomTransmissionStart.Add(new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_START));
-            }
-            if (IntercomTransmissionEnd.Count == 0)
-            {
-                IntercomTransmissionEnd.Add(new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.INTERCOM_TRANS_END));
-            }
-
-        }
-
-        //TODO unload ever?
-        public CachedAudioEffect GetAmbientEffect(string name)
-        {
-            name = name.ToLowerInvariant();
-            if (_ambientAudioEffects.TryGetValue(name, out CachedAudioEffect effect))
-            {
-                return effect;
-            }
-
-            effect = new CachedAudioEffect(CachedAudioEffect.AudioEffectTypes.AMBIENT_COCKPIT,
-                name);
-
-            _ambientAudioEffects[name] = effect;
-
-            return effect;
-        }
-    }
+		return effect;
+	}
 }

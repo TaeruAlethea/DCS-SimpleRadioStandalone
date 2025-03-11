@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.PresetChannels;
 
-namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings.RadioChannels
-{
-    public interface IPresetChannelsStore
-    {
-        IEnumerable<PresetChannel> LoadFromStore(string radioName, bool mids = false);
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings.RadioChannels;
 
-        string CreatePresetFile(string radioName);
-    }
+public interface IPresetChannelsStore
+{
+	IEnumerable<PresetChannel> LoadFromStore(string radioName, bool mids = false);
+
+	string CreatePresetFile(string radioName);
 }
