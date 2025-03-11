@@ -44,12 +44,16 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
     public partial class MainWindow : MetroWindow
     {
         public readonly MainWindowViewModel ViewModel;
+        [Obsolete("Currently on View. Will be Moved to ViewModel")]
         public delegate void ReceivedAutoConnect(string address, int port);
 
+        [Obsolete("Currently on View. Will be Moved to ViewModel")]
         public delegate void ToggleOverlayCallback(bool uiButton, bool awacs);
 
+        [Obsolete("Currently on View. Will be Moved to ViewModel")]
         private readonly AudioManager _audioManager;
 
+        [Obsolete("Currently on View. Will be Moved to ViewModel")]
         private readonly string _guid;
         private readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private AudioPreview _audioPreview;
@@ -60,6 +64,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         private Overlay.RadioOverlayWindow _radioOverlayWindow;
         private AwacsRadioOverlayWindow.RadioOverlayWindow _awacsRadioOverlay;
 
+        [Obsolete("Currently on View. Will be Moved to ViewModel")]
         private IPAddress _resolvedIp;
         private ServerSettingsWindow _serverSettingsWindow;
 
@@ -71,10 +76,11 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         private readonly DispatcherTimer _updateTimer;
         private ServerAddress _serverAddress;
         private readonly DelegateCommand _connectCommand;
-
+        
+        [Obsolete("Currently on View. Will be Moved to ViewModel")]
         private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
-
-
+        
+        [Obsolete("Currently on View. Will be Moved to ViewModel")]
         private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 
         public MainWindow()
