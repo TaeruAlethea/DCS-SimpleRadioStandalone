@@ -10,7 +10,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-	[Obsolete("MainWindow Reference is not MVVM compliant.", true)]
+	[Obsolete("MainWindow Reference is not MVVM compliant.")]
 	public MainWindow ToBeDepricatedMainWindow { get; init; }
 	
 	/// <remarks>Used in the XAML for DataBinding many things</remarks>
