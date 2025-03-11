@@ -1,6 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace DCS_SR_Client.ViewModels;
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
 public class ViewModelBase : ObservableObject
 {

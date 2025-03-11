@@ -45,7 +45,7 @@ using NLog;
 using WPFCustomMessageBox;
 using InputBinding = Ciribob.DCS.SimpleRadio.Standalone.Client.Settings.InputBinding;
 
-namespace DCS_SR_Client.ViewModels;
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
