@@ -1,24 +1,24 @@
 ﻿<controls:MetroWindow x:Class="Ciribob.DCS.SimpleRadio.Standalone.Client.UI.MainWindow"
                       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                      xmlns:clientWindow="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow"
                       xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
                       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                      xmlns:devices="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client"
-                      xmlns:input="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Settings"
                       xmlns:local="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.UI"
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                      xmlns:settings="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Settings"
                       xmlns:converters="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Utils.ValueConverters"
-					  xmlns:p="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Properties"
+                      xmlns:p="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Properties"
+                      xmlns:viewModels="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels"
                       Title="{x:Static p:Resources.ClientWindowTitle}"
                       Width="550"
                       Height="710"
-                      d:DataContext="{d:DesignInstance local:MainWindow}"
                       ResizeMode="CanMinimize"
-                      mc:Ignorable="d">
+                      mc:Ignorable="d"
+                      d:DataContext="{viewModels:MainWindowViewModel}">
+	<controls:MetroWindow.DataContext>
+		<viewModels:MainWindowViewModel x:Name="ViewModel" />
+	</controls:MetroWindow.DataContext>
 
-    <TabControl x:Name="TabControl">
+	<TabControl x:Name="TabControl">
         <TabControl.Resources>
             <converters:MicAvailabilityTooltipConverter x:Key="MicAvailabilityTooltipConverter" />
         </TabControl.Resources>
@@ -1297,7 +1297,7 @@
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Top" Margin="5" Padding="5" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CreateProfile}" Click="CreateProfile" />
+                                <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CreateProfile}" Command="{Binding CreateProfileCommand}" />
                                 <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CopyProfile}" Click="CopyProfile" />
                                 <Button Margin="5" Padding="5" Content="{x:Static p:Resources.RenameProfile}" Click="RenameProfile" />
                                 <Button Margin="5" Padding="5" Content="{x:Static p:Resources.DeleteProfile}" Click="DeleteProfile" />
