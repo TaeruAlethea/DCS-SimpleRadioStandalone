@@ -15,7 +15,7 @@
                       Height="710"
                       ResizeMode="CanMinimize"
                       mc:Ignorable="d" 
-                      d:DataContext="{viewModels:MainWindowViewModel}">
+                      d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}">
 	
 	<TabControl x:Name="TabControl">
         <TabControl.Resources>
