@@ -1,4 +1,4 @@
- using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,415 +17,376 @@ using Ciribob.DCS.SimpleRadio.Standalone.Server.Settings;
 using NLog;
 using LogManager = NLog.LogManager;
 
-namespace Ciribob.DCS.SimpleRadio.Standalone.Server.Network
+namespace Ciribob.DCS.SimpleRadio.Standalone.Server.Network;
+
+internal class UDPVoiceRouter : IHandle<ServerFrequenciesChanged>
 {
-    internal class UDPVoiceRouter: IHandle<ServerFrequenciesChanged>
-    {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+	private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private readonly ConcurrentDictionary<string, SRClient> _clientsList;
-        private readonly IEventAggregator _eventAggregator;
+	private static readonly List<int>
+		_emptyBlockedRadios =
+			new(); // Used in radio reachability check below, server does not track blocked radios, so forward all
 
-        private readonly BlockingCollection<OutgoingUDPPackets> _outGoing = new BlockingCollection<OutgoingUDPPackets>();
-        private readonly CancellationTokenSource _outgoingCancellationToken = new CancellationTokenSource();
+	private readonly ConcurrentDictionary<string, SRClient> _clientsList;
+	private readonly IEventAggregator _eventAggregator;
 
-        private readonly CancellationTokenSource _pendingProcessingCancellationToken = new CancellationTokenSource();
+	private readonly BlockingCollection<OutgoingUDPPackets> _outGoing = new();
+	private readonly CancellationTokenSource _outgoingCancellationToken = new();
 
-        private readonly BlockingCollection<PendingPacket> _pendingProcessingPackets =
-            new BlockingCollection<PendingPacket>();
+	private readonly CancellationTokenSource _pendingProcessingCancellationToken = new();
 
-        private readonly ServerSettingsStore _serverSettings = ServerSettingsStore.Instance;
-        private UdpClient _listener;
+	private readonly BlockingCollection<PendingPacket> _pendingProcessingPackets = new();
 
-        private volatile bool _stop;
+	private readonly ServerSettingsStore _serverSettings = ServerSettingsStore.Instance;
 
-        private static readonly List<int> _emptyBlockedRadios = new List<int>(); // Used in radio reachability check below, server does not track blocked radios, so forward all
-        private List<double> _testFrequencies = new List<double>();
-        private List<double> _globalFrequencies = new List<double>();
+	private readonly TransmissionLoggingQueue transmissionLoggingQueue = new();
+	private List<double> _globalFrequencies = new();
+	private UdpClient _listener;
 
-        private readonly TransmissionLoggingQueue transmissionLoggingQueue = new TransmissionLoggingQueue();
+	private volatile bool _stop;
+	private List<double> _testFrequencies = new();
 
-        public UDPVoiceRouter(ConcurrentDictionary<string, SRClient> clientsList, IEventAggregator eventAggregator)
-        {
-            _clientsList = clientsList;
-            _eventAggregator = eventAggregator;
-            _eventAggregator.Subscribe(this);
+	public UDPVoiceRouter(ConcurrentDictionary<string, SRClient> clientsList, IEventAggregator eventAggregator)
+	{
+		_clientsList = clientsList;
+		_eventAggregator = eventAggregator;
+		_eventAggregator.Subscribe(this);
 
-            var freqString = _serverSettings.GetGeneralSetting(ServerSettingsKeys.TEST_FREQUENCIES).StringValue;
-            UpdateTestFrequencies(freqString);
+		var freqString = _serverSettings.GetGeneralSetting(ServerSettingsKeys.TEST_FREQUENCIES).StringValue;
+		UpdateTestFrequencies(freqString);
 
-            var globalFreqString = _serverSettings.GetGeneralSetting(ServerSettingsKeys.GLOBAL_LOBBY_FREQUENCIES).StringValue;
-            UpdateGlobalLobbyFrequencies(globalFreqString);
-        }
+		var globalFreqString =
+			_serverSettings.GetGeneralSetting(ServerSettingsKeys.GLOBAL_LOBBY_FREQUENCIES).StringValue;
+		UpdateGlobalLobbyFrequencies(globalFreqString);
+	}
+
+	public Task HandleAsync(ServerFrequenciesChanged message, CancellationToken cancellationToken)
+	{
+		if (message.TestFrequencies != null)
+			UpdateTestFrequencies(message.TestFrequencies);
+		else
+			UpdateGlobalLobbyFrequencies(message.GlobalLobbyFrequencies);
+
+		return Task.CompletedTask;
+	}
 
 
-        private void UpdateTestFrequencies(string freqString)
-        {
-            
-            var freqStringList = freqString.Split(',');
+	private void UpdateTestFrequencies(string freqString)
+	{
+		var freqStringList = freqString.Split(',');
 
-            var newList = new List<double>();
-            foreach (var freq in freqStringList)
-            {
-                if (double.TryParse(freq.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out var freqDouble))
-                {
-                    freqDouble *= 1e+6; //convert to Hz from MHz
-                    newList.Add(freqDouble);
-                    Logger.Info("Adding Test Frequency: " + freqDouble);
-                }
-            }
+		var newList = new List<double>();
+		foreach (var freq in freqStringList)
+			if (double.TryParse(freq.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out var freqDouble))
+			{
+				freqDouble *= 1e+6; //convert to Hz from MHz
+				newList.Add(freqDouble);
+				Logger.Info("Adding Test Frequency: " + freqDouble);
+			}
 
-            _testFrequencies = newList;
-        }
+		_testFrequencies = newList;
+	}
 
-        private void UpdateGlobalLobbyFrequencies(string freqString)
-        {
+	private void UpdateGlobalLobbyFrequencies(string freqString)
+	{
+		var freqStringList = freqString.Split(',');
 
-            var freqStringList = freqString.Split(',');
+		var newList = new List<double>();
+		foreach (var freq in freqStringList)
+			if (double.TryParse(freq.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out var freqDouble))
+			{
+				freqDouble *= 1e+6; //convert to Hz from MHz
+				newList.Add(freqDouble);
+				Logger.Info("Adding Global Frequency: " + freqDouble);
+			}
 
-            var newList = new List<double>();
-            foreach (var freq in freqStringList)
-            {
-                if (double.TryParse(freq.Trim(), NumberStyles.Any, CultureInfo.InvariantCulture, out var freqDouble))
-                {
-                    freqDouble *= 1e+6; //convert to Hz from MHz
-                    newList.Add(freqDouble);
-                    Logger.Info("Adding Global Frequency: " + freqDouble);
-                }
-            }
+		_globalFrequencies = newList;
+	}
 
-            _globalFrequencies = newList;
-        }
+	public void Listen()
+	{
+		//start threads
+		//packets that need processing
+		new Thread(ProcessPackets).Start();
+		//outgoing packets
+		new Thread(SendPendingPackets).Start();
+		transmissionLoggingQueue.Start();
 
-        public void Listen()
-        {
-            //start threads
-            //packets that need processing
-            new Thread(ProcessPackets).Start();
-            //outgoing packets
-            new Thread(SendPendingPackets).Start();
-            transmissionLoggingQueue.Start();
+		var port = _serverSettings.GetServerPort();
+		_listener = new UdpClient();
+		try
+		{
+			_listener.AllowNatTraversal(true);
+		}
+		catch
+		{
+		}
 
-            var port = _serverSettings.GetServerPort();
-            _listener = new UdpClient();
-            try
-            {
-                _listener.AllowNatTraversal(true);
-            }
-            catch { }
-            
-            _listener.ExclusiveAddressUse = true;
-            _listener.DontFragment = true;
-            _listener.Client.DontFragment = true;
-            _listener.Client.Bind(new IPEndPoint(_serverSettings.GetServerIP(), port));
-            while (!_stop)
-                try
-                {
-                    var groupEP = new IPEndPoint(_serverSettings.GetServerIP(), port);
-                    var rawBytes = _listener.Receive(ref groupEP);
+		_listener.ExclusiveAddressUse = true;
+		_listener.DontFragment = true;
+		_listener.Client.DontFragment = true;
+		_listener.Client.Bind(new IPEndPoint(_serverSettings.GetServerIP(), port));
+		while (!_stop)
+			try
+			{
+				var groupEP = new IPEndPoint(_serverSettings.GetServerIP(), port);
+				var rawBytes = _listener.Receive(ref groupEP);
 
-                    if (rawBytes?.Length == 22)
-                    {
-                        try
-                        {
-                            //lookup guid here
-                            //22 bytes are guid!
-                            var guid = Encoding.ASCII.GetString(
-                                rawBytes, 0, 22);
+				if (rawBytes?.Length == 22)
+					try
+					{
+						//lookup guid here
+						//22 bytes are guid!
+						var guid = Encoding.ASCII.GetString(
+							rawBytes, 0, 22);
 
-                            if (_clientsList.ContainsKey(guid))
-                            {
-                                var client = _clientsList[guid];
-                                client.VoipPort = groupEP;
+						if (_clientsList.ContainsKey(guid))
+						{
+							var client = _clientsList[guid];
+							client.VoipPort = groupEP;
 
-                                //send back ping UDP
-                                _listener.Send(rawBytes, rawBytes.Length, groupEP);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            //dont log because it slows down thread too much...
-                        }
-                    }
-                    else if (rawBytes?.Length > 22)
-                        _pendingProcessingPackets.Add(new PendingPacket
-                        {
-                            RawBytes = rawBytes,
-                            ReceivedFrom = groupEP
-                        });
+							//send back ping UDP
+							_listener.Send(rawBytes, rawBytes.Length, groupEP);
+						}
+					}
+					catch (Exception)
+					{
+						//dont log because it slows down thread too much...
+					}
+				else if (rawBytes?.Length > 22)
+					_pendingProcessingPackets.Add(new PendingPacket
+					{
+						RawBytes = rawBytes,
+						ReceivedFrom = groupEP
+					});
+			}
+			catch (Exception e)
+			{
+				Logger.Error(e, "Error receving audio UDP for client " + e.Message);
+			}
 
-                }
-                catch (Exception e)
-                {
-                      Logger.Error(e,"Error receving audio UDP for client " + e.Message);
-                }
+		try
+		{
+			_listener.Close();
+		}
+		catch (Exception)
+		{
+		}
+	}
 
-            try
-            {
-                _listener.Close();
-            }
-            catch (Exception)
-            {
-            }
-        }
+	public void RequestStop()
+	{
+		_stop = true;
+		try
+		{
+			_listener.Close();
+		}
+		catch (Exception)
+		{
+		}
 
-        public void RequestStop()
-        {
-            _stop = true;
-            try
-            {
-                _listener.Close();
-            }
-            catch (Exception)
-            {
-            }
+		_outgoingCancellationToken.Cancel();
+		_pendingProcessingCancellationToken.Cancel();
+		transmissionLoggingQueue.Stop();
+	}
 
-            _outgoingCancellationToken.Cancel();
-            _pendingProcessingCancellationToken.Cancel();
-            transmissionLoggingQueue.Stop();
-        }
+	private void ProcessPackets()
+	{
+		while (!_stop)
+			try
+			{
+				PendingPacket udpPacket = null;
+				_pendingProcessingPackets.TryTake(out udpPacket, 100000, _pendingProcessingCancellationToken.Token);
 
-        private void ProcessPackets()
-        {
-            while (!_stop)
-                try
-                {
-                    PendingPacket udpPacket = null;
-                    _pendingProcessingPackets.TryTake(out udpPacket, 100000, _pendingProcessingCancellationToken.Token);
+				if (udpPacket != null)
+				{
+					//last 22 bytes are guid!
+					var guid = Encoding.ASCII.GetString(
+						udpPacket.RawBytes, udpPacket.RawBytes.Length - 22, 22);
 
-                    if (udpPacket != null)
-                    {
-                        //last 22 bytes are guid!
-                        var guid = Encoding.ASCII.GetString(
-                            udpPacket.RawBytes, udpPacket.RawBytes.Length - 22, 22);
+					if (_clientsList.ContainsKey(guid))
+					{
+						var client = _clientsList[guid];
+						client.VoipPort = udpPacket.ReceivedFrom;
 
-                        if (_clientsList.ContainsKey(guid))
-                        {
-                            var client = _clientsList[guid];
-                            client.VoipPort = udpPacket.ReceivedFrom;
+						var spectatorAudioDisabled =
+							_serverSettings.GetGeneralSetting(ServerSettingsKeys.SPECTATORS_AUDIO_DISABLED).BoolValue;
 
-                            var spectatorAudioDisabled =
-                                _serverSettings.GetGeneralSetting(ServerSettingsKeys.SPECTATORS_AUDIO_DISABLED).BoolValue;
+						if ((client.Coalition == 0 && spectatorAudioDisabled) || client.Muted)
+						{
+							// IGNORE THE AUDIO
+						}
+						else
+						{
+							try
+							{
+								//decode
+								var udpVoicePacket = UDPVoicePacket.DecodeVoicePacket(udpPacket.RawBytes);
 
-                            if ((client.Coalition == 0 && spectatorAudioDisabled) || client.Muted)
-                            {
-                                // IGNORE THE AUDIO
-                            }
-                            else
-                            {
-                                try
-                                {
-                                    //decode
-                                    var udpVoicePacket = UDPVoicePacket.DecodeVoicePacket(udpPacket.RawBytes);
+								if (udpVoicePacket != null)
+									//magical ping ignore message 4 - its an empty voip packet to intialise VoIP if
+									//someone doesnt transmit
+								{
+									var outgoingVoice = GenerateOutgoingPacket(udpVoicePacket, udpPacket, client);
 
-                                    if (udpVoicePacket != null)
-                                        //magical ping ignore message 4 - its an empty voip packet to intialise VoIP if
-                                        //someone doesnt transmit
-                                    {
-                                        var outgoingVoice = GenerateOutgoingPacket(udpVoicePacket, udpPacket, client);
+									if (outgoingVoice != null)
+									{
+										//Add to the processing queue
+										_outGoing.Add(outgoingVoice);
 
-                                        if (outgoingVoice != null)
-                                        {
-                                            //Add to the processing queue
-                                            _outGoing.Add(outgoingVoice);
-                                            
-                                            //mark as transmitting for the UI
-                                            double mainFrequency = udpVoicePacket.Frequencies.FirstOrDefault();
-                                            // Only trigger transmitting frequency update for "proper" packets (excluding invalid frequencies and magic ping packets with modulation 4)
-                                            if (mainFrequency > 0)
-                                            {
-                                                RadioInformation.Modulation mainModulation = (RadioInformation.Modulation)udpVoicePacket.Modulations[0];
-                                                if (mainModulation == RadioInformation.Modulation.INTERCOM)
-                                                {
-                                                    client.TransmittingFrequency = "INTERCOM";
-                                                }
-                                                else
-                                                {
-                                                    client.TransmittingFrequency = $"{(mainFrequency / 1000000).ToString("0.000", CultureInfo.InvariantCulture)} {mainModulation}";
-                                                }
-                                                client.LastTransmissionReceived = DateTime.Now;
+										//mark as transmitting for the UI
+										var mainFrequency = udpVoicePacket.Frequencies.FirstOrDefault();
+										// Only trigger transmitting frequency update for "proper" packets (excluding invalid frequencies and magic ping packets with modulation 4)
+										if (mainFrequency > 0)
+										{
+											var mainModulation =
+												(RadioInformation.Modulation)udpVoicePacket.Modulations[0];
+											if (mainModulation == RadioInformation.Modulation.INTERCOM)
+												client.TransmittingFrequency = "INTERCOM";
+											else
+												client.TransmittingFrequency =
+													$"{(mainFrequency / 1000000).ToString("0.000", CultureInfo.InvariantCulture)} {mainModulation}";
+											client.LastTransmissionReceived = DateTime.Now;
 
-                                                // Only log the initial transmission
-                                                // only log received transmissions!
-                                                if (udpVoicePacket.RetransmissionCount == 0)
-                                                {
-                                                    transmissionLoggingQueue.LogTransmission(client);
-                                                }
-                                            }
-                                        }
+											// Only log the initial transmission
+											// only log received transmissions!
+											if (udpVoicePacket.RetransmissionCount == 0)
+												transmissionLoggingQueue.LogTransmission(client);
+										}
+									}
+								}
+							}
+							catch (Exception)
+							{
+								//Hide for now, slows down loop to much....
+							}
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.Info("Failed to Process UDP Packet: " + ex.Message);
+			}
+	}
 
-                                    }
-                                }
-                                catch (Exception)
-                                {
-                                    //Hide for now, slows down loop to much....
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Info("Failed to Process UDP Packet: " + ex.Message);
-                }
-        }
+	private
+		void SendPendingPackets()
+	{
+		//_listener.Send(bytes, bytes.Length, ip);
+		while (!_stop)
+			try
+			{
+				OutgoingUDPPackets udpPacket = null;
+				_outGoing.TryTake(out udpPacket, 100000, _pendingProcessingCancellationToken.Token);
 
-        private
-            void SendPendingPackets()
-        {
-            //_listener.Send(bytes, bytes.Length, ip);
-            while (!_stop)
-                try
-                {
-                    OutgoingUDPPackets udpPacket = null;
-                    _outGoing.TryTake(out udpPacket, 100000, _pendingProcessingCancellationToken.Token);
+				if (udpPacket != null)
+				{
+					var bytes = udpPacket.ReceivedPacket;
+					var bytesLength = bytes.Length;
+					foreach (var outgoingEndPoint in udpPacket.OutgoingEndPoints)
+						try
+						{
+							_listener.Send(bytes, bytesLength, outgoingEndPoint);
+						}
+						catch (Exception)
+						{
+							//dont log, slows down too much...
+						}
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.Info("Error processing Sending Queue UDP Packet: " + ex.Message);
+			}
+	}
 
-                    if (udpPacket != null)
-                    {
-                        var bytes = udpPacket.ReceivedPacket;
-                        var bytesLength = bytes.Length;
-                        foreach (var outgoingEndPoint in udpPacket.OutgoingEndPoints)
-                            try
-                            {
-                                _listener.Send(bytes, bytesLength, outgoingEndPoint);
-                            }
-                            catch (Exception)
-                            {
-                                //dont log, slows down too much...
-                            }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Info("Error processing Sending Queue UDP Packet: " + ex.Message);
-                }
-        }
+	private OutgoingUDPPackets GenerateOutgoingPacket(UDPVoicePacket udpVoice, PendingPacket pendingPacket,
+		SRClient fromClient)
+	{
+		var nodeHopCount =
+			_serverSettings.GetGeneralSetting(ServerSettingsKeys.RETRANSMISSION_NODE_LIMIT).IntValue;
 
-        private OutgoingUDPPackets GenerateOutgoingPacket(UDPVoicePacket udpVoice, PendingPacket pendingPacket,
-            SRClient fromClient)
-        {
-            var nodeHopCount =
-                _serverSettings.GetGeneralSetting(ServerSettingsKeys.RETRANSMISSION_NODE_LIMIT).IntValue;
+		if (udpVoice.RetransmissionCount > nodeHopCount)
+			//not allowed to retransmit any further
+			return null;
 
-            if (udpVoice.RetransmissionCount > nodeHopCount)
-            {
-                //not allowed to retransmit any further
-                return null;
-            }
+		var outgoingList = new HashSet<IPEndPoint>();
 
-            var outgoingList = new HashSet<IPEndPoint>();
+		var coalitionSecurity =
+			_serverSettings.GetGeneralSetting(ServerSettingsKeys.COALITION_AUDIO_SECURITY).BoolValue;
 
-            var coalitionSecurity =
-                _serverSettings.GetGeneralSetting(ServerSettingsKeys.COALITION_AUDIO_SECURITY).BoolValue;
+		var guid = fromClient.ClientGuid;
 
-            var guid = fromClient.ClientGuid;
+		var strictEncryption = _serverSettings.GetGeneralSetting(ServerSettingsKeys.STRICT_RADIO_ENCRYPTION).BoolValue;
 
-            var strictEncryption = _serverSettings.GetGeneralSetting(ServerSettingsKeys.STRICT_RADIO_ENCRYPTION).BoolValue;
+		foreach (var client in _clientsList)
+			if (!client.Key.Equals(guid))
+			{
+				var ip = client.Value.VoipPort;
+				var global = false;
+				if (ip != null)
+				{
+					for (var i = 0; i < udpVoice.Frequencies.Length; i++)
+						foreach (var testFrequency in _globalFrequencies)
+							if (DCSPlayerRadioInfo.FreqCloseEnough(testFrequency, udpVoice.Frequencies[i]))
+							{
+								//ignore everything as its global frequency
+								global = true;
+								break;
+							}
 
-            foreach (var client in _clientsList)
-            {
-                if (!client.Key.Equals(guid))
-                {
-                    var ip = client.Value.VoipPort;
-                    bool global = false;
-                    if (ip != null)
-                    {
+					if (global)
+					{
+						outgoingList.Add(ip);
+					}
+					// check that either coalition radio security is disabled OR the coalitions match
+					else if (!coalitionSecurity || client.Value.Coalition == fromClient.Coalition)
+					{
+						var radioInfo = client.Value.RadioInfo;
 
-                        for (int i = 0; i < udpVoice.Frequencies.Length; i++)
-                        {
-                            foreach (var testFrequency in _globalFrequencies)
-                            {
-                                if (DCSPlayerRadioInfo.FreqCloseEnough(testFrequency, udpVoice.Frequencies[i]))
-                                {
-                                    //ignore everything as its global frequency
-                                    global = true;
-                                    break;
-                                }
-                            }
-                        }
+						if (radioInfo != null)
+							for (var i = 0; i < udpVoice.Frequencies.Length; i++)
+							{
+								RadioReceivingState radioReceivingState = null;
+								bool decryptable;
+								var receivingRadio = radioInfo.CanHearTransmission(udpVoice.Frequencies[i],
+									(RadioInformation.Modulation)udpVoice.Modulations[i],
+									udpVoice.Encryptions[i],
+									strictEncryption,
+									udpVoice.UnitId,
+									_emptyBlockedRadios,
+									out radioReceivingState,
+									out decryptable);
 
-                        if (global)
-                        {
-                            outgoingList.Add(ip);
-                        }
-                        // check that either coalition radio security is disabled OR the coalitions match
-                        else if ((!coalitionSecurity || (client.Value.Coalition == fromClient.Coalition)))
-                        {
+								//only send if we can hear!
+								if (receivingRadio != null) outgoingList.Add(ip);
+							}
+					}
+				}
+			}
+			else
+			{
+				var ip = client.Value.VoipPort;
 
-                            var radioInfo = client.Value.RadioInfo;
+				if (ip != null)
+					foreach (var frequency in udpVoice.Frequencies)
+					foreach (var testFrequency in _testFrequencies)
+						if (DCSPlayerRadioInfo.FreqCloseEnough(testFrequency, frequency))
+						{
+							//send back to sending client as its a test frequency
+							outgoingList.Add(ip);
+							break;
+						}
+			}
 
-                            if (radioInfo != null)
-                            {
-                                for (int i = 0; i < udpVoice.Frequencies.Length; i++)
-                                {
-                                    RadioReceivingState radioReceivingState = null;
-                                    bool decryptable;
-                                    var receivingRadio = radioInfo.CanHearTransmission(udpVoice.Frequencies[i],
-                                        (RadioInformation.Modulation)udpVoice.Modulations[i],
-                                        udpVoice.Encryptions[i],
-                                        strictEncryption,
-                                        udpVoice.UnitId,
-                                        _emptyBlockedRadios,
-                                        out radioReceivingState,
-                                        out decryptable);
+		if (outgoingList.Count > 0)
+			return new OutgoingUDPPackets
+			{
+				OutgoingEndPoints = outgoingList.ToList(),
+				ReceivedPacket = pendingPacket.RawBytes
+			};
 
-                                    //only send if we can hear!
-                                    if (receivingRadio != null)
-                                    {
-                                        outgoingList.Add(ip);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    var ip = client.Value.VoipPort;
-
-                    if (ip != null)
-                    {
-                        foreach (var frequency in udpVoice.Frequencies)
-                        {
-                            foreach (var testFrequency in _testFrequencies)
-                            {
-                                if (DCSPlayerRadioInfo.FreqCloseEnough(testFrequency, frequency))
-                                {
-                                    //send back to sending client as its a test frequency
-                                    outgoingList.Add(ip);
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if (outgoingList.Count > 0)
-            {
-                return new OutgoingUDPPackets
-                {
-                    OutgoingEndPoints = outgoingList.ToList(),
-                    ReceivedPacket = pendingPacket.RawBytes
-                };
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public Task HandleAsync(ServerFrequenciesChanged message, CancellationToken cancellationToken)
-        {
-            if (message.TestFrequencies != null)
-            {
-                UpdateTestFrequencies(message.TestFrequencies);
-            }
-            else
-            {
-                UpdateGlobalLobbyFrequencies(message.GlobalLobbyFrequencies);
-            }
-
-            return Task.CompletedTask;
-        }
-    }
+		return null;
+	}
 }

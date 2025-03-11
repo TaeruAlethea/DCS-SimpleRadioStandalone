@@ -6,56 +6,59 @@
 [![NuGet](https://img.shields.io/nuget/v/NetCoreServer.svg)](https://www.nuget.org/packages/NetCoreServer/)
 
 Ultra fast and low latency asynchronous socket server & client C# .NET Core
-library with support TCP, SSL, UDP, HTTP, HTTPS, WebSocket protocols and [10K connections problem](https://en.wikipedia.org/wiki/C10k_problem)
+library with support TCP, SSL, UDP, HTTP, HTTPS, WebSocket protocols
+and [10K connections problem](https://en.wikipedia.org/wiki/C10k_problem)
 solution.
 
 [NetCoreServer documentation](https://chronoxor.github.io/NetCoreServer)<br/>
 [NetCoreServer downloads](https://github.com/chronoxor/NetCoreServer/releases)<br/>
 
 # Contents
-  * [Features](#features)
-  * [Requirements](#requirements)
-  * [How to build?](#how-to-build)
-  * [Examples](#examples)
-    * [Example: TCP chat server](#example-tcp-chat-server)
-    * [Example: TCP chat client](#example-tcp-chat-client)
-    * [Example: SSL chat server](#example-ssl-chat-server)
-    * [Example: SSL chat client](#example-ssl-chat-client)
-    * [Example: UDP echo server](#example-udp-echo-server)
-    * [Example: UDP echo client](#example-udp-echo-client)
-    * [Example: UDP multicast server](#example-udp-multicast-server)
-    * [Example: UDP multicast client](#example-udp-multicast-client)
-    * [Example: HTTP server](#example-http-server)
-    * [Example: HTTP client](#example-http-client)
-    * [Example: HTTPS server](#example-https-server)
-    * [Example: HTTPS client](#example-https-client)
-    * [Example: WebSocket chat server](#example-websocket-chat-server)
-    * [Example: WebSocket chat client](#example-websocket-chat-client)
-    * [Example: WebSocket secure chat server](#example-websocket-secure-chat-server)
-    * [Example: WebSocket secure chat client](#example-websocket-secure-chat-client)
-  * [Performance](#performance)
-    * [Benchmark: Round-Trip](#benchmark-round-trip)
-      * [TCP echo server](#tcp-echo-server)
-      * [SSL echo server](#ssl-echo-server)
-      * [UDP echo server](#udp-echo-server)
-      * [WebSocket echo server](#websocket-echo-server)
-      * [WebSocket secure echo server](#websocket-secure-echo-server)
-    * [Benchmark: Multicast](#benchmark-multicast)
-      * [TCP multicast server](#tcp-multicast-server)
-      * [SSL multicast server](#ssl-multicast-server)
-      * [UDP multicast server](#udp-multicast-server)
-      * [WebSocket multicast server](#websocket-multicast-server)
-      * [WebSocket secure multicast server](#websocket-secure-multicast-server)
-    * [Benchmark: Web Server](#benchmark-web-server)
-      * [HTTP Trace server](#http-trace-server)
-      * [HTTPS Trace server](#https-trace-server)
-  * [OpenSSL certificates](#openssl-certificates)
-    * [Certificate Authority](#certificate-authority)
-    * [SSL Server certificate](#ssl-server-certificate)
-    * [SSL Client certificate](#ssl-client-certificate)
-    * [Diffie-Hellman key exchange](#diffie-hellman-key-exchange)
+
+* [Features](#features)
+* [Requirements](#requirements)
+* [How to build?](#how-to-build)
+* [Examples](#examples)
+	* [Example: TCP chat server](#example-tcp-chat-server)
+	* [Example: TCP chat client](#example-tcp-chat-client)
+	* [Example: SSL chat server](#example-ssl-chat-server)
+	* [Example: SSL chat client](#example-ssl-chat-client)
+	* [Example: UDP echo server](#example-udp-echo-server)
+	* [Example: UDP echo client](#example-udp-echo-client)
+	* [Example: UDP multicast server](#example-udp-multicast-server)
+	* [Example: UDP multicast client](#example-udp-multicast-client)
+	* [Example: HTTP server](#example-http-server)
+	* [Example: HTTP client](#example-http-client)
+	* [Example: HTTPS server](#example-https-server)
+	* [Example: HTTPS client](#example-https-client)
+	* [Example: WebSocket chat server](#example-websocket-chat-server)
+	* [Example: WebSocket chat client](#example-websocket-chat-client)
+	* [Example: WebSocket secure chat server](#example-websocket-secure-chat-server)
+	* [Example: WebSocket secure chat client](#example-websocket-secure-chat-client)
+* [Performance](#performance)
+	* [Benchmark: Round-Trip](#benchmark-round-trip)
+		* [TCP echo server](#tcp-echo-server)
+		* [SSL echo server](#ssl-echo-server)
+		* [UDP echo server](#udp-echo-server)
+		* [WebSocket echo server](#websocket-echo-server)
+		* [WebSocket secure echo server](#websocket-secure-echo-server)
+	* [Benchmark: Multicast](#benchmark-multicast)
+		* [TCP multicast server](#tcp-multicast-server)
+		* [SSL multicast server](#ssl-multicast-server)
+		* [UDP multicast server](#udp-multicast-server)
+		* [WebSocket multicast server](#websocket-multicast-server)
+		* [WebSocket secure multicast server](#websocket-secure-multicast-server)
+	* [Benchmark: Web Server](#benchmark-web-server)
+		* [HTTP Trace server](#http-trace-server)
+		* [HTTPS Trace server](#https-trace-server)
+* [OpenSSL certificates](#openssl-certificates)
+	* [Certificate Authority](#certificate-authority)
+	* [SSL Server certificate](#ssl-server-certificate)
+	* [SSL Client certificate](#ssl-client-certificate)
+	* [Diffie-Hellman key exchange](#diffie-hellman-key-exchange)
 
 # Features
+
 * Cross platform (Linux, OSX, Windows)
 * Asynchronous communication
 * Supported transport protocols: [TCP](#example-tcp-chat-server), [SSL](#example-ssl-chat-server),
@@ -65,6 +68,7 @@ solution.
 * Supported [Swagger OpenAPI](https://swagger.io/specification/) iterative documentation
 
 # Requirements
+
 * Linux
 * OSX
 * Windows 10
@@ -75,36 +79,44 @@ solution.
 * [Visual Studio](https://www.visualstudio.com)
 
 Optional:
+
 * [Rider](https://www.jetbrains.com/rider)
 
 # How to build?
 
 ### Setup repository
+
 ```shell
 git clone https://github.com/chronoxor/NetCoreServer.git
 cd NetCoreServer
 ```
 
 ### Linux
+
 ```shell
 cd build
 ./unix.sh
 ```
 
 ### OSX
+
 ```shell
 cd build
 ./unix.sh
 ```
 
 ### Windows (Visual Studio)
-Open and build [NetCoreServer.sln](https://github.com/chronoxor/NetCoreServer/blob/master/NetCoreServer.sln) or run the build script:
+
+Open and build [NetCoreServer.sln](https://github.com/chronoxor/NetCoreServer/blob/master/NetCoreServer.sln) or run the
+build script:
+
 ```shell
 cd build
 vs.bat
 ```
 
 The build script will create "release" directory with zip files:
+
 * NetCoreServer.zip - C# Server assembly
 * Benchmarks.zip - C# Server benchmarks
 * Examples.zip - C# Server examples
@@ -112,6 +124,7 @@ The build script will create "release" directory with zip files:
 # Examples
 
 ## Example: TCP chat server
+
 Here comes the example of the TCP chat server. It handles multiple TCP client
 sessions and multicast received message from any session to all ones. Also it
 is possible to send admin message directly from the server.
@@ -228,6 +241,7 @@ namespace TcpChatServer
 ```
 
 ## Example: TCP chat client
+
 Here comes the example of the TCP chat client. It connects to the TCP chat
 server and allows to send message to it and receive new messages.
 
@@ -341,6 +355,7 @@ namespace TcpChatClient
 ```
 
 ## Example: SSL chat server
+
 Here comes the example of the SSL chat server. It handles multiple SSL client
 sessions and multicast received message from any session to all ones. Also it
 is possible to send admin message directly from the server.
@@ -470,6 +485,7 @@ namespace SslChatServer
 ```
 
 ## Example: SSL chat client
+
 Here comes the example of the SSL chat client. It connects to the SSL chat
 server and allows to send message to it and receive new messages.
 
@@ -596,6 +612,7 @@ namespace SslChatClient
 ```
 
 ## Example: UDP echo server
+
 Here comes the example of the UDP echo server. It receives a datagram mesage
 from any UDP client and resend it back without any changes.
 
@@ -687,6 +704,7 @@ namespace UdpEchoServer
 ```
 
 ## Example: UDP echo client
+
 Here comes the example of the UDP echo client. It sends user datagram message
 to UDP server and listen for response.
 
@@ -807,6 +825,7 @@ namespace UdpEchoClient
 ```
 
 ## Example: UDP multicast server
+
 Here comes the example of the UDP multicast server. It use multicast IP address
 to multicast datagram messages to all client that joined corresponding UDP
 multicast group.
@@ -889,6 +908,7 @@ namespace UdpMulticastServer
 ```
 
 ## Example: UDP multicast client
+
 Here comes the example of the UDP multicast client. It use multicast IP address
 and joins UDP multicast group in order to receive multicasted datagram messages
 from UDP server.
@@ -1020,10 +1040,12 @@ namespace UdpMulticastClient
 ```
 
 ## Example: HTTP server
+
 Here comes the example of the HTTP cache server. It allows to manipulate
 cache data with HTTP methods (GET, POST, PUT and DELETE).
 
-Use the following link to open [Swagger OpenAPI](https://swagger.io/specification/) iterative documentation: http://localhost:8080/api/index.html
+Use the following link to open [Swagger OpenAPI](https://swagger.io/specification/) iterative
+documentation: http://localhost:8080/api/index.html
 
 ![OpenAPI-HTTP](https://github.com/chronoxor/NetCoreServer/raw/master/images/openapi-http.png)
 
@@ -1194,6 +1216,7 @@ namespace HttpServer
 ```
 
 ## Example: HTTP client
+
 Here comes the example of the HTTP client. It allows to send HTTP requests
 (GET, POST, PUT and DELETE) and receive HTTP responses.
 
@@ -1314,11 +1337,13 @@ namespace HttpClient
 ```
 
 ## Example: HTTPS server
+
 Here comes the example of the HTTPS cache server. It allows to manipulate
 cache data with HTTP methods (GET, POST, PUT and DELETE) with secured
 transport protocol.
 
-Use the following link to open [Swagger OpenAPI](https://swagger.io/specification/) iterative documentation: https://localhost:8443/api/index.html
+Use the following link to open [Swagger OpenAPI](https://swagger.io/specification/) iterative
+documentation: https://localhost:8443/api/index.html
 
 ![OpenAPI-HTTPS](https://github.com/chronoxor/NetCoreServer/raw/master/images/openapi-https.png)
 
@@ -1494,6 +1519,7 @@ namespace HttpsServer
 ```
 
 ## Example: HTTPS client
+
 Here comes the example of the HTTPS client. It allows to send HTTP requests
 (GET, POST, PUT and DELETE) and receive HTTP responses with secured
 transport protocol.
@@ -1620,6 +1646,7 @@ namespace HttpsClient
 ```
 
 ## Example: WebSocket chat server
+
 Here comes the example of the WebSocket chat server. It handles multiple
 WebSocket client sessions and multicast received message from any session
 to all ones. Also it is possible to send admin message directly from the
@@ -1747,6 +1774,7 @@ namespace WsChatServer
 ```
 
 ## Example: WebSocket chat client
+
 Here comes the example of the WebSocket chat client. It connects to the
 WebSocket chat server and allows to send message to it and receive new
 messages.
@@ -1880,6 +1908,7 @@ namespace WsChatClient
 ```
 
 ## Example: WebSocket secure chat server
+
 Here comes the example of the WebSocket secure chat server. It handles
 multiple WebSocket secure client sessions and multicast received message
 from any session to all ones. Also it is possible to send admin message
@@ -2015,6 +2044,7 @@ namespace WssChatServer
 ```
 
 ## Example: WebSocket secure chat client
+
 Here comes the example of the WebSocket secure chat client. It connects to
 the WebSocket secure chat server and allows to send message to it and receive
 new messages.
@@ -2163,6 +2193,7 @@ namespace WssChatClient
 Here comes several communication scenarios with timing measurements.
 
 Benchmark environment is the following:
+
 ```
 CPU architecutre: Intel(R) Core(TM) i7-4790K CPU @ 4.00GHz
 CPU logical cores: 8
@@ -2420,7 +2451,8 @@ of errors.
 ### TCP multicast server
 
 * [TcpMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/TcpMulticastServer/Program.cs)
-* [TcpMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/TcpMulticastClient/Program.cs) -c 1
+* [TcpMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/TcpMulticastClient/Program.cs)
+  -c 1
 
 ```
 Server address: 127.0.0.1
@@ -2440,7 +2472,8 @@ Message throughput: 1330734 msg/s
 ```
 
 * [TcpMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/TcpMulticastServer/Program.cs)
-* [TcpMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/TcpMulticastClient/Program.cs) -c 100
+* [TcpMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/TcpMulticastClient/Program.cs)
+  -c 100
 
 ```
 Server address: 127.0.0.1
@@ -2462,7 +2495,8 @@ Message throughput: 1365280 msg/s
 ### SSL multicast server
 
 * [SslMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/SslMulticastServer/Program.cs)
-* [SslMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/SslMulticastClient/Program.cs) -c 1
+* [SslMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/SslMulticastClient/Program.cs)
+  -c 1
 
 ```
 Server address: 127.0.0.1
@@ -2482,7 +2516,8 @@ Message throughput: 1063075 msg/s
 ```
 
 * [SslMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/SslMulticastServer/Program.cs)
-* [SslMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/SslMulticastClient/Program.cs) -c 100
+* [SslMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/SslMulticastClient/Program.cs)
+  -c 100
 
 ```
 Server address: 127.0.0.1
@@ -2504,7 +2539,8 @@ Message throughput: 1109393 msg/s
 ### UDP multicast server
 
 * [UdpMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/UdpMulticastServer/Program.cs)
-* [UdpMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/UdpMulticastClient/Program.cs) -c 1
+* [UdpMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/UdpMulticastClient/Program.cs)
+  -c 1
 
 ```
 Server address: 239.255.0.1
@@ -2524,7 +2560,8 @@ Message throughput: 43205 msg/s
 ```
 
 * [UdpMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/UdpMulticastServer/Program.cs)
-* [UdpMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/UdpMulticastClient/Program.cs) -c 100
+* [UdpMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/UdpMulticastClient/Program.cs)
+  -c 100
 
 ```
 Server address: 239.255.0.1
@@ -2546,7 +2583,8 @@ Message throughput: 93606 msg/s
 ### WebSocket multicast server
 
 * [WsMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WsMulticastServer/Program.cs)
-* [WsMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WsMulticastClient/Program.cs) -c 1
+* [WsMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WsMulticastClient/Program.cs)
+  -c 1
 
 ```
 Server address: 127.0.0.1
@@ -2566,7 +2604,8 @@ Message throughput: 597121 msg/s
 ```
 
 * [WsMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WsMulticastServer/Program.cs)
-* [WsMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WsMulticastClient/Program.cs) -c 100
+* [WsMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WsMulticastClient/Program.cs)
+  -c 100
 
 ```
 Server address: 127.0.0.1
@@ -2588,7 +2627,8 @@ Message throughput: 403466 msg/s
 ### WebSocket secure multicast server
 
 * [WssMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WssMulticastServer/Program.cs)
-* [WssMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WssMulticastClient/Program.cs) -c 1
+* [WssMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WssMulticastClient/Program.cs)
+  -c 1
 
 ```
 Server address: 127.0.0.1
@@ -2608,7 +2648,8 @@ Message throughput: 601338 msg/s
 ```
 
 * [WssMulticastServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WssMulticastServer/Program.cs)
-* [WssMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WssMulticastClient/Program.cs) -c 100
+* [WssMulticastClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/WssMulticastClient/Program.cs)
+  -c 100
 
 ```
 Server address: 127.0.0.1
@@ -2652,7 +2693,8 @@ Message throughput: 10820 msg/s
 ```
 
 * [HttpTraceServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpTraceServer/Program.cs)
-* [HttpTraceClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpTraceClient/Program.cs) -c 100
+* [HttpTraceClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpTraceClient/Program.cs) -c
+  100
 
 ```
 Server address: 127.0.0.1
@@ -2674,7 +2716,8 @@ Message throughput: 39807 msg/s
 ### HTTPS Trace server
 
 * [HttpsTraceServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpsTraceServer/Program.cs)
-* [HttpsTraceClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpsTraceClient/Program.cs) -c 1
+* [HttpsTraceClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpsTraceClient/Program.cs) -c
+  1
 
 ```
 Server address: 127.0.0.1
@@ -2694,7 +2737,8 @@ Message throughput: 10189 msg/s
 ```
 
 * [HttpsTraceServer](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpsTraceServer/Program.cs)
-* [HttpsTraceClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpsTraceClient/Program.cs) -c 100
+* [HttpsTraceClient](https://github.com/chronoxor/NetCoreServer/blob/master/performance/HttpsTraceClient/Program.cs) -c
+  100
 
 ```
 Server address: 127.0.0.1
@@ -2714,6 +2758,7 @@ Message throughput: 50471 msg/s
 ```
 
 # OpenSSL certificates
+
 In order to create OpenSSL based server and client you should prepare a set of
 SSL certificates. Here comes several steps to get a self-signed set of SSL
 certificates for testing purposes:
@@ -2721,26 +2766,31 @@ certificates for testing purposes:
 ## Certificate Authority
 
 * Create CA private key
+
 ```shell
 openssl genrsa -passout pass:qwerty -out ca-secret.key 4096
 ```
 
 * Remove passphrase
+
 ```shell
 openssl rsa -passin pass:qwerty -in ca-secret.key -out ca.key
 ```
 
 * Create CA self-signed certificate
+
 ```shell
 openssl req -new -x509 -days 3650 -subj '/C=BY/ST=Belarus/L=Minsk/O=Example root CA/OU=Example CA unit/CN=example.com' -key ca.key -out ca.crt
 ```
 
 * Convert CA self-signed certificate to PFX
+
 ```shell
 openssl pkcs12 -export -passout pass:qwerty -inkey ca.key -in ca.crt -out ca.pfx
 ```
 
 * Convert CA self-signed certificate to PEM
+
 ```shell
 openssl pkcs12 -passin pass:qwerty -passout pass:qwerty -in ca.pfx -out ca.pem
 ```
@@ -2748,31 +2798,37 @@ openssl pkcs12 -passin pass:qwerty -passout pass:qwerty -in ca.pfx -out ca.pem
 ## SSL Server certificate
 
 * Create private key for the server
+
 ```shell
 openssl genrsa -passout pass:qwerty -out server-secret.key 4096
 ```
 
 * Remove passphrase
+
 ```shell
 openssl rsa -passin pass:qwerty -in server-secret.key -out server.key
 ```
 
 * Create CSR for the server
+
 ```shell
 openssl req -new -subj '/C=BY/ST=Belarus/L=Minsk/O=Example server/OU=Example server unit/CN=server.example.com' -key server.key -out server.csr
 ```
 
 * Create certificate for the server
+
 ```shell
 openssl x509 -req -days 3650 -in server.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out server.crt
 ```
 
 * Convert the server certificate to PFX
+
 ```shell
 openssl pkcs12 -export -passout pass:qwerty -inkey server.key -in server.crt -out server.pfx
 ```
 
 * Convert the server certificate to PEM
+
 ```shell
 openssl pkcs12 -passin pass:qwerty -passout pass:qwerty -in server.pfx -out server.pem
 ```
@@ -2780,31 +2836,37 @@ openssl pkcs12 -passin pass:qwerty -passout pass:qwerty -in server.pfx -out serv
 ## SSL Client certificate
 
 * Create private key for the client
+
 ```shell
 openssl genrsa -passout pass:qwerty -out client-secret.key 4096
 ```
 
 * Remove passphrase
+
 ```shell
 openssl rsa -passin pass:qwerty -in client-secret.key -out client.key
 ```
 
 * Create CSR for the client
+
 ```shell
 openssl req -new -subj '/C=BY/ST=Belarus/L=Minsk/O=Example client/OU=Example client unit/CN=client.example.com' -key client.key -out client.csr
 ```
 
 * Create the client certificate
+
 ```shell
 openssl x509 -req -days 3650 -in client.csr -CA ca.crt -CAkey ca.key -set_serial 01 -out client.crt
 ```
 
 * Convert the client certificate to PFX
+
 ```shell
 openssl pkcs12 -export -passout pass:qwerty -inkey client.key -in client.crt -out client.pfx
 ```
 
 * Convert the client certificate to PEM
+
 ```shell
 openssl pkcs12 -passin pass:qwerty -passout pass:qwerty -in client.pfx -out client.pem
 ```
@@ -2812,6 +2874,7 @@ openssl pkcs12 -passin pass:qwerty -passout pass:qwerty -in client.pfx -out clie
 ## Diffie-Hellman key exchange
 
 * Create DH parameters
+
 ```shell
 openssl dhparam -out dh4096.pem 4096
 ```
