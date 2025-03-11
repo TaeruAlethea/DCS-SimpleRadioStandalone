@@ -1,3 +1,4 @@
+using System;
 using System.Runtime;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Preferences;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
@@ -9,6 +10,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
+	[Obsolete("MainWindow Reference is not MVVM compliant.", true)]
 	public MainWindow ToBeDepricatedMainWindow { get; init; }
 	
 	/// <remarks>Used in the XAML for DataBinding many things</remarks>
