@@ -1,40 +1,39 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
-using System.Linq;
-using System.Net;
 using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using Ciribob.DCS.SimpleRadio.Standalone.Common.Properties;
 using NLog;
-using Octokit;
-using Application = System.Windows.Application;
 
-namespace Ciribob.DCS.SimpleRadio.Standalone.Common
+namespace Ciribob.DCS.SimpleRadio.Standalone.Common;
+
+//Quick and dirty update checker based on GitHub Published Versions
+public class UpdaterChecker
 {
-    //Quick and dirty update checker based on GitHub Published Versions
-    public class UpdaterChecker
-    {
-        public static readonly string GITHUB_USERNAME = "ciribob";
-        public static readonly string GITHUB_REPOSITORY = "DCS-SimpleRadioStandalone";
-        // Required for all requests against the GitHub API, as per https://developer.github.com/v3/#user-agent-required
-        public static readonly string GITHUB_USER_AGENT = $"{GITHUB_USERNAME}_{GITHUB_REPOSITORY}";
+	public static readonly string GITHUB_USERNAME = "ciribob";
 
-        public static readonly string MINIMUM_PROTOCOL_VERSION = "1.9.0.0";
+	public static readonly string GITHUB_REPOSITORY = "DCS-SimpleRadioStandalone";
 
-        public static readonly string VERSION = "2.1.1.0";
+	// Required for all requests against the GitHub API, as per https://developer.github.com/v3/#user-agent-required
+	public static readonly string GITHUB_USER_AGENT = $"{GITHUB_USERNAME}_{GITHUB_REPOSITORY}";
 
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+	public static readonly string MINIMUM_PROTOCOL_VERSION = "1.9.0.0";
 
-        public static async void CheckForUpdate(bool checkForBetaUpdates)
-        {
-            Version currentVersion = Version.Parse(VERSION);
+	public static readonly string VERSION = "2.1.1.0";
+
+	private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
+	public static async void CheckForUpdate(bool checkForBetaUpdates)
+	{
+		var currentVersion = Version.Parse(VERSION);
 
 #if DEBUG
-            _logger.Info("Skipping update check due to DEBUG mode");
+		_logger.Info("Skipping update check due to DEBUG mode");
 
-            //ShowUpdateAvailableDialog("test",currentVersion,"https://google.com", false);
+		//ShowUpdateAvailableDialog("test",currentVersion,"https://google.com", false);
 #else
             try
             {
@@ -98,103 +97,82 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Common
                 _logger.Error(ex, "Failed to check for updated version");
             }
 #endif
-        }
+	}
 
-        public static void ShowUpdateAvailableDialog(string branch, Version version, string url, bool beta)
-        {
-            //Thread.CurrentThread.CurrentUICulture = new CultureInfo("zh-CN");
-            _logger.Warn($"New {branch} version available on GitHub: {version}");
+	public static void ShowUpdateAvailableDialog(string branch, Version version, string url, bool beta)
+	{
+		//Thread.CurrentThread.CurrentUICulture = new CultureInfo("zh-CN");
+		_logger.Warn($"New {branch} version available on GitHub: {version}");
 
-            var result = MessageBox.Show($"{Properties.Resources.MsgBoxUpdate1} {branch} {Properties.Resources.MsgBoxUpdate2} {version} {Properties.Resources.MsgBoxUpdate3}\n\n{Properties.Resources.MsgBoxUpdate4}",
-                Properties.Resources.MsgBoxUpdateTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
+		var result = MessageBox.Show(
+			$"{Resources.MsgBoxUpdate1} {branch} {Resources.MsgBoxUpdate2} {version} {Resources.MsgBoxUpdate3}\n\n{Resources.MsgBoxUpdate4}",
+			Resources.MsgBoxUpdateTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
 
-            if (result == MessageBoxResult.Yes)
-            {
-                try
-                {
-                    LaunchUpdater(beta);
-                }
-                catch (Exception)
-                {
-                    MessageBox.Show($"{Properties.Resources.MsgBoxUpdateFailed}",
-                        Properties.Resources.MsgBoxUpdateFailedTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
+		if (result == MessageBoxResult.Yes)
+			try
+			{
+				LaunchUpdater(beta);
+			}
+			catch (Exception)
+			{
+				MessageBox.Show($"{Resources.MsgBoxUpdateFailed}",
+					Resources.MsgBoxUpdateFailedTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Information);
 
-                    Process.Start(url);
-                }
+				Process.Start(url);
+			}
+		else if (result == MessageBoxResult.No) Process.Start(url);
+	}
 
-            }
-            else if (result == MessageBoxResult.No)
-            {
-                Process.Start(url);
-            }
-        }
+	private static bool IsDCSRunning()
+	{
+		foreach (var clsProcess in Process.GetProcesses())
+			if (clsProcess.ProcessName.ToLower().Trim().Equals("dcs"))
+				return true;
 
-        private static bool IsDCSRunning()
-        {
-            foreach (var clsProcess in Process.GetProcesses())
-            {
-                if (clsProcess.ProcessName.ToLower().Trim().Equals("dcs"))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+		return false;
+	}
 
-        private static void LaunchUpdater(bool beta)
-        {
-            Task.Run(() =>
-            {
-                while (IsDCSRunning())
-                {
-                    Thread.Sleep(5000);
-                }
+	private static void LaunchUpdater(bool beta)
+	{
+		Task.Run(() =>
+		{
+			while (IsDCSRunning()) Thread.Sleep(5000);
 
-                WindowsPrincipal principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
-                bool hasAdministrativeRight = principal.IsInRole(WindowsBuiltInRole.Administrator);
+			var principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
+			var hasAdministrativeRight = principal.IsInRole(WindowsBuiltInRole.Administrator);
 
-                if (!hasAdministrativeRight)
-                {
+			if (!hasAdministrativeRight)
+			{
+				var location = AppDomain.CurrentDomain.BaseDirectory;
 
-                    var location = AppDomain.CurrentDomain.BaseDirectory;
+				var startInfo = new ProcessStartInfo
+				{
+					UseShellExecute = true,
+					WorkingDirectory = location,
+					FileName = location + "SRS-AutoUpdater.exe",
+					Verb = "runas"
+				};
 
-                    ProcessStartInfo startInfo = new ProcessStartInfo
-                    {
-                        UseShellExecute = true,
-                        WorkingDirectory = location,
-                        FileName = location + "SRS-AutoUpdater.exe",
-                        Verb = "runas"
-                    };
+				if (beta) startInfo.Arguments = "-beta";
 
-                    if (beta)
-                    {
-                        startInfo.Arguments = "-beta";
-                    }
-
-                    try
-                    {
-                        Process p = Process.Start(startInfo);
-                    }
-                    catch (System.ComponentModel.Win32Exception)
-                    {
-                        MessageBox.Show(
-                            "SRS Auto Update Requires Admin Rights",
-                            "UAC Error", MessageBoxButton.OK, MessageBoxImage.Warning);
-                    }
-                }
-                else
-                {
-                    if (beta)
-                    {
-                        Process.Start("SRS-AutoUpdater.exe", "-beta");
-                    }
-                    else
-                    {
-                        Process.Start("SRS-AutoUpdater.exe");
-                    }
-                }
-            });
-           
-        }
-    }
+				try
+				{
+					var p = Process.Start(startInfo);
+				}
+				catch (Win32Exception)
+				{
+					MessageBox.Show(
+						"SRS Auto Update Requires Admin Rights",
+						"UAC Error", MessageBoxButton.OK, MessageBoxImage.Warning);
+				}
+			}
+			else
+			{
+				if (beta)
+					Process.Start("SRS-AutoUpdater.exe", "-beta");
+				else
+					Process.Start("SRS-AutoUpdater.exe");
+			}
+		});
+	}
 }

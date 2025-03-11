@@ -58,26 +58,26 @@ public class RadioMixingProvider : ISampleProvider
 		//   waveWriter = new NAudio.Wave.WaveFileWriter($@"C:\\temp\\output{Guid.NewGuid()}.wav", new WaveFormat(AudioManager.OUTPUT_SAMPLE_RATE, 2));
 	}
 
-    /// <summary>
-    ///     Returns the mixer inputs (read-only - use AddMixerInput to add an input
-    /// </summary>
-    public IEnumerable<ClientAudioProvider> MixerInputs => sources;
+	/// <summary>
+	///     Returns the mixer inputs (read-only - use AddMixerInput to add an input
+	/// </summary>
+	public IEnumerable<ClientAudioProvider> MixerInputs => sources;
 
 	public bool IsEndOfTransmission => DateTime.Now.Ticks - lastReceivedAt < 3500000;
 
-    /// <summary>
-    ///     The output WaveFormat of this sample provider
-    /// </summary>
-    public WaveFormat WaveFormat { get; }
+	/// <summary>
+	///     The output WaveFormat of this sample provider
+	/// </summary>
+	public WaveFormat WaveFormat { get; }
 
-    /// <summary>
-    ///     Reads samples from this sample provider
-    /// </summary>
-    /// <param name="buffer">Sample buffer</param>
-    /// <param name="offset">Offset into sample buffer</param>
-    /// <param name="count">Number of samples required</param>
-    /// <returns>Number of samples read</returns>
-    public int Read(float[] buffer, int offset, int count)
+	/// <summary>
+	///     Reads samples from this sample provider
+	/// </summary>
+	/// <param name="buffer">Sample buffer</param>
+	/// <param name="offset">Offset into sample buffer</param>
+	/// <param name="count">Number of samples required</param>
+	/// <returns>Number of samples read</returns>
+	public int Read(float[] buffer, int offset, int count)
 	{
 		_mainAudio.Clear();
 		_secondaryAudio.Clear();
@@ -158,11 +158,11 @@ public class RadioMixingProvider : ISampleProvider
 		return EnsureFullBuffer(buffer, outputSamples, offset, count);
 	}
 
-    /// <summary>
-    ///     Adds a new mixer input
-    /// </summary>
-    /// <param name="mixerInput">Mixer input</param>
-    public void AddMixerInput(ClientAudioProvider mixerInput)
+	/// <summary>
+	///     Adds a new mixer input
+	/// </summary>
+	/// <param name="mixerInput">Mixer input</param>
+	public void AddMixerInput(ClientAudioProvider mixerInput)
 	{
 		// we'll just call the lock around add since we are protecting against an AddMixerInput at
 		// the same time as a Read, rather than two AddMixerInput calls at the same time
@@ -180,10 +180,10 @@ public class RadioMixingProvider : ISampleProvider
 		}
 	}
 
-    /// <summary>
-    ///     Removes all mixer inputs
-    /// </summary>
-    public void RemoveAllMixerInputs()
+	/// <summary>
+	///     Removes all mixer inputs
+	/// </summary>
+	public void RemoveAllMixerInputs()
 	{
 		lock (sources)
 		{

@@ -13,111 +13,111 @@ namespace NetCoreServer;
 /// <remarks>Thread-safe</remarks>
 public class TcpClient : IDisposable
 {
-    /// <summary>
-    ///     Initialize TCP client with a given server IP address and port number
-    /// </summary>
-    /// <param name="address">IP address</param>
-    /// <param name="port">Port number</param>
-    public TcpClient(IPAddress address, int port) : this(new IPEndPoint(address, port))
+	/// <summary>
+	///     Initialize TCP client with a given server IP address and port number
+	/// </summary>
+	/// <param name="address">IP address</param>
+	/// <param name="port">Port number</param>
+	public TcpClient(IPAddress address, int port) : this(new IPEndPoint(address, port))
 	{
 	}
 
-    /// <summary>
-    ///     Initialize TCP client with a given server IP address and port number
-    /// </summary>
-    /// <param name="address">IP address</param>
-    /// <param name="port">Port number</param>
-    public TcpClient(string address, int port) : this(new IPEndPoint(IPAddress.Parse(address), port))
+	/// <summary>
+	///     Initialize TCP client with a given server IP address and port number
+	/// </summary>
+	/// <param name="address">IP address</param>
+	/// <param name="port">Port number</param>
+	public TcpClient(string address, int port) : this(new IPEndPoint(IPAddress.Parse(address), port))
 	{
 	}
 
-    /// <summary>
-    ///     Initialize TCP client with a given IP endpoint
-    /// </summary>
-    /// <param name="endpoint">IP endpoint</param>
-    public TcpClient(IPEndPoint endpoint)
+	/// <summary>
+	///     Initialize TCP client with a given IP endpoint
+	/// </summary>
+	/// <param name="endpoint">IP endpoint</param>
+	public TcpClient(IPEndPoint endpoint)
 	{
 		Id = Guid.NewGuid();
 		Endpoint = endpoint;
 	}
 
-    /// <summary>
-    ///     Client Id
-    /// </summary>
-    public Guid Id { get; }
+	/// <summary>
+	///     Client Id
+	/// </summary>
+	public Guid Id { get; }
 
-    /// <summary>
-    ///     IP endpoint
-    /// </summary>
-    public IPEndPoint Endpoint { get; }
+	/// <summary>
+	///     IP endpoint
+	/// </summary>
+	public IPEndPoint Endpoint { get; }
 
-    /// <summary>
-    ///     Socket
-    /// </summary>
-    public Socket Socket { get; private set; }
+	/// <summary>
+	///     Socket
+	/// </summary>
+	public Socket Socket { get; private set; }
 
-    /// <summary>
-    ///     Number of bytes pending sent by the client
-    /// </summary>
-    public long BytesPending { get; private set; }
+	/// <summary>
+	///     Number of bytes pending sent by the client
+	/// </summary>
+	public long BytesPending { get; private set; }
 
-    /// <summary>
-    ///     Number of bytes sending by the client
-    /// </summary>
-    public long BytesSending { get; private set; }
+	/// <summary>
+	///     Number of bytes sending by the client
+	/// </summary>
+	public long BytesSending { get; private set; }
 
-    /// <summary>
-    ///     Number of bytes sent by the client
-    /// </summary>
-    public long BytesSent { get; private set; }
+	/// <summary>
+	///     Number of bytes sent by the client
+	/// </summary>
+	public long BytesSent { get; private set; }
 
-    /// <summary>
-    ///     Number of bytes received by the client
-    /// </summary>
-    public long BytesReceived { get; private set; }
+	/// <summary>
+	///     Number of bytes received by the client
+	/// </summary>
+	public long BytesReceived { get; private set; }
 
-    /// <summary>
-    ///     Option: dual mode socket
-    /// </summary>
-    /// <remarks>
-    ///     Specifies whether the Socket is a dual-mode socket used for both IPv4 and IPv6.
-    ///     Will work only if socket is bound on IPv6 address.
-    /// </remarks>
-    public bool OptionDualMode { get; set; }
+	/// <summary>
+	///     Option: dual mode socket
+	/// </summary>
+	/// <remarks>
+	///     Specifies whether the Socket is a dual-mode socket used for both IPv4 and IPv6.
+	///     Will work only if socket is bound on IPv6 address.
+	/// </remarks>
+	public bool OptionDualMode { get; set; }
 
-    /// <summary>
-    ///     Option: keep alive
-    /// </summary>
-    /// <remarks>
-    ///     This option will setup SO_KEEPALIVE if the OS support this feature
-    /// </remarks>
-    public bool OptionKeepAlive { get; set; }
+	/// <summary>
+	///     Option: keep alive
+	/// </summary>
+	/// <remarks>
+	///     This option will setup SO_KEEPALIVE if the OS support this feature
+	/// </remarks>
+	public bool OptionKeepAlive { get; set; }
 
-    /// <summary>
-    ///     Option: no delay
-    /// </summary>
-    /// <remarks>
-    ///     This option will enable/disable Nagle's algorithm for TCP protocol
-    /// </remarks>
-    public bool OptionNoDelay { get; set; }
+	/// <summary>
+	///     Option: no delay
+	/// </summary>
+	/// <remarks>
+	///     This option will enable/disable Nagle's algorithm for TCP protocol
+	/// </remarks>
+	public bool OptionNoDelay { get; set; }
 
-    /// <summary>
-    ///     Option: receive buffer size
-    /// </summary>
-    public int OptionReceiveBufferSize { get; set; } = 8192;
+	/// <summary>
+	///     Option: receive buffer size
+	/// </summary>
+	public int OptionReceiveBufferSize { get; set; } = 8192;
 
-    /// <summary>
-    ///     Option: send buffer size
-    /// </summary>
-    public int OptionSendBufferSize { get; set; } = 8192;
+	/// <summary>
+	///     Option: send buffer size
+	/// </summary>
+	public int OptionSendBufferSize { get; set; } = 8192;
 
 	#region Error handling
 
-    /// <summary>
-    ///     Send error notification
-    /// </summary>
-    /// <param name="error">Socket error code</param>
-    private void SendError(SocketError error)
+	/// <summary>
+	///     Send error notification
+	/// </summary>
+	/// <param name="error">Socket error code</param>
+	private void SendError(SocketError error)
 	{
 		// Skip disconnect errors
 		if (error == SocketError.ConnectionAborted ||
@@ -136,25 +136,25 @@ public class TcpClient : IDisposable
 
 	private SocketAsyncEventArgs _connectEventArg;
 
-    /// <summary>
-    ///     Is the client connecting?
-    /// </summary>
-    public bool IsConnecting { get; private set; }
+	/// <summary>
+	///     Is the client connecting?
+	/// </summary>
+	public bool IsConnecting { get; private set; }
 
-    /// <summary>
-    ///     Is the client connected?
-    /// </summary>
-    public bool IsConnected { get; private set; }
+	/// <summary>
+	///     Is the client connected?
+	/// </summary>
+	public bool IsConnected { get; private set; }
 
-    /// <summary>
-    ///     Connect the client (synchronous)
-    /// </summary>
-    /// <remarks>
-    ///     Please note that synchronous connect will not receive data automatically!
-    ///     You should use Receive() or ReceiveAsync() method manually after successful connection.
-    /// </remarks>
-    /// <returns>'true' if the client was successfully connected, 'false' if the client failed to connect</returns>
-    public virtual bool Connect()
+	/// <summary>
+	///     Connect the client (synchronous)
+	/// </summary>
+	/// <remarks>
+	///     Please note that synchronous connect will not receive data automatically!
+	///     You should use Receive() or ReceiveAsync() method manually after successful connection.
+	/// </remarks>
+	/// <returns>'true' if the client was successfully connected, 'false' if the client failed to connect</returns>
+	public virtual bool Connect()
 	{
 		if (IsConnected || IsConnecting)
 			return false;
@@ -236,11 +236,11 @@ public class TcpClient : IDisposable
 		return true;
 	}
 
-    /// <summary>
-    ///     Disconnect the client (synchronous)
-    /// </summary>
-    /// <returns>'true' if the client was successfully disconnected, 'false' if the client is already disconnected</returns>
-    public virtual bool Disconnect()
+	/// <summary>
+	///     Disconnect the client (synchronous)
+	/// </summary>
+	/// <returns>'true' if the client was successfully disconnected, 'false' if the client is already disconnected</returns>
+	public virtual bool Disconnect()
 	{
 		if (!IsConnected && !IsConnecting)
 			return false;
@@ -299,11 +299,11 @@ public class TcpClient : IDisposable
 		return true;
 	}
 
-    /// <summary>
-    ///     Reconnect the client (synchronous)
-    /// </summary>
-    /// <returns>'true' if the client was successfully reconnected, 'false' if the client is already reconnected</returns>
-    public virtual bool Reconnect()
+	/// <summary>
+	///     Reconnect the client (synchronous)
+	/// </summary>
+	/// <returns>'true' if the client was successfully reconnected, 'false' if the client is already reconnected</returns>
+	public virtual bool Reconnect()
 	{
 		if (!Disconnect())
 			return false;
@@ -311,11 +311,11 @@ public class TcpClient : IDisposable
 		return Connect();
 	}
 
-    /// <summary>
-    ///     Connect the client (asynchronous)
-    /// </summary>
-    /// <returns>'true' if the client was successfully connected, 'false' if the client failed to connect</returns>
-    public virtual bool ConnectAsync()
+	/// <summary>
+	///     Connect the client (asynchronous)
+	/// </summary>
+	/// <returns>'true' if the client was successfully connected, 'false' if the client failed to connect</returns>
+	public virtual bool ConnectAsync()
 	{
 		if (IsConnected || IsConnecting)
 			return false;
@@ -349,20 +349,20 @@ public class TcpClient : IDisposable
 		return true;
 	}
 
-    /// <summary>
-    ///     Disconnect the client (asynchronous)
-    /// </summary>
-    /// <returns>'true' if the client was successfully disconnected, 'false' if the client is already disconnected</returns>
-    public virtual bool DisconnectAsync()
+	/// <summary>
+	///     Disconnect the client (asynchronous)
+	/// </summary>
+	/// <returns>'true' if the client was successfully disconnected, 'false' if the client is already disconnected</returns>
+	public virtual bool DisconnectAsync()
 	{
 		return Disconnect();
 	}
 
-    /// <summary>
-    ///     Reconnect the client (asynchronous)
-    /// </summary>
-    /// <returns>'true' if the client was successfully reconnected, 'false' if the client is already reconnected</returns>
-    public virtual bool ReconnectAsync()
+	/// <summary>
+	///     Reconnect the client (asynchronous)
+	/// </summary>
+	/// <returns>'true' if the client was successfully reconnected, 'false' if the client is already reconnected</returns>
+	public virtual bool ReconnectAsync()
 	{
 		if (!DisconnectAsync())
 			return false;
@@ -391,24 +391,24 @@ public class TcpClient : IDisposable
 	private SocketAsyncEventArgs _sendEventArg;
 	private long _sendBufferFlushOffset;
 
-    /// <summary>
-    ///     Send data to the server (synchronous)
-    /// </summary>
-    /// <param name="buffer">Buffer to send</param>
-    /// <returns>Size of sent data</returns>
-    public virtual long Send(byte[] buffer)
+	/// <summary>
+	///     Send data to the server (synchronous)
+	/// </summary>
+	/// <param name="buffer">Buffer to send</param>
+	/// <returns>Size of sent data</returns>
+	public virtual long Send(byte[] buffer)
 	{
 		return Send(buffer, 0, buffer.Length);
 	}
 
-    /// <summary>
-    ///     Send data to the server (synchronous)
-    /// </summary>
-    /// <param name="buffer">Buffer to send</param>
-    /// <param name="offset">Buffer offset</param>
-    /// <param name="size">Buffer size</param>
-    /// <returns>Size of sent data</returns>
-    public virtual long Send(byte[] buffer, long offset, long size)
+	/// <summary>
+	///     Send data to the server (synchronous)
+	/// </summary>
+	/// <param name="buffer">Buffer to send</param>
+	/// <param name="offset">Buffer offset</param>
+	/// <param name="size">Buffer size</param>
+	/// <returns>Size of sent data</returns>
+	public virtual long Send(byte[] buffer, long offset, long size)
 	{
 		if (!IsConnected)
 			return 0;
@@ -437,34 +437,34 @@ public class TcpClient : IDisposable
 		return sent;
 	}
 
-    /// <summary>
-    ///     Send text to the server (synchronous)
-    /// </summary>
-    /// <param name="text">Text string to send</param>
-    /// <returns>Size of sent text</returns>
-    public virtual long Send(string text)
+	/// <summary>
+	///     Send text to the server (synchronous)
+	/// </summary>
+	/// <param name="text">Text string to send</param>
+	/// <returns>Size of sent text</returns>
+	public virtual long Send(string text)
 	{
 		return Send(Encoding.UTF8.GetBytes(text));
 	}
 
-    /// <summary>
-    ///     Send data to the server (asynchronous)
-    /// </summary>
-    /// <param name="buffer">Buffer to send</param>
-    /// <returns>'true' if the data was successfully sent, 'false' if the client is not connected</returns>
-    public virtual bool SendAsync(byte[] buffer)
+	/// <summary>
+	///     Send data to the server (asynchronous)
+	/// </summary>
+	/// <param name="buffer">Buffer to send</param>
+	/// <returns>'true' if the data was successfully sent, 'false' if the client is not connected</returns>
+	public virtual bool SendAsync(byte[] buffer)
 	{
 		return SendAsync(buffer, 0, buffer.Length);
 	}
 
-    /// <summary>
-    ///     Send data to the server (asynchronous)
-    /// </summary>
-    /// <param name="buffer">Buffer to send</param>
-    /// <param name="offset">Buffer offset</param>
-    /// <param name="size">Buffer size</param>
-    /// <returns>'true' if the data was successfully sent, 'false' if the client is not connected</returns>
-    public virtual bool SendAsync(byte[] buffer, long offset, long size)
+	/// <summary>
+	///     Send data to the server (asynchronous)
+	/// </summary>
+	/// <param name="buffer">Buffer to send</param>
+	/// <param name="offset">Buffer offset</param>
+	/// <param name="size">Buffer size</param>
+	/// <returns>'true' if the data was successfully sent, 'false' if the client is not connected</returns>
+	public virtual bool SendAsync(byte[] buffer, long offset, long size)
 	{
 		if (!IsConnected)
 			return false;
@@ -494,34 +494,34 @@ public class TcpClient : IDisposable
 		return true;
 	}
 
-    /// <summary>
-    ///     Send text to the server (asynchronous)
-    /// </summary>
-    /// <param name="text">Text string to send</param>
-    /// <returns>'true' if the text was successfully sent, 'false' if the client is not connected</returns>
-    public virtual bool SendAsync(string text)
+	/// <summary>
+	///     Send text to the server (asynchronous)
+	/// </summary>
+	/// <param name="text">Text string to send</param>
+	/// <returns>'true' if the text was successfully sent, 'false' if the client is not connected</returns>
+	public virtual bool SendAsync(string text)
 	{
 		return SendAsync(Encoding.UTF8.GetBytes(text));
 	}
 
-    /// <summary>
-    ///     Receive data from the server (synchronous)
-    /// </summary>
-    /// <param name="buffer">Buffer to receive</param>
-    /// <returns>Size of received data</returns>
-    public virtual long Receive(byte[] buffer)
+	/// <summary>
+	///     Receive data from the server (synchronous)
+	/// </summary>
+	/// <param name="buffer">Buffer to receive</param>
+	/// <returns>Size of received data</returns>
+	public virtual long Receive(byte[] buffer)
 	{
 		return Receive(buffer, 0, buffer.Length);
 	}
 
-    /// <summary>
-    ///     Receive data from the server (synchronous)
-    /// </summary>
-    /// <param name="buffer">Buffer to receive</param>
-    /// <param name="offset">Buffer offset</param>
-    /// <param name="size">Buffer size</param>
-    /// <returns>Size of received data</returns>
-    public virtual long Receive(byte[] buffer, long offset, long size)
+	/// <summary>
+	///     Receive data from the server (synchronous)
+	/// </summary>
+	/// <param name="buffer">Buffer to receive</param>
+	/// <param name="offset">Buffer offset</param>
+	/// <param name="size">Buffer size</param>
+	/// <returns>Size of received data</returns>
+	public virtual long Receive(byte[] buffer, long offset, long size)
 	{
 		if (!IsConnected)
 			return 0;
@@ -550,31 +550,31 @@ public class TcpClient : IDisposable
 		return received;
 	}
 
-    /// <summary>
-    ///     Receive text from the server (synchronous)
-    /// </summary>
-    /// <param name="size">Text size to receive</param>
-    /// <returns>Received text</returns>
-    public virtual string Receive(long size)
+	/// <summary>
+	///     Receive text from the server (synchronous)
+	/// </summary>
+	/// <param name="size">Text size to receive</param>
+	/// <returns>Received text</returns>
+	public virtual string Receive(long size)
 	{
 		var buffer = new byte[size];
 		var length = Receive(buffer);
 		return Encoding.UTF8.GetString(buffer, 0, (int)length);
 	}
 
-    /// <summary>
-    ///     Receive data from the server (asynchronous)
-    /// </summary>
-    public virtual void ReceiveAsync()
+	/// <summary>
+	///     Receive data from the server (asynchronous)
+	/// </summary>
+	public virtual void ReceiveAsync()
 	{
 		// Try to receive data from the server
 		TryReceive();
 	}
 
-    /// <summary>
-    ///     Try to receive new data
-    /// </summary>
-    private void TryReceive()
+	/// <summary>
+	///     Try to receive new data
+	/// </summary>
+	private void TryReceive()
 	{
 		if (_receiving)
 			return;
@@ -602,10 +602,10 @@ public class TcpClient : IDisposable
 		}
 	}
 
-    /// <summary>
-    ///     Try to send pending data
-    /// </summary>
-    private void TrySend()
+	/// <summary>
+	///     Try to send pending data
+	/// </summary>
+	private void TrySend()
 	{
 		if (_sending)
 			return;
@@ -665,10 +665,10 @@ public class TcpClient : IDisposable
 		}
 	}
 
-    /// <summary>
-    ///     Clear send/receive buffers
-    /// </summary>
-    private void ClearBuffers()
+	/// <summary>
+	///     Clear send/receive buffers
+	/// </summary>
+	private void ClearBuffers()
 	{
 		lock (_sendLock)
 		{
@@ -687,10 +687,10 @@ public class TcpClient : IDisposable
 
 	#region IO processing
 
-    /// <summary>
-    ///     This method is called whenever a receive or send operation is completed on a socket
-    /// </summary>
-    private void OnAsyncCompleted(object sender, SocketAsyncEventArgs e)
+	/// <summary>
+	///     This method is called whenever a receive or send operation is completed on a socket
+	/// </summary>
+	private void OnAsyncCompleted(object sender, SocketAsyncEventArgs e)
 	{
 		// Determine which type of operation just completed and call the associated handler
 		switch (e.LastOperation)
@@ -711,10 +711,10 @@ public class TcpClient : IDisposable
 		}
 	}
 
-    /// <summary>
-    ///     This method is invoked when an asynchronous connect operation completes
-    /// </summary>
-    private void ProcessConnect(SocketAsyncEventArgs e)
+	/// <summary>
+	///     This method is invoked when an asynchronous connect operation completes
+	/// </summary>
+	private void ProcessConnect(SocketAsyncEventArgs e)
 	{
 		IsConnecting = false;
 
@@ -759,10 +759,10 @@ public class TcpClient : IDisposable
 		}
 	}
 
-    /// <summary>
-    ///     This method is invoked when an asynchronous receive operation completes
-    /// </summary>
-    private bool ProcessReceive(SocketAsyncEventArgs e)
+	/// <summary>
+	///     This method is invoked when an asynchronous receive operation completes
+	/// </summary>
+	private bool ProcessReceive(SocketAsyncEventArgs e)
 	{
 		if (!IsConnected)
 			return false;
@@ -802,10 +802,10 @@ public class TcpClient : IDisposable
 		return false;
 	}
 
-    /// <summary>
-    ///     This method is invoked when an asynchronous send operation completes
-    /// </summary>
-    private bool ProcessSend(SocketAsyncEventArgs e)
+	/// <summary>
+	///     This method is invoked when an asynchronous send operation completes
+	/// </summary>
+	private bool ProcessSend(SocketAsyncEventArgs e)
 	{
 		if (!IsConnected)
 			return false;
@@ -848,62 +848,62 @@ public class TcpClient : IDisposable
 
 	#region Session handlers
 
-    /// <summary>
-    ///     Handle client connected notification
-    /// </summary>
-    protected virtual void OnConnected()
+	/// <summary>
+	///     Handle client connected notification
+	/// </summary>
+	protected virtual void OnConnected()
 	{
 	}
 
-    /// <summary>
-    ///     Handle client disconnected notification
-    /// </summary>
-    protected virtual void OnDisconnected()
+	/// <summary>
+	///     Handle client disconnected notification
+	/// </summary>
+	protected virtual void OnDisconnected()
 	{
 	}
 
-    /// <summary>
-    ///     Handle buffer received notification
-    /// </summary>
-    /// <param name="buffer">Received buffer</param>
-    /// <param name="offset">Received buffer offset</param>
-    /// <param name="size">Received buffer size</param>
-    /// <remarks>
-    ///     Notification is called when another chunk of buffer was received from the server
-    /// </remarks>
-    protected virtual void OnReceived(byte[] buffer, long offset, long size)
+	/// <summary>
+	///     Handle buffer received notification
+	/// </summary>
+	/// <param name="buffer">Received buffer</param>
+	/// <param name="offset">Received buffer offset</param>
+	/// <param name="size">Received buffer size</param>
+	/// <remarks>
+	///     Notification is called when another chunk of buffer was received from the server
+	/// </remarks>
+	protected virtual void OnReceived(byte[] buffer, long offset, long size)
 	{
 	}
 
-    /// <summary>
-    ///     Handle buffer sent notification
-    /// </summary>
-    /// <param name="sent">Size of sent buffer</param>
-    /// <param name="pending">Size of pending buffer</param>
-    /// <remarks>
-    ///     Notification is called when another chunk of buffer was sent to the server.
-    ///     This handler could be used to send another buffer to the server for instance when the pending size is zero.
-    /// </remarks>
-    protected virtual void OnSent(long sent, long pending)
+	/// <summary>
+	///     Handle buffer sent notification
+	/// </summary>
+	/// <param name="sent">Size of sent buffer</param>
+	/// <param name="pending">Size of pending buffer</param>
+	/// <remarks>
+	///     Notification is called when another chunk of buffer was sent to the server.
+	///     This handler could be used to send another buffer to the server for instance when the pending size is zero.
+	/// </remarks>
+	protected virtual void OnSent(long sent, long pending)
 	{
 	}
 
-    /// <summary>
-    ///     Handle empty send buffer notification
-    /// </summary>
-    /// <remarks>
-    ///     Notification is called when the send buffer is empty and ready for a new data to send.
-    ///     This handler could be used to send another buffer to the server.
-    /// </remarks>
-    protected virtual void OnEmpty()
+	/// <summary>
+	///     Handle empty send buffer notification
+	/// </summary>
+	/// <remarks>
+	///     Notification is called when the send buffer is empty and ready for a new data to send.
+	///     This handler could be used to send another buffer to the server.
+	/// </remarks>
+	protected virtual void OnEmpty()
 	{
 	}
 
-    /// <summary>
-    ///     Handle error notification
-    /// </summary>
-    /// <param name="error">Socket error code</param>
-    protected virtual void OnError(SocketError error)
+	/// <summary>
+	///     Handle error notification
+	/// </summary>
+	/// <param name="error">Socket error code</param>
+	protected virtual void OnError(SocketError error)
 	{
 	}
 
@@ -911,15 +911,15 @@ public class TcpClient : IDisposable
 
 	#region IDisposable implementation
 
-    /// <summary>
-    ///     Disposed flag
-    /// </summary>
-    public bool IsDisposed { get; private set; }
+	/// <summary>
+	///     Disposed flag
+	/// </summary>
+	public bool IsDisposed { get; private set; }
 
-    /// <summary>
-    ///     Client socket disposed flag
-    /// </summary>
-    public bool IsSocketDisposed { get; private set; } = true;
+	/// <summary>
+	///     Client socket disposed flag
+	/// </summary>
+	public bool IsSocketDisposed { get; private set; } = true;
 
 	// Implement IDisposable.
 	public void Dispose()

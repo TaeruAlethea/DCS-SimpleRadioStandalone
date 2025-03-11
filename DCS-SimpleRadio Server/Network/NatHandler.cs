@@ -8,12 +8,12 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Server.Network;
 public class NatHandler
 {
 	private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-	private NatDevice _device;
-	private NatDiscoverer _discoverer;
 	private readonly int _port;
-	private CancellationTokenSource _searchToken;
 	private readonly Mapping _tcpMapping;
 	private readonly Mapping _udpMapping;
+	private NatDevice _device;
+	private NatDiscoverer _discoverer;
+	private CancellationTokenSource _searchToken;
 
 	public NatHandler(int port)
 	{

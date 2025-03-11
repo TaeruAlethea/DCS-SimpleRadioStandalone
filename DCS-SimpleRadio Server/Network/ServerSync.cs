@@ -25,9 +25,9 @@ public class ServerSync : TcpServer, IHandle<ServerSettingsChangedMessage>
 
 	private readonly ConcurrentDictionary<string, SRClient> _clients = new();
 	private readonly IEventAggregator _eventAggregator;
+	private readonly NatHandler _natHandler;
 
 	private readonly ServerSettingsStore _serverSettings;
-	private readonly NatHandler _natHandler;
 
 
 	public ServerSync(ConcurrentDictionary<string, SRClient> connectedClients, HashSet<IPAddress> _bannedIps,

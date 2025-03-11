@@ -31,40 +31,40 @@ internal static class SpeexDspNative
 		// ReSharper disable InconsistentNaming
 		// ReSharper disable UnusedMember.Local
 
-        /**
+		/**
 		 * Set preprocessor denoiser state
 		 */
-        SPEEX_PREPROCESS_SET_DENOISE = 0,
+		SPEEX_PREPROCESS_SET_DENOISE = 0,
 
-        /**
+		/**
 		 * Get preprocessor denoiser state
 		 */
-        SPEEX_PREPROCESS_GET_DENOISE = 1,
+		SPEEX_PREPROCESS_GET_DENOISE = 1,
 
-        /**
+		/**
 		 * Set preprocessor Automatic Gain Control state
 		 */
-        SPEEX_PREPROCESS_SET_AGC = 2,
+		SPEEX_PREPROCESS_SET_AGC = 2,
 
-        /**
+		/**
 		 * Get preprocessor Automatic Gain Control state
 		 */
-        SPEEX_PREPROCESS_GET_AGC = 3,
+		SPEEX_PREPROCESS_GET_AGC = 3,
 
 		///** Set preprocessor Voice Activity Detection state */
 		//SPEEX_PREPROCESS_SET_VAD = 4,
 		///** Get preprocessor Voice Activity Detection state */
 		//SPEEX_PREPROCESS_GET_VAD = 5,
 
-        /**
+		/**
 		 * Set preprocessor Automatic Gain Control level (float)
 		 */
-        SPEEX_PREPROCESS_SET_AGC_LEVEL = 6,
+		SPEEX_PREPROCESS_SET_AGC_LEVEL = 6,
 
-        /**
+		/**
 		 * Get preprocessor Automatic Gain Control level (float)
 		 */
-        SPEEX_PREPROCESS_GET_AGC_LEVEL = 7,
+		SPEEX_PREPROCESS_GET_AGC_LEVEL = 7,
 
 		//Dereverb is disabled in the preprocessor!
 		///** Set preprocessor Dereverb state */
@@ -82,15 +82,15 @@ internal static class SpeexDspNative
 		///** Get probability required for the VAD to stay in the voice state (integer percent) */
 		//SPEEX_PREPROCESS_GET_PROB_CONTINUE = 17,
 
-        /**
+		/**
 		 * Set maximum attenuation of the noise in dB (negative number)
 		 */
-        SPEEX_PREPROCESS_SET_NOISE_SUPPRESS = 18,
+		SPEEX_PREPROCESS_SET_NOISE_SUPPRESS = 18,
 
-        /**
+		/**
 		 * Get maximum attenuation of the noise in dB (negative number)
 		 */
-        SPEEX_PREPROCESS_GET_NOISE_SUPPRESS = 19,
+		SPEEX_PREPROCESS_GET_NOISE_SUPPRESS = 19,
 
 		///** Set maximum attenuation of the residual echo in dB (negative number) */
 		//SPEEX_PREPROCESS_SET_ECHO_SUPPRESS = 20,
@@ -107,96 +107,96 @@ internal static class SpeexDspNative
 		///** Get the corresponding echo canceller state */
 		//SPEEX_PREPROCESS_GET_ECHO_STATE = 25,
 
-        /**
+		/**
 		 * Set maximal gain increase in dB/second (int32)
 		 */
-        SPEEX_PREPROCESS_SET_AGC_INCREMENT = 26,
+		SPEEX_PREPROCESS_SET_AGC_INCREMENT = 26,
 
-        /**
+		/**
 		 * Get maximal gain increase in dB/second (int32)
 		 */
-        SPEEX_PREPROCESS_GET_AGC_INCREMENT = 27,
+		SPEEX_PREPROCESS_GET_AGC_INCREMENT = 27,
 
-        /**
+		/**
 		 * Set maximal gain decrease in dB/second (int32)
 		 */
-        SPEEX_PREPROCESS_SET_AGC_DECREMENT = 28,
+		SPEEX_PREPROCESS_SET_AGC_DECREMENT = 28,
 
-        /**
+		/**
 		 * Get maximal gain decrease in dB/second (int32)
 		 */
-        SPEEX_PREPROCESS_GET_AGC_DECREMENT = 29,
+		SPEEX_PREPROCESS_GET_AGC_DECREMENT = 29,
 
-        /**
+		/**
 		 * Set maximal gain in dB (int32)
 		 */
-        SPEEX_PREPROCESS_SET_AGC_MAX_GAIN = 30,
+		SPEEX_PREPROCESS_SET_AGC_MAX_GAIN = 30,
 
-        /**
+		/**
 		 * Get maximal gain in dB (int32)
 		 */
-        SPEEX_PREPROCESS_GET_AGC_MAX_GAIN = 31,
+		SPEEX_PREPROCESS_GET_AGC_MAX_GAIN = 31,
 
 		/*  Can't set loudness */
-        /**
+		/**
 		 * Get loudness
 		 */
-        SPEEX_PREPROCESS_GET_AGC_LOUDNESS = 33,
+		SPEEX_PREPROCESS_GET_AGC_LOUDNESS = 33,
 
 		/*  Can't set gain */
-        /**
+		/**
 		 * Get current gain (int32 percent)
 		 */
-        SPEEX_PREPROCESS_GET_AGC_GAIN = 35,
+		SPEEX_PREPROCESS_GET_AGC_GAIN = 35,
 
 		/*  Can't set spectrum size */
-        /**
+		/**
 		 * Get spectrum size for power spectrum (int32)
 		 */
-        SPEEX_PREPROCESS_GET_PSD_SIZE = 37,
+		SPEEX_PREPROCESS_GET_PSD_SIZE = 37,
 
 		/*  Can't set power spectrum */
-        /**
+		/**
 		 * Get power spectrum (int32[] of squared values)
 		 */
-        SPEEX_PREPROCESS_GET_PSD = 39,
+		SPEEX_PREPROCESS_GET_PSD = 39,
 
 		/*  Can't set noise size */
-        /**
+		/**
 		 * Get spectrum size for noise estimate (int32)
 		 */
-        SPEEX_PREPROCESS_GET_NOISE_PSD_SIZE = 41,
+		SPEEX_PREPROCESS_GET_NOISE_PSD_SIZE = 41,
 
 		/*  Can't set noise estimate */
-        /**
+		/**
 		 * Get noise estimate (int32[] of squared values)
 		 */
-        SPEEX_PREPROCESS_GET_NOISE_PSD = 43,
+		SPEEX_PREPROCESS_GET_NOISE_PSD = 43,
 
 		/* Can't set speech probability */
-        /**
+		/**
 		 * Get speech probability in last frame (int32).
 		 */
-        SPEEX_PREPROCESS_GET_PROB = 45,
+		SPEEX_PREPROCESS_GET_PROB = 45,
 
-        /**
+		/**
 		 * Set preprocessor Automatic Gain Control level (int32)
 		 */
-        SPEEX_PREPROCESS_SET_AGC_TARGET = 46,
+		SPEEX_PREPROCESS_SET_AGC_TARGET = 46,
 
-        /**
+		/**
 		 * Get preprocessor Automatic Gain Control level (int32)
 		 */
-        SPEEX_PREPROCESS_GET_AGC_TARGET = 47
+		SPEEX_PREPROCESS_GET_AGC_TARGET = 47
 
 		// ReSharper restore UnusedMember.Local
 		// ReSharper restore InconsistentNaming
 	}
 
-    /// <summary>
-    ///     A preprocessor for microphone input which performs denoising and automatic gain control
-    /// </summary>
-    public sealed class Preprocessor
+	/// <summary>
+	///     A preprocessor for microphone input which performs denoising and automatic gain control
+	/// </summary>
+	public sealed class Preprocessor
 		: IDisposable
 	{
 		//every 40ms so 500
@@ -211,12 +211,12 @@ internal static class SpeexDspNative
 			RefreshSettings(true);
 		}
 
-        /// <summary>
-        ///     Process a frame of data captured from the microphone
-        /// </summary>
-        /// <param name="frame"></param>
-        /// <returns>Returns true iff VAD is enabled and speech is detected</returns>
-        public void Process(ArraySegment<short> frame)
+		/// <summary>
+		///     Process a frame of data captured from the microphone
+		/// </summary>
+		/// <param name="frame"></param>
+		/// <returns>Returns true iff VAD is enabled and speech is detected</returns>
+		public void Process(ArraySegment<short> frame)
 		{
 			if (frame.Count != FrameSize)
 				throw new ArgumentException(
@@ -286,10 +286,10 @@ internal static class SpeexDspNative
 
 		#region denoise
 
-        /// <summary>
-        ///     Get or Set if denoise filter is enabled
-        /// </summary>
-        public bool Denoise
+		/// <summary>
+		///     Get or Set if denoise filter is enabled
+		/// </summary>
+		public bool Denoise
 		{
 			get => CTL_Int(SpeexDspCtl.SPEEX_PREPROCESS_GET_DENOISE) != 0;
 			set
@@ -299,10 +299,10 @@ internal static class SpeexDspNative
 			}
 		}
 
-        /// <summary>
-        ///     Get or Set maximum attenuation of the noise in dB (negative number)
-        /// </summary>
-        public int DenoiseAttenuation
+		/// <summary>
+		///     Get or Set maximum attenuation of the noise in dB (negative number)
+		/// </summary>
+		public int DenoiseAttenuation
 		{
 			get => CTL_Int(SpeexDspCtl.SPEEX_PREPROCESS_GET_NOISE_SUPPRESS);
 			set => CTL(SpeexDspCtl.SPEEX_PREPROCESS_SET_NOISE_SUPPRESS, ref value);
@@ -352,10 +352,10 @@ internal static class SpeexDspNative
 			set => CTL(SpeexDspCtl.SPEEX_PREPROCESS_SET_AGC_DECREMENT, ref value);
 		}
 
-        /// <summary>
-        ///     Get the current amount of AGC applied (0-1 indicating none -> max)
-        /// </summary>
-        public float AutomaticGainControlCurrent => CTL_Int(SpeexDspCtl.SPEEX_PREPROCESS_GET_AGC_GAIN) / 100f;
+		/// <summary>
+		///     Get the current amount of AGC applied (0-1 indicating none -> max)
+		/// </summary>
+		public float AutomaticGainControlCurrent => CTL_Int(SpeexDspCtl.SPEEX_PREPROCESS_GET_AGC_GAIN) / 100f;
 
 		#endregion
 
@@ -459,15 +459,15 @@ public class Preprocessor
 //for the Pin for the arrays
 internal static class ArraySegmentExtensions
 {
-    /// <summary>
-    ///     Copy from the given array segment into the given array
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="segment"></param>
-    /// <param name="destination"></param>
-    /// <param name="destinationOffset"></param>
-    /// <returns>The segment of the destination array which was written into</returns>
-    internal static ArraySegment<T> CopyTo<T>(this ArraySegment<T> segment, T[] destination, int destinationOffset = 0)
+	/// <summary>
+	///     Copy from the given array segment into the given array
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="segment"></param>
+	/// <param name="destination"></param>
+	/// <param name="destinationOffset"></param>
+	/// <returns>The segment of the destination array which was written into</returns>
+	internal static ArraySegment<T> CopyTo<T>(this ArraySegment<T> segment, T[] destination, int destinationOffset = 0)
 		where T : struct
 	{
 		if (segment.Count > destination.Length - destinationOffset)
@@ -478,14 +478,14 @@ internal static class ArraySegmentExtensions
 		return new ArraySegment<T>(destination, destinationOffset, segment.Count);
 	}
 
-    /// <summary>
-    ///     Copy as many samples as possible from the source array into the segment
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="segment"></param>
-    /// <param name="source"></param>
-    /// <returns></returns>
-    internal static int CopyFrom<T>(this ArraySegment<T> segment, T[] source)
+	/// <summary>
+	///     Copy as many samples as possible from the source array into the segment
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="segment"></param>
+	/// <param name="source"></param>
+	/// <returns></returns>
+	internal static int CopyFrom<T>(this ArraySegment<T> segment, T[] source)
 	{
 		var count = Math.Min(segment.Count, source.Length);
 		Array.Copy(source, 0, segment.Array, segment.Offset, count);
@@ -497,13 +497,13 @@ internal static class ArraySegmentExtensions
 		Array.Clear(segment.Array, segment.Offset, segment.Count);
 	}
 
-    /// <summary>
-    ///     Pin the array and return a pointer to the start of the segment
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <param name="segment"></param>
-    /// <returns></returns>
-    internal static DisposableHandle Pin<T>(this ArraySegment<T> segment) where T : struct
+	/// <summary>
+	///     Pin the array and return a pointer to the start of the segment
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	/// <param name="segment"></param>
+	/// <returns></returns>
+	internal static DisposableHandle Pin<T>(this ArraySegment<T> segment) where T : struct
 	{
 		var handle = GCHandle.Alloc(segment.Array, GCHandleType.Pinned);
 		var ptr = new IntPtr(handle.AddrOfPinnedObject().ToInt64() + segment.Offset * Marshal.SizeOf(typeof(T)));

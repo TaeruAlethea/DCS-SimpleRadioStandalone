@@ -28,15 +28,15 @@ public class SRSClientSession : TcpSession
 
 	public string SRSGuid { get; set; }
 
-    /// <summary>
-    ///     Stores remote address. Only available after connect.
-    /// </summary>
-    private string RemoteAddress { get; set; } = string.Empty;
+	/// <summary>
+	///     Stores remote address. Only available after connect.
+	/// </summary>
+	private string RemoteAddress { get; set; } = string.Empty;
 
-    /// <summary>
-    ///     Stores remote port. Only available after connect.
-    /// </summary>
-    private string RemotePort { get; set; } = string.Empty;
+	/// <summary>
+	///     Stores remote port. Only available after connect.
+	/// </summary>
+	private string RemotePort { get; set; } = string.Empty;
 
 	protected override void OnConnected()
 	{
@@ -124,13 +124,13 @@ public class SRSClientSession : TcpSession
 		Logger.Error($"Caught Socket Error: {error}");
 	}
 
-    /// <summary>
-    ///     Logs information about the remote ip and port attempting to perform some operation.
-    /// </summary>
-    /// <param name="operation">
-    ///     Plain text name of the operation.
-    /// </param>
-    private void LogOperation(string operation)
+	/// <summary>
+	///     Logs information about the remote ip and port attempting to perform some operation.
+	/// </summary>
+	/// <param name="operation">
+	///     Plain text name of the operation.
+	/// </param>
+	private void LogOperation(string operation)
 	{
 		Logger.Info($"{operation}: IP {RemoteAddress} | Port {RemotePort}");
 	}

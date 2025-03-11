@@ -1,15 +1,14 @@
-﻿namespace Ciribob.DCS.SimpleRadio.Standalone.Common
-{
-    public class RadioReceivingPriority
-    {
-        public double Frequency;
-        public byte Encryption;
-        public short Modulation;
-        public float LineOfSightLoss;
-        public double ReceivingPowerLossPercent;
-        public bool Decryptable;
+﻿namespace Ciribob.DCS.SimpleRadio.Standalone.Common;
 
-        public RadioReceivingState ReceivingState;
-        public RadioInformation ReceivingRadio;
-    }
+public class RadioReceivingPriority
+{
+	public bool Decryptable;
+	public byte Encryption;
+	public double Frequency;
+	public float LineOfSightLoss;
+	public short Modulation;
+	public double ReceivingPowerLossPercent;
+	public RadioInformation ReceivingRadio;
+
+	public RadioReceivingState ReceivingState;
 }

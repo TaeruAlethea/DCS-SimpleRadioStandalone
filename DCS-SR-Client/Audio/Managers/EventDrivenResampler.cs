@@ -111,11 +111,11 @@ public class EventDrivenResampler
 		return sdata;
 	}
 
-    /// <summary>
-    ///     Dispose
-    /// </summary>
-    /// <param name="disposing">True if disposing (not from finalizer)</param>
-    public void Dispose(bool disposing)
+	/// <summary>
+	///     Dispose
+	/// </summary>
+	/// <param name="disposing">True if disposing (not from finalizer)</param>
+	public void Dispose(bool disposing)
 	{
 		buf.ClearBuffer();
 		if (windowsN)

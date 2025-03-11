@@ -1,15 +1,14 @@
-﻿namespace Ciribob.DCS.SimpleRadio.Standalone.Common
+﻿namespace Ciribob.DCS.SimpleRadio.Standalone.Common;
+
+public struct DCSAircraftCapabilities
 {
-    public struct DCSAircraftCapabilities
-    {
-        public bool dcsPtt;
+	public bool dcsPtt;
 
-        public bool dcsIFF;
+	public bool dcsIFF;
 
-        public bool dcsRadioSwitch;
+	public bool dcsRadioSwitch;
 
-        public bool intercomHotMic;
+	public bool intercomHotMic;
 
-        public string desc;
-    }
+	public string desc;
 }

@@ -11,35 +11,35 @@ public class VolumeSampleProviderWithPeak : ISampleProvider
 	private readonly SamplePeak _samplePeak;
 	private readonly ISampleProvider source;
 
-    /// <summary>
-    ///     Initializes a new instance of VolumeSampleProvider
-    /// </summary>
-    /// <param name="source">Source Sample Provider</param>
-    public VolumeSampleProviderWithPeak(ISampleProvider source, SamplePeak samplePeak)
+	/// <summary>
+	///     Initializes a new instance of VolumeSampleProvider
+	/// </summary>
+	/// <param name="source">Source Sample Provider</param>
+	public VolumeSampleProviderWithPeak(ISampleProvider source, SamplePeak samplePeak)
 	{
 		this.source = source;
 		_samplePeak = samplePeak;
 		Volume = 1.0f;
 	}
 
-    /// <summary>
-    ///     Allows adjusting the volume, 1.0f = full volume
-    /// </summary>
-    public float Volume { get; set; }
+	/// <summary>
+	///     Allows adjusting the volume, 1.0f = full volume
+	/// </summary>
+	public float Volume { get; set; }
 
-    /// <summary>
-    ///     WaveFormat
-    /// </summary>
-    public WaveFormat WaveFormat => source.WaveFormat;
+	/// <summary>
+	///     WaveFormat
+	/// </summary>
+	public WaveFormat WaveFormat => source.WaveFormat;
 
-    /// <summary>
-    ///     Reads samples from this sample provider
-    /// </summary>
-    /// <param name="buffer">Sample buffer</param>
-    /// <param name="offset">Offset into sample buffer</param>
-    /// <param name="sampleCount">Number of samples desired</param>
-    /// <returns>Number of samples read</returns>
-    public int Read(float[] buffer, int offset, int sampleCount)
+	/// <summary>
+	///     Reads samples from this sample provider
+	/// </summary>
+	/// <param name="buffer">Sample buffer</param>
+	/// <param name="offset">Offset into sample buffer</param>
+	/// <param name="sampleCount">Number of samples desired</param>
+	/// <returns>Number of samples read</returns>
+	public int Read(float[] buffer, int offset, int sampleCount)
 	{
 		var samplesRead = source.Read(buffer, offset, sampleCount);
 

@@ -12,240 +12,219 @@ using Easy.MessageHub;
 using Newtonsoft.Json;
 using NLog;
 
-namespace Ciribob.DCS.SimpleRadio.Standalone.ExternalAudioClient.Network
+namespace Ciribob.DCS.SimpleRadio.Standalone.ExternalAudioClient.Network;
+
+public class SRSClientSyncHandler
 {
-    public class SRSClientSyncHandler
-    {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+	private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        private volatile bool _stop = false;
+	private static readonly int MAX_DECODE_ERRORS = 5;
 
-        private readonly string _guid;
-        private readonly DCSPlayerRadioInfo gameState;
-        private IPEndPoint _serverEndpoint;
-        private TcpClient _tcpClient;
+	private readonly string _guid;
+	private readonly int coalition;
+	private readonly DCSPlayerRadioInfo gameState;
+	private readonly string name;
+	private readonly bool _allowRecord;
+	private IPEndPoint _serverEndpoint;
 
-        private static readonly int MAX_DECODE_ERRORS = 5;
-        private readonly string name;
-        private readonly int coalition;
-        private DCSLatLngPosition position;
-        private bool _allowRecord;
+	private volatile bool _stop;
+	private TcpClient _tcpClient;
+	private readonly DCSLatLngPosition position;
 
-        public SRSClientSyncHandler(string guid, DCSPlayerRadioInfo gameState, string name, int coalition, DCSLatLngPosition position, bool Record)
-        {
-            _guid = guid;
-            this.gameState = gameState;
-            this.name = name;
-            this.coalition = coalition;
-            this.position = position;
-            _allowRecord = Record;
-        }
+	public SRSClientSyncHandler(string guid, DCSPlayerRadioInfo gameState, string name, int coalition,
+		DCSLatLngPosition position, bool Record)
+	{
+		_guid = guid;
+		this.gameState = gameState;
+		this.name = name;
+		this.coalition = coalition;
+		this.position = position;
+		_allowRecord = Record;
+	}
 
-        public void TryConnect(IPEndPoint endpoint)
-        {
-            _serverEndpoint = endpoint;
-            new Thread(Connect).Start();
-        }
+	public void TryConnect(IPEndPoint endpoint)
+	{
+		_serverEndpoint = endpoint;
+		new Thread(Connect).Start();
+	}
 
-        private void Connect()
-        {
-            bool connectionError = false;
+	private void Connect()
+	{
+		var connectionError = false;
 
-            using (_tcpClient = new TcpClient())
-            {
-                try
-                {
-                    Logger.Info($"Connecting to server @{_serverEndpoint.Address}:{_serverEndpoint.Port} ");
-                    _tcpClient.SendTimeout = 90000;
-                    _tcpClient.NoDelay = true;
+		using (_tcpClient = new TcpClient())
+		{
+			try
+			{
+				Logger.Info($"Connecting to server @{_serverEndpoint.Address}:{_serverEndpoint.Port} ");
+				_tcpClient.SendTimeout = 90000;
+				_tcpClient.NoDelay = true;
 
-                    // Wait for 10 seconds before aborting connection attempt - no SRS server running/port opened in that case
-                    _tcpClient.ConnectAsync(_serverEndpoint.Address, _serverEndpoint.Port).Wait(TimeSpan.FromSeconds(10));
+				// Wait for 10 seconds before aborting connection attempt - no SRS server running/port opened in that case
+				_tcpClient.ConnectAsync(_serverEndpoint.Address, _serverEndpoint.Port).Wait(TimeSpan.FromSeconds(10));
 
-                    if (_tcpClient.Connected)
-                    {
-                        Logger.Info($"Connected to {_serverEndpoint.Address}:{_serverEndpoint.Port} ");
-                        _tcpClient.NoDelay = true;
-                        ClientSyncLoop();
-                    }
-                    else
-                    {
-                        Logger.Error($"Failed to connect to server @ {_serverEndpoint.ToString()}");
+				if (_tcpClient.Connected)
+				{
+					Logger.Info($"Connected to {_serverEndpoint.Address}:{_serverEndpoint.Port} ");
+					_tcpClient.NoDelay = true;
+					ClientSyncLoop();
+				}
+				else
+				{
+					Logger.Error($"Failed to connect to server @ {_serverEndpoint}");
 
-                        // Signal disconnect including an error
-                        connectionError = true;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Logger.Error(ex, "Could not connect to server");
-                    connectionError = true;
-                }
-            }
-
-
-            //disconnect callback
-            MessageHub.Instance.Publish(new DisconnectedMessage());
-        }
-
-        private void ClientSyncLoop()
-        {
-            int decodeErrors = 0; //if the JSON is unreadable - new version likely
-
-            using (var reader = new StreamReader(_tcpClient.GetStream(), Encoding.UTF8))
-            {
-                try
-                {
-                    Logger.Info($"Sending client sync to {_serverEndpoint.Address}:{_serverEndpoint.Port} ");
-                    //start the loop off by sending a SYNC Request
-                    SendToServer(new NetworkMessage
-                    {
-                        Client = new SRClient
-                        {
-                            Coalition = coalition,
-                            Name = this.name,
-                            ClientGuid = _guid,
-                            RadioInfo = gameState,
-                            LatLngPosition = position,
-                            AllowRecord = _allowRecord
-                        },
-                        MsgType = NetworkMessage.MessageType.SYNC,
-
-                    });
-
-                    Logger.Info($"Sending radio update to {_serverEndpoint.Address}:{_serverEndpoint.Port} ");
-                    SendToServer(new NetworkMessage
-                    {
-                        Client = new SRClient
-                        {
-                            Coalition = coalition,
-                            Name = this.name,
-                            ClientGuid = _guid,
-                            RadioInfo = gameState,
-                            LatLngPosition = position,
-                            AllowRecord = _allowRecord
-                        },
-                        MsgType = NetworkMessage.MessageType.RADIO_UPDATE,
-
-                    });
-
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        try
-                        {
-                            Logger.Debug("Received update from Server: " + (line));
-                            var serverMessage = JsonConvert.DeserializeObject<NetworkMessage>(line);
-                            decodeErrors = 0; //reset counter
-                            if (serverMessage != null)
-                            {
+					// Signal disconnect including an error
+					connectionError = true;
+				}
+			}
+			catch (Exception ex)
+			{
+				Logger.Error(ex, "Could not connect to server");
+				connectionError = true;
+			}
+		}
 
 
-                                //Logger.Debug("Received "+serverMessage.MsgType);
-                                switch (serverMessage.MsgType)
-                                {
-                                    case NetworkMessage.MessageType.PING:
-                                    case NetworkMessage.MessageType.RADIO_UPDATE:
-                                    case NetworkMessage.MessageType.UPDATE:
-                                    case NetworkMessage.MessageType.SERVER_SETTINGS:
-                                    case NetworkMessage.MessageType.CLIENT_DISCONNECT:
-                                        break;
-                                    case NetworkMessage.MessageType.SYNC:
-                                       // response to sync - kick off everything
-                                       MessageHub.Instance.Publish(new ReadyMessage());
+		//disconnect callback
+		MessageHub.Instance.Publish(new DisconnectedMessage());
+	}
 
-                                       break;
-                                    case NetworkMessage.MessageType.VERSION_MISMATCH:
-                                        Logger.Error($"Version Mismatch Between Client ({UpdaterChecker.VERSION}) & Server ({serverMessage.Version}) - Disconnecting");
+	private void ClientSyncLoop()
+	{
+		var decodeErrors = 0; //if the JSON is unreadable - new version likely
 
-                                        Disconnect();
-                                        break;
-                                    default:
-                                        Logger.Error("Received unknown Message " + line);
-                                        break;
-                                }
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            decodeErrors++;
-                            if (!_stop)
-                            {
-                                Logger.Error(ex, "Client exception reading from socket ");
-                            }
+		using (var reader = new StreamReader(_tcpClient.GetStream(), Encoding.UTF8))
+		{
+			try
+			{
+				Logger.Info($"Sending client sync to {_serverEndpoint.Address}:{_serverEndpoint.Port} ");
+				//start the loop off by sending a SYNC Request
+				SendToServer(new NetworkMessage
+				{
+					Client = new SRClient
+					{
+						Coalition = coalition,
+						Name = name,
+						ClientGuid = _guid,
+						RadioInfo = gameState,
+						LatLngPosition = position,
+						AllowRecord = _allowRecord
+					},
+					MsgType = NetworkMessage.MessageType.SYNC
+				});
 
-                            if (decodeErrors > MAX_DECODE_ERRORS)
-                            {
-                                Disconnect();
-                                break;
-                            }
-                        }
+				Logger.Info($"Sending radio update to {_serverEndpoint.Address}:{_serverEndpoint.Port} ");
+				SendToServer(new NetworkMessage
+				{
+					Client = new SRClient
+					{
+						Coalition = coalition,
+						Name = name,
+						ClientGuid = _guid,
+						RadioInfo = gameState,
+						LatLngPosition = position,
+						AllowRecord = _allowRecord
+					},
+					MsgType = NetworkMessage.MessageType.RADIO_UPDATE
+				});
 
-                        // do something with line
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (!_stop)
-                    {
-                        Logger.Error(ex, "Client exception reading - Disconnecting ");
-                    }
-                }
-            }
+				string line;
+				while ((line = reader.ReadLine()) != null)
+					try
+					{
+						Logger.Debug("Received update from Server: " + line);
+						var serverMessage = JsonConvert.DeserializeObject<NetworkMessage>(line);
+						decodeErrors = 0; //reset counter
+						if (serverMessage != null)
+							//Logger.Debug("Received "+serverMessage.MsgType);
+							switch (serverMessage.MsgType)
+							{
+								case NetworkMessage.MessageType.PING:
+								case NetworkMessage.MessageType.RADIO_UPDATE:
+								case NetworkMessage.MessageType.UPDATE:
+								case NetworkMessage.MessageType.SERVER_SETTINGS:
+								case NetworkMessage.MessageType.CLIENT_DISCONNECT:
+									break;
+								case NetworkMessage.MessageType.SYNC:
+									// response to sync - kick off everything
+									MessageHub.Instance.Publish(new ReadyMessage());
 
-            Disconnect();
-        }
+									break;
+								case NetworkMessage.MessageType.VERSION_MISMATCH:
+									Logger.Error(
+										$"Version Mismatch Between Client ({UpdaterChecker.VERSION}) & Server ({serverMessage.Version}) - Disconnecting");
 
-        private void SendToServer(NetworkMessage message)
-        {
-            try
-            {
+									Disconnect();
+									break;
+								default:
+									Logger.Error("Received unknown Message " + line);
+									break;
+							}
+					}
+					catch (Exception ex)
+					{
+						decodeErrors++;
+						if (!_stop) Logger.Error(ex, "Client exception reading from socket ");
 
-                message.Version = UpdaterChecker.VERSION;
+						if (decodeErrors > MAX_DECODE_ERRORS)
+						{
+							Disconnect();
+							break;
+						}
+					}
+				// do something with line
+			}
+			catch (Exception ex)
+			{
+				if (!_stop) Logger.Error(ex, "Client exception reading - Disconnecting ");
+			}
+		}
 
-                var json = message.Encode();
+		Disconnect();
+	}
 
-                if (message.MsgType == NetworkMessage.MessageType.RADIO_UPDATE)
-                {
-                    Logger.Debug("Sending Radio Update To Server: "+ (json));
-                }
+	private void SendToServer(NetworkMessage message)
+	{
+		try
+		{
+			message.Version = UpdaterChecker.VERSION;
 
-                var bytes = Encoding.UTF8.GetBytes(json);
-                _tcpClient.GetStream().Write(bytes, 0, bytes.Length);
-                //Need to flush?
-            }
-            catch (Exception ex)
-            {
-                if (!_stop)
-                {
-                    Logger.Error(ex, "Client exception sending to server");
-                }
+			var json = message.Encode();
 
-                Disconnect();
-            }
-        }
+			if (message.MsgType == NetworkMessage.MessageType.RADIO_UPDATE)
+				Logger.Debug("Sending Radio Update To Server: " + json);
 
-        //implement IDispose? To close stuff properly?
-        public void Disconnect()
-        {
-            _stop = true;
+			var bytes = Encoding.UTF8.GetBytes(json);
+			_tcpClient.GetStream().Write(bytes, 0, bytes.Length);
+			//Need to flush?
+		}
+		catch (Exception ex)
+		{
+			if (!_stop) Logger.Error(ex, "Client exception sending to server");
 
-            try
-            {
-                if (_tcpClient != null)
-                {
-                    _tcpClient.Close(); // this'll stop the socket blocking
+			Disconnect();
+		}
+	}
 
-                    MessageHub.Instance.Publish(new DisconnectedMessage());
-                }
-            }
-            catch (Exception)
-            {
-                MessageHub.Instance.Publish(new DisconnectedMessage());
-            }
+	//implement IDispose? To close stuff properly?
+	public void Disconnect()
+	{
+		_stop = true;
 
-            Logger.Info("Disconnecting from server");
+		try
+		{
+			if (_tcpClient != null)
+			{
+				_tcpClient.Close(); // this'll stop the socket blocking
 
-        }
-    }
+				MessageHub.Instance.Publish(new DisconnectedMessage());
+			}
+		}
+		catch (Exception)
+		{
+			MessageHub.Instance.Publish(new DisconnectedMessage());
+		}
+
+		Logger.Info("Disconnecting from server");
+	}
 }

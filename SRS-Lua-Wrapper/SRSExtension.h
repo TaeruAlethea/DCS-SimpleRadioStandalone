@@ -6,22 +6,20 @@
 #include <thread>
 #include <windows.h>
 #include <tlhelp32.h>
+
 namespace SRS
 {
-	
+    class SRSExtension
+    {
+    public:
+        SRSExtension();
+        ~SRSExtension();
 
-	class SRSExtension
-	{
-	public:
-		SRSExtension();
-		~SRSExtension();
+        static bool Launch(const char*);
+        static std::wstring ReadSRSPath();
+        static bool IsSRSRunning();
 
-		static bool Launch(const char*);
-		static std::wstring ReadSRSPath();
-		static bool IsSRSRunning();
-	private:
-		static std::wstring s2ws(const std::string& str);
-		
-	};
-
+    private:
+        static std::wstring s2ws(const std::string& str);
+    };
 }
