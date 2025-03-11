@@ -40,7 +40,7 @@
                               ItemsSource="{Binding Path=AudioInput.InputAudioDevices}"
                               SelectedItem="{Binding Path=AudioInput.SelectedAudioInput, Mode=TwoWay}"
                               ToolTip="{Binding Path=AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
-                    <ProgressBar Name="Mic_VU"
+                    <ProgressBar Name="MicVu"
                                  HorizontalAlignment="Center"
                                  Width="150"
                                  Height="20"

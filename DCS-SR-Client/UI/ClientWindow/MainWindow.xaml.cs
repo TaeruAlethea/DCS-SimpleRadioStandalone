@@ -152,7 +152,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             SpeakerBoost.Value = _globalSettings.GetClientSetting(GlobalSettingsKeys.SpeakerBoost).DoubleValue;
 
             Speaker_VU.Value = -100;
-            Mic_VU.Value = -100;
+            MicVu.Value = -100;
 
             ExternalAWACSModeName.Text = _globalSettings.GetClientSetting(GlobalSettingsKeys.LastSeenName).RawValue;
             UpdatePresetsFolderLabel();
