@@ -38,6 +38,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Common.Helpers;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Overlay;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
 using NAudio.CoreAudioApi;
@@ -59,31 +60,27 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
 
         public delegate void ToggleOverlayCallback(bool uiButton, bool awacs);
 
-        private readonly AudioManager _audioManager;
+        [ObservableProperty] private readonly AudioManager _audioManager;
 
         private readonly string _guid;
         private readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private AudioPreview _audioPreview;
-        private SRSClientSyncHandler _client;
-        private DCSAutoConnectHandler _dcsAutoConnectListener;
+        [ObservableProperty] private AudioPreview _audioPreview;
+        [ObservableProperty] private SRSClientSyncHandler _client;
+        [ObservableProperty] private DCSAutoConnectHandler _dcsAutoConnectListener;
         private int _port = 5002;
 
-        private Overlay.RadioOverlayWindow _radioOverlayWindow;
-        private AwacsRadioOverlayWindow.RadioOverlayWindow _awacsRadioOverlay;
+        [ObservableProperty] private Overlay.RadioOverlayWindow _radioOverlayWindow;
+        [ObservableProperty] private AwacsRadioOverlayWindow.RadioOverlayWindow _awacsRadioOverlay;
 
         private IPAddress _resolvedIp;
-        private ServerSettingsWindow _serverSettingsWindow;
+        [ObservableProperty] private ServerSettingsWindow _serverSettingsWindow;
+        [ObservableProperty] private ClientListWindow _clientListWindow;
 
-        private ClientListWindow _clientListWindow;
-
-        //used to debounce toggle
-        private long _toggleShowHide;
-
-        private readonly DispatcherTimer _updateTimer;
+        [ObservableProperty] private readonly DispatcherTimer _updateTimer;
         private ServerAddress _serverAddress;
         private readonly DelegateCommand _connectCommand;
 
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+        [ObservableProperty] public readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
 
         /// <remarks>Used in the XAML for DataBinding many things</remarks>
         public ClientStateSingleton ClientState { get; } = ClientStateSingleton.Instance;
@@ -97,7 +94,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
         /// <remarks>Used in the XAML for DataBinding output audio related UI elements</remarks>
         public AudioOutputSingleton AudioOutput { get; } = AudioOutputSingleton.Instance;
 
-        private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+        [ObservableProperty] private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 
         public MainWindowViewModel()
         {
@@ -178,6 +175,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
             _updateTimer.Tick += UpdatePlayerLocationAndVUMeters;
             _updateTimer.Start();
 
+
+            CreateProfileCommand = new RelayCommand(CreateProfile);
         }
 
         private void CheckWindowVisibility()
@@ -308,7 +307,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
             ServerAddress = FavouriteServersViewModel.DefaultServerAddress;
         }
 
-        private void InitSettingsProfiles()
+        public void InitSettingsProfiles()
         {
             ControlsProfile.IsEnabled = false;
             ControlsProfile.Items.Clear();
@@ -323,7 +322,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
 
         }
 
-        void ReloadProfile()
+        public void ReloadProfile()
         {
             //switch profiles
             Logger.Info(ControlsProfile.SelectedValue as string + " - Profile now in use");
@@ -1075,7 +1074,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
             return 5002;
         }
 
-        private void Stop(bool connectionError = false)
+        public void Stop(bool connectionError = false)
         {
             if (ClientState.IsConnected && _globalSettings.GetClientSettingBool(GlobalSettingsKeys.PlayConnectionSounds))
             {
@@ -1871,10 +1870,10 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
             MessageBox.Show(this,
                 Properties.Resources.MsgBoxAdminText,
                 Properties.Resources.MsgBoxAdmin, MessageBoxButton.OK, MessageBoxImage.Warning);
-
         }
-
-        private void CreateProfile(object sender, RoutedEventArgs e)
+        
+        public ICommand CreateProfileCommand { get; }
+        private void CreateProfile()
         {
             var inputProfileWindow = new InputProfileWindow.InputProfileWindow(name =>
                 {
@@ -1951,7 +1950,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels
 
         }
 
-        private void UpdatePresetsFolderLabel()
+        public void UpdatePresetsFolderLabel()
         {
             var presetsFolder = _globalSettings.GetClientSetting(GlobalSettingsKeys.LastPresetsFolder).RawValue;
             if (!string.IsNullOrWhiteSpace(presetsFolder))
