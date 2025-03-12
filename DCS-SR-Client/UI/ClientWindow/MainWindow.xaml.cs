@@ -72,16 +72,12 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         //used to debounce toggle
         private long _toggleShowHide;
-
-        private readonly DispatcherTimer _updateTimer;
-        private ServerAddress _serverAddress;
-        private readonly DelegateCommand _connectCommand;
         
         [Obsolete("Currently on View. Will be Moved to ViewModel")]
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+        public readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
         
         [Obsolete("Currently on View. Will be Moved to ViewModel")]
-        private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+        public readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 
         public MainWindow()
         {
@@ -133,10 +129,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
             InitInput();
 
-            _connectCommand = new DelegateCommand(Connect, () => ServerAddress != null);
-
-            InitDefaultAddress();
-
             SpeakerBoost.Value = _globalSettings.GetClientSetting(GlobalSettingsKeys.SpeakerBoost).DoubleValue;
 
             SpeakerVu.Value = -100;
@@ -159,9 +151,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
             _dcsAutoConnectListener = new DCSAutoConnectHandler(AutoConnect);
 
-            _updateTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
-            _updateTimer.Tick += UpdatePlayerLocationAndVUMeters;
-            _updateTimer.Start();
+
 
         }
 
@@ -279,19 +269,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 });
         }
 
-        private void InitDefaultAddress()
-        {
-            // legacy setting migration
-            if (!string.IsNullOrEmpty(_globalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue) &&
-                ViewModel.FavouriteServersViewModel.Addresses.Count == 0)
-            {
-                var oldAddress = new ServerAddress(_globalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue,
-                    _globalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue, null, true);
-                ViewModel.FavouriteServersViewModel.Addresses.Add(oldAddress);
-            }
 
-            ServerAddress = ViewModel.FavouriteServersViewModel.DefaultServerAddress;
-        }
 
         private void InitSettingsProfiles()
         {
@@ -593,27 +571,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         public InputDeviceManager InputManager { get; set; }
 
-
-
-        public ServerAddress ServerAddress
-        {
-            get { return _serverAddress; }
-            set
-            {
-                _serverAddress = value;
-                if (value != null)
-                {
-                    ServerIp.Text = value.Address;
-                    ExternalAwacsModePassword.Password = string.IsNullOrWhiteSpace(value.EAMCoalitionPassword) ? "" : value.EAMCoalitionPassword;
-                }
-
-                _connectCommand.RaiseCanExecuteChanged();
-            }
-        }
-
-        public ICommand ConnectCommand => _connectCommand;
-
-        private void UpdatePlayerLocationAndVUMeters(object sender, EventArgs e)
+        public void UpdatePlayerLocationAndVUMeters(object sender, EventArgs e)
         {
             if (_audioPreview != null)
             {
@@ -913,7 +871,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        private void Connect()
+        public void Connect()
         {
             if (ViewModel.ClientState.IsConnected)
             {
@@ -1243,10 +1201,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
             //save window position
             base.OnClosing(e);
-
-            //stop timer
-            _updateTimer?.Stop();
-
+            
             Stop();
 
             _audioPreview?.StopEncoding();
@@ -2170,6 +2125,15 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         {
             _globalSettings.SetClientSetting(GlobalSettingsKeys.LastPresetsFolder, string.Empty);
             UpdatePresetsFolderLabel();
+        }
+
+        private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
+        {
+            if (ViewModel != null)
+            {
+                // Special Case Binding
+                ViewModel.ServerAddress.EAMCoalitionPassword = ((PasswordBox)sender).Password;
+            } 
         }
     }
 }
