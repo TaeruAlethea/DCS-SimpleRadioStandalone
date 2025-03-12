@@ -21,7 +21,7 @@ using WPFCustomMessageBox;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio
 {
-    internal class AudioPreview
+    public class AudioPreview
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private BufferedWaveProvider _playBuffer;
