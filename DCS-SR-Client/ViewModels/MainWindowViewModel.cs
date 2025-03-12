@@ -40,10 +40,10 @@ public partial class MainWindowViewModel : ObservableObject
 	public FavouriteServersViewModel FavouriteServersViewModel { get; }
 	
 	[ObservableProperty]
-	public readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+	public SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 	
 	[ObservableProperty]
-	public readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+	public GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
 	
 	public MainWindowViewModel(MainWindow mainWindowView)
 	{
