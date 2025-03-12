@@ -1,8 +1,11 @@
 using System;
 using System.ComponentModel;
+using System.Net;
 using System.Runtime;
 using System.Windows.Threading;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.Network;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Preferences;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
@@ -27,10 +30,15 @@ public partial class MainWindowViewModel : ObservableObject
 	public ClientStateSingleton ClientState { get; } = ClientStateSingleton.Instance;
 	/// <remarks>Used in the XAML for DataBinding the connected client count</remarks>
 	public ConnectedClientsSingleton Clients { get; } = ConnectedClientsSingleton.Instance;
+	[ObservableProperty] private SRSClientSyncHandler _client;
+	[ObservableProperty] private DCSAutoConnectHandler _dcsAutoConnectListener;
 	
 	private readonly DispatcherTimer _updateTimer;
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(ConnectCommand))]
 	private ServerAddress _serverAddress;
+	[ObservableProperty] private IPAddress _resolvedIp;
+	[ObservableProperty] private readonly string _guid;
+	[ObservableProperty] private int _port = 5002;
 	
 	/// <remarks>Used in the XAML for DataBinding many things</remarks>
 	public AudioInputSingleton AudioInput { get; } = AudioInputSingleton.Instance;
@@ -52,10 +60,13 @@ public partial class MainWindowViewModel : ObservableObject
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
 		
 		_audioManager = new AudioManager(AudioOutput.WindowsN);
+		Guid = ClientStateSingleton.Instance.ShortGUID;
 		
 		InitDefaultAddress();
 		
 		AudioManager.SpeakerBoost = GlobalSettings.GetClientSetting(GlobalSettingsKeys.SpeakerBoost).FloatValue;
+		
+		DcsAutoConnectListener = new DCSAutoConnectHandler(ToBeDepricatedMainWindow.AutoConnect);
 		
 		_updateTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
 		_updateTimer.Tick += ToBeDepricatedMainWindow.UpdatePlayerLocationAndVUMeters;
