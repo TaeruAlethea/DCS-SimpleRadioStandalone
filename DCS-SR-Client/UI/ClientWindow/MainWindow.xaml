@@ -21,6 +21,7 @@
 	<TabControl x:Name="TabControl">
         <TabControl.Resources>
             <converters:MicAvailabilityTooltipConverter x:Key="MicAvailabilityTooltipConverter" />
+            <converters:BooleanInverterConverter x:Key="BooleanInverterConverter" />
         </TabControl.Resources>
         <TabItem Header="{x:Static p:Resources.GeneralTab}">
             <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="auto">
@@ -187,17 +188,14 @@
                     </UniformGrid>
 
                     <StackPanel Margin="0" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <StackPanel.IsEnabled>
-                            <Binding Path="ClientState.ExternalAWACSModeConnected">
-                                <Binding.Converter>
-                                    <converters:BooleanInverterConverter />
-                                </Binding.Converter>
-                            </Binding>
-                        </StackPanel.IsEnabled>
-                        <Label x:Name="PresetsFolderLabel" 
-                               Width="220" 
-                               HorizontalAlignment="Right"
-                               Margin="5"/>
+	                    <StackPanel.IsEnabled>
+		                    <Binding Path="ClientState.ExternalAWACSModeConnected" 
+		                             Converter="{StaticResource BooleanInverterConverter}" />
+	                    </StackPanel.IsEnabled>
+	                    <Label x:Name="PresetsFolderLabel" 
+	                           Width="220" 
+	                           HorizontalAlignment="Right"
+	                           Margin="5"/>
                         <Button x:Name="PresetsFolderBrowseButton" 
                                 Content="{x:Static p:Resources.PresetsFolderBrowseButton}" 
                                 Click="PresetsFolderBrowseButton_Click" 
