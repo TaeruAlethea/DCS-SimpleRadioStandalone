@@ -7,18 +7,17 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Setting;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
 {
-    public sealed class ConnectedClientsSingleton : INotifyPropertyChanged
+    public sealed partial class ConnectedClientsSingleton : ObservableObject
     {
-        private readonly ConcurrentDictionary<string, SRClient> _clients = new ConcurrentDictionary<string, SRClient>();
+        [ObservableProperty] private ConcurrentDictionary<string, SRClient> _clients = new ConcurrentDictionary<string, SRClient>();
         private static volatile ConnectedClientsSingleton _instance;
         private static object _lock = new Object();
         private readonly string _guid = ClientStateSingleton.Instance.ShortGUID;
         private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         private ConnectedClientsSingleton() { }
 
@@ -39,25 +38,20 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
             }
         }
 
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         public void NotifyAll()
         {
-            NotifyPropertyChanged("Total");
+            OnPropertyChanged(nameof(Total));
         }
 
         public SRClient this[string key]
         {
             get
             {
-                return _clients[key];
+                return Clients[key];
             }
             set
             {
-                _clients[key] = value;
+                Clients[key] = value;
                NotifyAll();
             }
         }
@@ -66,7 +60,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
         {
             get
             {
-                return _clients.Values;
+                return Clients.Values;
             }
         }
 
@@ -74,34 +68,34 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
         {
             get
             {
-                return _clients.Count();
+                return Clients.Count();
             }
         }
 
         public bool TryRemove(string key, out SRClient value)
         {
-            bool result = _clients.TryRemove(key, out value);
+            bool result = Clients.TryRemove(key, out value);
             if (result)
             {
-                NotifyPropertyChanged("Total");
+                OnPropertyChanged(nameof(Total));
             }
             return result;
         }
 
         public void Clear()
         {
-            _clients.Clear();
-            NotifyPropertyChanged("Total");
+            Clients.Clear();
+            OnPropertyChanged(nameof(Total));
         }
 
         public bool TryGetValue(string key, out SRClient value)
         {
-            return _clients.TryGetValue(key, out value);
+            return Clients.TryGetValue(key, out value);
         }
 
         public bool ContainsKey(string key)
         {
-            return _clients.ContainsKey(key);
+            return Clients.ContainsKey(key);
         }
 
         public int ClientsOnFreq(double freq, RadioInformation.Modulation modulation)
@@ -117,7 +111,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
             var global = globalFrequencies.Contains(freq);
             int count = 0;
 
-            foreach (var client in _clients)
+            foreach (var client in Clients)
             {
                 if (!client.Key.Equals(_guid))
                 {

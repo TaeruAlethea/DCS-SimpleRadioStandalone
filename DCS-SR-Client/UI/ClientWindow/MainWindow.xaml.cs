@@ -540,7 +540,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         public InputDeviceManager InputManager { get; set; }
 
-        public void UpdatePlayerLocationAndVUMeters(object sender, EventArgs e)
+        public void UpdateVUMeters(object sender, EventArgs e)
         {
             if (ViewModel.AudioPreview != null)
             {
@@ -565,17 +565,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 MicVu.Value = -100;
                 SpeakerVu.Value = -100;
             }
-
-            try
-            {
-                var pos = ViewModel.ClientState.PlayerCoaltionLocationMetadata.LngLngPosition;
-                //CurrentPosition.Text = $"Lat/Lng: {pos.lat:0.###},{pos.lng:0.###} - Alt: {pos.alt:0}";
-                //CurrentUnit.Text = $"{ViewModel.ClientState?.DcsPlayerRadioInfo?.unit}";
-            }
-            catch { }
-
+            
             ConnectedClientsSingleton.Instance.NotifyAll();
-
         }
 
         private void InitSettingsScreen()
