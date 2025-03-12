@@ -117,7 +117,7 @@
                                  Margin="5"
                                  MaxLines="1"
                                  TextWrapping="Wrap"
-                                 Text="{Binding ServerAddress.Address}"/>
+                                 Text="{Binding ServerAddress.Address, Mode=OneWay}"/>
 
                         <Grid Margin="5">
                             <Grid.ColumnDefinitions>
