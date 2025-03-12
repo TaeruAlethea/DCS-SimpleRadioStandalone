@@ -283,37 +283,32 @@
                                MouseLeftButtonUp="CurrentPosition_OnClick" />
                     </StackPanel>
 
-                    <StackPanel Margin="0"
-                                HorizontalAlignment="Center"
+                    <StackPanel HorizontalAlignment="Center"
                                 Orientation="Horizontal">
-                        <StackPanel.Resources>
-                            <converters:ConnectionStatusImageConverter x:Key="ConnectionStatusImageConverter" />
-                        </StackPanel.Resources>
-                        <Label HorizontalAlignment="Center" HorizontalContentAlignment="Center" Content="{x:Static p:Resources.ServerConnectionStatusLabel}" />
-                        <Image x:Name="ServerConnectionStatus"
-                               Source="{Binding Path=ClientState.IsConnected, Converter={StaticResource ConnectionStatusImageConverter}}"
-                               HorizontalAlignment="Center"
-                               Height="26"
-                               Margin="5,0,5,0" />
-                        <Label HorizontalAlignment="Center" HorizontalContentAlignment="Center" Content="{x:Static p:Resources.VOIPConnectionStatusLabel}" />
-                        <Image x:Name="VoipConnectionStatus"
-                               Source="{Binding Path=ClientState.IsVoipConnected, Converter={StaticResource ConnectionStatusImageConverter}}"
-                               Height="26"
-                               HorizontalAlignment="Center"
-                               Margin="5,0,5,0" />
-                        <Label HorizontalAlignment="Center" HorizontalContentAlignment="Center" Content="{x:Static p:Resources.GameConnectionStatusLabel}" />
-                        <Image x:Name="GameConnectionStatus"
-                               Source="{Binding Path=ClientState.IsGameConnected, Converter={StaticResource ConnectionStatusImageConverter}}"
-                               Height="26"
-                               HorizontalAlignment="Center"
-                               Margin="5,0,5,0" />
-                        <Label HorizontalAlignment="Center" HorizontalContentAlignment="Center" Content="{x:Static p:Resources.LotATCConnectionStatusLabel}" />
-                        <Image x:Name="LotAtcConnectionStatus"
-                               Source="{Binding Path=ClientState.IsLotATCConnected, Converter={StaticResource ConnectionStatusImageConverter}}"
-                               Height="26"
-                               HorizontalAlignment="Center"
-                               Margin="5,0,0,0" />
-
+                        <Label HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Content="{x:Static p:Resources.ServerConnectionStatusLabel}" />
+                        <Image IsEnabled="{Binding ClientState.IsConnected}"
+                               Tag="{Binding ClientState.IsConnectionErrored}"
+                               Style="{StaticResource ConnectionIconStyle}" />
+	                      <Label HorizontalAlignment="Center" 
+	                               VerticalAlignment="Center"
+	                               Content="{x:Static p:Resources.VOIPConnectionStatusLabel}" />
+                        <Image IsEnabled="{Binding ClientState.IsVoipConnected}"
+                               Tag="0"
+                               Style="{StaticResource ConnectionIconStyle}" />
+                        <Label HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               Content="{x:Static p:Resources.GameConnectionStatusLabel}" />
+                        <Image IsEnabled="{Binding ClientState.IsGameConnected}"
+                               Tag="0"
+                               Style="{StaticResource ConnectionIconStyle}" />
+                        <Label HorizontalAlignment="Center" 
+                               VerticalAlignment="Center" 
+                               Content="{x:Static p:Resources.LotATCConnectionStatusLabel}" />
+                        <Image IsEnabled="{Binding ClientState.IsLotATCConnected}"
+                               Tag="0"
+                               Style="{StaticResource ConnectionIconStyle}"/>
                     </StackPanel>
 
                     <Button Content="{x:Static p:Resources.Donate_OnClick}"

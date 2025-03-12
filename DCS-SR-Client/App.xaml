@@ -1,7 +1,7 @@
 ﻿<Application x:Class="DCS_SR_Client.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:DCS_SR_Client"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
              StartupUri="UI/ClientWindow/MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
@@ -10,10 +10,15 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Light.Blue.xaml" />
-
-                <ResourceDictionary Source="Themes\Styles.xaml" />
-
+               
+                <ResourceDictionary Source="Themes/Styles.xaml" />
+                <ResourceDictionary Source="Themes/Icons.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            
+            <!-- This gives more consistent results for boolean checks.
+            I am as confused as you may be. -->
+            <s:Boolean x:Key="FalseValue">False</s:Boolean>
+            <s:Boolean x:Key="TrueValue">True</s:Boolean>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

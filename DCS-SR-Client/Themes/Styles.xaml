@@ -3,6 +3,7 @@
                     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                     xmlns:p="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Properties"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib"
                     mc:Ignorable="d">
 
 
@@ -271,6 +272,49 @@
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
             </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <s:Boolean x:Key="FalseValue">False</s:Boolean>
+    <s:Boolean x:Key="TrueValue">True</s:Boolean>
+
+    
+    <Style x:Key="ConnectionIconStyle" TargetType="{x:Type Image}">
+        <!-- Tag Field is a Boolean used to detect if there is a connection error.-->
+        <Setter Property="Height" Value="26" />
+        <Setter Property="Margin" Value="5" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Source" Value="{DynamicResource IconDisconnected}"/>
+        <Style.Triggers>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="{StaticResource TrueValue}"/>
+                    <Condition Property="IsEnabled" Value="{StaticResource TrueValue}"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Source" Value="{DynamicResource IconDisconnectedGame}" />
+            </MultiTrigger>  
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="{StaticResource TrueValue}"/>
+                    <Condition Property="IsEnabled" Value="{StaticResource FalseValue}"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Source" Value="{DynamicResource IconDisconnectedError}" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="{StaticResource FalseValue}"/>
+                    <Condition Property="IsEnabled" Value="{StaticResource FalseValue}"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Source" Value="{DynamicResource IconDisconnected}" />
+            </MultiTrigger>
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="Tag" Value="{StaticResource FalseValue}"/>
+                    <Condition Property="IsEnabled" Value="{StaticResource TrueValue}"/>
+                </MultiTrigger.Conditions>
+                <Setter Property="Source" Value="{DynamicResource IconConnected}" />
+            </MultiTrigger>
         </Style.Triggers>
     </Style>
 </ResourceDictionary>

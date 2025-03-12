@@ -51,7 +51,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
 
         [ObservableProperty] private bool _isVoipConnected;
 
-        [ObservableProperty] private bool _isConnectionErrored;
+        [ObservableProperty] private bool _isConnectionErrored = false;
         public string ShortGUID { get; }
         
         // Indicates the user's desire to be in External Awacs Mode or not

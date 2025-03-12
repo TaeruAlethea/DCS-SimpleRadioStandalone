@@ -66,9 +66,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             // Initialize ToolTip controls
             ToolTips.Init();
 
-            // Initialize images/icons
-            Images.Init();
-
             // Initialise sounds
             Sounds.Init();
 
