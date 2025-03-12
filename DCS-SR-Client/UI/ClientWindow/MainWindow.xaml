@@ -87,6 +87,7 @@
                                 IsMoveToPointEnabled="true"
                                 ValueChanged="SpeakerBoost_ValueChanged"
                                 Value="{Binding Path=AudioManager.SpeakerBoost}" />
+																<!-- TODO: Verify that NAudio is happy with a raw float like this. It seems to work, but may have quietly changed the functionality. -->
                         <ProgressBar Name="SpeakerVu"
                                      Width="150"
                                      Height="20"
