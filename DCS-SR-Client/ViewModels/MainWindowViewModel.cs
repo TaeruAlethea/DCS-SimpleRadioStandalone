@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Net;
 using System.Runtime;
 using System.Windows.Threading;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS;
@@ -25,6 +26,7 @@ public partial class MainWindowViewModel : ObservableObject
 	private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 	
 	[ObservableProperty] private AudioManager _audioManager;
+	[ObservableProperty] private AudioPreview _audioPreview;
 	
 	/// <remarks>Used in the XAML for DataBinding many things</remarks>
 	public ClientStateSingleton ClientState { get; } = ClientStateSingleton.Instance;
@@ -37,7 +39,7 @@ public partial class MainWindowViewModel : ObservableObject
 	[ObservableProperty, NotifyCanExecuteChangedFor(nameof(ConnectCommand))]
 	private ServerAddress _serverAddress;
 	[ObservableProperty] private IPAddress _resolvedIp;
-	[ObservableProperty] private readonly string _guid;
+	[ObservableProperty] private string _guid; // Does not need to be observable.
 	[ObservableProperty] private int _port = 5002;
 	
 	/// <remarks>Used in the XAML for DataBinding many things</remarks>

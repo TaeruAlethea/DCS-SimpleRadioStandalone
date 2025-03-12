@@ -57,7 +57,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         //used to debounce toggle
         private long _toggleShowHide;
         
-        private AudioPreview _audioPreview;
 
         public MainWindow()
         {
@@ -543,14 +542,14 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         public void UpdatePlayerLocationAndVUMeters(object sender, EventArgs e)
         {
-            if (_audioPreview != null)
+            if (ViewModel.AudioPreview != null)
             {
                 // Only update mic volume output if an audio input device is available - sometimes the value can still change, leaving the user with the impression their mic is working after all
                 if (ViewModel.AudioInput.MicrophoneAvailable)
                 {
-                    MicVu.Value = _audioPreview.MicMax;
+                    MicVu.Value = ViewModel.AudioPreview.MicMax;
                 }
-                SpeakerVu.Value = _audioPreview.SpeakerMax;
+                SpeakerVu.Value = ViewModel.AudioPreview.SpeakerMax;
             }
             else if (ViewModel.AudioManager  != null)
             {
@@ -931,11 +930,11 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                         MicOutput.IsEnabled = false;
                         Preview.IsEnabled = false;
 
-                        if (_audioPreview != null)
+                        if (ViewModel.AudioPreview != null)
                         {
                             Preview.Content = Properties.Resources.PreviewAudio;
-                            _audioPreview.StopEncoding();
-                            _audioPreview = null;
+                            ViewModel.AudioPreview.StopEncoding();
+                            ViewModel.AudioPreview = null;
                         }
                     }
                     else
@@ -1028,9 +1027,17 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             }
             catch (Exception)
             {
+                // ignored
             }
 
-            ViewModel.Client.Disconnect();
+            try
+            {
+                ViewModel.Client.Disconnect();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
 
             ViewModel.ClientState.DcsPlayerRadioInfo.Reset();
             ViewModel.ClientState.PlayerCoaltionLocationMetadata.Reset();
@@ -1174,8 +1181,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             
             Stop();
 
-            _audioPreview?.StopEncoding();
-            _audioPreview = null;
+            ViewModel.AudioPreview?.StopEncoding();
+            ViewModel.AudioPreview = null;
 
             _radioOverlayWindow?.Close();
             _radioOverlayWindow = null;
@@ -1199,7 +1206,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         private void PreviewAudio(object sender, RoutedEventArgs e)
         {
-            if (_audioPreview == null)
+            if (ViewModel.AudioPreview == null)
             {
                 if (!ViewModel.AudioInput.MicrophoneAvailable)
                 {
@@ -1212,9 +1219,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 {
                     SaveSelectedInputAndOutput();
 
-                    _audioPreview = new AudioPreview();
-                    _audioPreview.SpeakerBoost = VolumeConversionHelper.ConvertVolumeSliderToScale((float)SpeakerBoost.Value);
-                    _audioPreview.StartPreview(ViewModel.AudioOutput.WindowsN);
+                    ViewModel.AudioPreview = new AudioPreview();
+                    ViewModel.AudioPreview.SpeakerBoost = VolumeConversionHelper.ConvertVolumeSliderToScale((float)SpeakerBoost.Value);
+                    ViewModel.AudioPreview.StartPreview(ViewModel.AudioOutput.WindowsN);
 
                     Preview.Content = Properties.Resources.PreviewAudioStop;
                 }
@@ -1228,8 +1235,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             else
             {
                 Preview.Content = Preview.Content = Properties.Resources.PreviewAudio;
-                _audioPreview.StopEncoding();
-                _audioPreview = null;
+                ViewModel.AudioPreview.StopEncoding();
+                ViewModel.AudioPreview = null;
             }
         }
 
@@ -1256,9 +1263,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         {
             var convertedValue = VolumeConversionHelper.ConvertVolumeSliderToScale((float)SpeakerBoost.Value);
 
-            if (_audioPreview != null)
+            if (ViewModel.AudioPreview != null)
             {
-                _audioPreview.SpeakerBoost = convertedValue;
+                ViewModel.AudioPreview.SpeakerBoost = convertedValue;
             }
 
             ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.SpeakerBoost,
