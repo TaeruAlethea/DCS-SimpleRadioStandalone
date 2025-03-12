@@ -39,6 +39,12 @@ public partial class MainWindowViewModel : ObservableObject
 
 	public FavouriteServersViewModel FavouriteServersViewModel { get; }
 	
+	[ObservableProperty]
+	public readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+	
+	[ObservableProperty]
+	public readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+	
 	public MainWindowViewModel(MainWindow mainWindowView)
 	{
 		ToBeDepricatedMainWindow = mainWindowView;
@@ -63,11 +69,11 @@ public partial class MainWindowViewModel : ObservableObject
 	private void InitDefaultAddress()
 	{
 		// legacy setting migration
-		if (!string.IsNullOrEmpty(ToBeDepricatedMainWindow._globalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue) &&
+		if (!string.IsNullOrEmpty(GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue) &&
 		    FavouriteServersViewModel.Addresses.Count == 0)
 		{
-			var oldAddress = new ServerAddress(ToBeDepricatedMainWindow._globalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue,
-				ToBeDepricatedMainWindow._globalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue, null, true);
+			var oldAddress = new ServerAddress(GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue,
+				GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue, null, true);
 			FavouriteServersViewModel.Addresses.Add(oldAddress);
 		}
 
