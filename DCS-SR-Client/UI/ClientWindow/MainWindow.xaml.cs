@@ -44,15 +44,10 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
     public partial class MainWindow : MetroWindow
     {
         public readonly MainWindowViewModel ViewModel;
-        [Obsolete("Currently on View. Will be Moved to ViewModel")]
+        
         public delegate void ReceivedAutoConnect(string address, int port);
-
-        [Obsolete("Currently on View. Will be Moved to ViewModel")]
         public delegate void ToggleOverlayCallback(bool uiButton, bool awacs);
-
-        [Obsolete("Currently on View. Will be Moved to ViewModel")]
-        private readonly AudioManager _audioManager;
-
+        
         [Obsolete("Currently on View. Will be Moved to ViewModel")]
         private readonly string _guid;
         private readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -137,12 +132,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             ExternalAwacsModeName.Text = _globalSettings.GetClientSetting(GlobalSettingsKeys.LastSeenName).RawValue;
             UpdatePresetsFolderLabel();
 
-            _audioManager = new AudioManager(ViewModel.AudioOutput.WindowsN);
-            _audioManager.SpeakerBoost = VolumeConversionHelper.ConvertVolumeSliderToScale((float)SpeakerBoost.Value);
-
             if ((SpeakerBoostLabel != null) && (SpeakerBoost != null))
             {
-                SpeakerBoostLabel.Content = VolumeConversionHelper.ConvertLinearDiffToDB(_audioManager.SpeakerBoost);
+                SpeakerBoostLabel.Content = VolumeConversionHelper.ConvertLinearDiffToDB( ViewModel.AudioManager.SpeakerBoost);
             }
 
             UpdaterChecker.CheckForUpdate(_globalSettings.GetClientSettingBool(GlobalSettingsKeys.CheckForBetaUpdates));
@@ -582,14 +574,14 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 }
                 SpeakerVu.Value = _audioPreview.SpeakerMax;
             }
-            else if (_audioManager != null)
+            else if (ViewModel.AudioManager  != null)
             {
                 // Only update mic volume output if an audio input device is available - sometimes the value can still change, leaving the user with the impression their mic is working after all
                 if (ViewModel.AudioInput.MicrophoneAvailable)
                 {
-                    MicVu.Value = _audioManager.MicMax;
+                    MicVu.Value = ViewModel.AudioManager.MicMax;
                 }
-                SpeakerVu.Value = _audioManager.SpeakerMax;
+                SpeakerVu.Value = ViewModel.AudioManager.SpeakerMax;
             }
             else
             {
@@ -1054,7 +1046,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
             try
             {
-                _audioManager.StopEncoding();
+                ViewModel.AudioManager.StopEncoding();
             }
             catch (Exception)
             {
@@ -1152,7 +1144,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
                         _globalSettings.SetClientSetting(GlobalSettingsKeys.LastServer, ServerIp.Text);
 
-                        _audioManager.StartEncoding(_guid, InputManager,
+                        ViewModel.AudioManager.StartEncoding(_guid, InputManager,
                             _resolvedIp, _port);
                     }
                     catch (Exception ex)
@@ -1289,10 +1281,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             if (_audioPreview != null)
             {
                 _audioPreview.SpeakerBoost = convertedValue;
-            }
-            if (_audioManager != null)
-            {
-                _audioManager.SpeakerBoost = convertedValue;
             }
 
             _globalSettings.SetClientSetting(GlobalSettingsKeys.SpeakerBoost,

@@ -85,7 +85,8 @@
                                 Maximum="1.0"
                                 Minimum="0.0"
                                 IsMoveToPointEnabled="true"
-                                ValueChanged="SpeakerBoost_ValueChanged" />
+                                ValueChanged="SpeakerBoost_ValueChanged"
+                                Value="{Binding Path=AudioManager.SpeakerBoost}" />
                         <ProgressBar Name="SpeakerVu"
                                      Width="150"
                                      Height="20"

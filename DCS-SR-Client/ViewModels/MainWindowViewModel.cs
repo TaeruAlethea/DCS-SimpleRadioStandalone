@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime;
 using System.Windows.Threading;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Preferences;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
@@ -9,6 +10,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using NLog;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
@@ -16,6 +18,10 @@ public partial class MainWindowViewModel : ObservableObject
 {
 	[Obsolete("MainWindow Reference is not MVVM compliant.")]
 	public MainWindow ToBeDepricatedMainWindow { get; init; }
+	
+	private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+	
+	[ObservableProperty] private AudioManager _audioManager;
 	
 	/// <remarks>Used in the XAML for DataBinding many things</remarks>
 	public ClientStateSingleton ClientState { get; } = ClientStateSingleton.Instance;
@@ -38,6 +44,8 @@ public partial class MainWindowViewModel : ObservableObject
 		ToBeDepricatedMainWindow = mainWindowView;
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
+		
+		_audioManager = new AudioManager(AudioOutput.WindowsN);
 		
 		InitDefaultAddress();
 		
