@@ -69,7 +69,7 @@ public partial class MainWindowViewModel : ObservableObject
 		DcsAutoConnectListener = new DCSAutoConnectHandler(ToBeDepricatedMainWindow.AutoConnect);
 		
 		_updateTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
-		_updateTimer.Tick += ToBeDepricatedMainWindow.UpdatePlayerLocationAndVUMeters;
+		_updateTimer.Tick += ToBeDepricatedMainWindow.UpdateVUMeters;
 		_updateTimer.Start();
 	}
 
