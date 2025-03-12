@@ -295,19 +295,19 @@
 	                               VerticalAlignment="Center"
 	                               Content="{x:Static p:Resources.VOIPConnectionStatusLabel}" />
                         <Image IsEnabled="{Binding ClientState.IsVoipConnected}"
-                               Tag="0"
+                               Tag="{StaticResource FalseValue}"
                                Style="{StaticResource ConnectionIconStyle}" />
                         <Label HorizontalAlignment="Center" 
                                VerticalAlignment="Center" 
                                Content="{x:Static p:Resources.GameConnectionStatusLabel}" />
                         <Image IsEnabled="{Binding ClientState.IsGameConnected}"
-                               Tag="0"
+                               Tag="{StaticResource FalseValue}"
                                Style="{StaticResource ConnectionIconStyle}" />
                         <Label HorizontalAlignment="Center" 
                                VerticalAlignment="Center" 
                                Content="{x:Static p:Resources.LotATCConnectionStatusLabel}" />
                         <Image IsEnabled="{Binding ClientState.IsLotATCConnected}"
-                               Tag="0"
+                               Tag="{StaticResource FalseValue}"
                                Style="{StaticResource ConnectionIconStyle}"/>
                     </StackPanel>
 
