@@ -10,10 +10,11 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.RadioOverlayWindow.PresetChan
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.DCSState;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
 {
-    public sealed class ClientStateSingleton : INotifyPropertyChanged
+    public sealed partial class ClientStateSingleton : ObservableObject
     {
         private static volatile ClientStateSingleton _instance;
         private static object _lock = new Object();
@@ -22,10 +23,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
 
         private List<RadioUpdatedCallback> _radioCallbacks = new List<RadioUpdatedCallback>();
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public DCSPlayerRadioInfo DcsPlayerRadioInfo { get; }
-        public DCSPlayerSideInfo PlayerCoaltionLocationMetadata { get; set; }
+        [ObservableProperty] private DCSPlayerRadioInfo _dcsPlayerRadioInfo;
+        [ObservableProperty] private DCSPlayerSideInfo _playerCoaltionLocationMetadata;
 
         // Timestamp the last UDP Game GUI broadcast was received from DCS, used for determining active game connection
         public long DcsGameGuiLastReceived { get; set; }
@@ -48,50 +47,13 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
         public RadioSendingState RadioSendingState { get; set; }
         public  RadioReceivingState[] RadioReceivingState { get; }
 
-        private bool isConnected;
-        public bool IsConnected
-        {
-            get
-            {
-                return isConnected;
-            }
-            set
-            {
-                isConnected = value;
-                NotifyPropertyChanged("IsConnected");
-            }
-        }
+        [ObservableProperty] private bool _isConnected;
 
-        private bool isVoipConnected;
-        public bool IsVoipConnected
-        {
-            get
-            {
-                return isVoipConnected;
-            }
-            set
-            {
-                isVoipConnected = value;
-                NotifyPropertyChanged("IsVoipConnected");
-            }
-        }
+        [ObservableProperty] private bool _isVoipConnected;
 
-        private bool isConnectionErrored;
+        [ObservableProperty] private bool _isConnectionErrored;
         public string ShortGUID { get; }
-
-        public bool IsConnectionErrored
-        {
-            get
-            {
-                return isConnectionErrored;
-            }
-            set
-            {
-                isConnectionErrored = value;
-                NotifyPropertyChanged("isConnectionErrored");
-            }
-        }
-
+        
         // Indicates the user's desire to be in External Awacs Mode or not
         public bool ExternalAWACSModelSelected { get; set; }
 
@@ -131,10 +93,14 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
             DcsGameGuiLastReceived = 0;
             DcsExportLastReceived = 0;
             _timer.Interval = TimeSpan.FromSeconds(1);
-            _timer.Tick += (s, e) => {
-                NotifyPropertyChanged("IsGameConnected");
-                NotifyPropertyChanged("IsLotATCConnected");
-                NotifyPropertyChanged("ExternalAWACSModeConnected");
+            _timer.Tick += (s, e) =>
+            {
+                OnPropertyChanged(nameof(DcsPlayerRadioInfo));
+                OnPropertyChanged(nameof(PlayerCoaltionLocationMetadata));
+                
+                OnPropertyChanged(nameof(IsGameConnected));
+                OnPropertyChanged(nameof(IsLotATCConnected));
+                OnPropertyChanged(nameof(ExternalAWACSModeConnected));
             };
             _timer.Start();
 
@@ -171,12 +137,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
         }
 
         public int IntercomOffset { get; set; }
-
-        private void NotifyPropertyChanged(string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
+        
         public bool ShouldUseLotATCPosition()
         {
             if (!IsLotATCConnected)

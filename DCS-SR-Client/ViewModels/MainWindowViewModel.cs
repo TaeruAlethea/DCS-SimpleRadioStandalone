@@ -28,10 +28,8 @@ public partial class MainWindowViewModel : ObservableObject
 	[ObservableProperty] private AudioManager _audioManager;
 	[ObservableProperty] private AudioPreview _audioPreview;
 	
-	/// <remarks>Used in the XAML for DataBinding many things</remarks>
-	public ClientStateSingleton ClientState { get; } = ClientStateSingleton.Instance;
-	/// <remarks>Used in the XAML for DataBinding the connected client count</remarks>
-	public ConnectedClientsSingleton Clients { get; } = ConnectedClientsSingleton.Instance;
+	[ObservableProperty] private ClientStateSingleton _clientState = ClientStateSingleton.Instance;
+	[ObservableProperty] private ConnectedClientsSingleton _clients = ConnectedClientsSingleton.Instance;
 	[ObservableProperty] private SRSClientSyncHandler _client;
 	[ObservableProperty] private DCSAutoConnectHandler _dcsAutoConnectListener;
 	

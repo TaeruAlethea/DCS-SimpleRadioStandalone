@@ -273,7 +273,7 @@
                         <Label Name="CurrentProfile" Content="{x:Static p:Resources.CurrentProfileNone}" />
                         <Label Content="{x:Static p:Resources.CurrentUnitLabel}" />
                         <Label>
-                            <TextBlock Name="CurrentUnit" Text=""/>
+                            <TextBlock Text="{Binding ClientState.DcsPlayerRadioInfo.Unit}"/>
                         </Label>
                     </StackPanel>
                     <StackPanel Margin="0"
@@ -294,8 +294,9 @@
                         </Label>
                         <Label Content="{x:Static p:Resources.CurrentPositionLabel}" />
                         <Label>
-                            <TextBlock Name="CurrentPosition" Text="0,0 - Alt:0"
-                                       MouseLeftButtonUp="CurrentPosition_OnClick" />
+                            <TextBlock Name="CurrentPosition"
+                                       MouseLeftButtonUp="CurrentPosition_OnClick"
+                                       Text="{Binding ClientState.PlayerCoaltionLocationMetadata.LngLngPosition.PrettyPrint}" />
                         </Label>
                     </StackPanel>
 

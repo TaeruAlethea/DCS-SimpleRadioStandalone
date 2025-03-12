@@ -41,7 +41,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Common
         public short selected = 0;
 
         public string unit = "";
-        
+        public string Unit => unit;
+
         public uint unitId;
 
         [JsonNetworkIgnoreSerialization] [JsonDCSIgnoreSerialization]
