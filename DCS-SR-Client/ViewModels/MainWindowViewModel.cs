@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime;
 using System.Windows.Threading;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Preferences;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
@@ -22,6 +23,7 @@ public partial class MainWindowViewModel : ObservableObject
 	private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 	
 	[ObservableProperty] private AudioManager _audioManager;
+	[ObservableProperty] private AudioPreview _audioPreview;
 	
 	/// <remarks>Used in the XAML for DataBinding many things</remarks>
 	public ClientStateSingleton ClientState { get; } = ClientStateSingleton.Instance;
@@ -40,10 +42,10 @@ public partial class MainWindowViewModel : ObservableObject
 	public FavouriteServersViewModel FavouriteServersViewModel { get; }
 	
 	[ObservableProperty]
-	public SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+	private SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 	
 	[ObservableProperty]
-	public GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+	private GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
 	
 	public MainWindowViewModel(MainWindow mainWindowView)
 	{
@@ -54,6 +56,8 @@ public partial class MainWindowViewModel : ObservableObject
 		_audioManager = new AudioManager(AudioOutput.WindowsN);
 		
 		InitDefaultAddress();
+		
+		AudioManager.SpeakerBoost = GlobalSettings.GetClientSetting(GlobalSettingsKeys.SpeakerBoost).FloatValue;
 		
 		_updateTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
 		_updateTimer.Tick += ToBeDepricatedMainWindow.UpdatePlayerLocationAndVUMeters;
