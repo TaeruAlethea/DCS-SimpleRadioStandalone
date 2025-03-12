@@ -75,9 +75,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             // Set up tooltips that are always defined
             InitToolTips();
 
-            var client = ClientStateSingleton.Instance;
-
-
             WindowStartupLocation = WindowStartupLocation.Manual;
             Left = ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.ClientX).DoubleValue;
             Top = ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.ClientY).DoubleValue;
