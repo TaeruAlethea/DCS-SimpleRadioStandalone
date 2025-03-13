@@ -10,7 +10,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 using MahApps.Metro.Controls;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -28,6 +32,8 @@ namespace DCS_SR_Client
         private bool loggingReady = false;
         private static Logger Logger = LogManager.GetCurrentClassLogger();
 
+        private IServiceProvider _serviceProvider;
+        
         public App()
         {
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("zh-CN");
@@ -57,7 +63,9 @@ namespace DCS_SR_Client
 
                 Environment.Exit(1);
             }
-
+            
+            Services = ConfigureServices();
+            
             SetupLogging();
 
             ListArgs();
@@ -103,9 +111,9 @@ namespace DCS_SR_Client
             RequireAdmin();
 
             InitNotificationIcon();
-
+            this.InitializeComponent();
         }
-
+        
         private void ListArgs()
         {
             Logger.Info("Arguments:");
@@ -315,5 +323,28 @@ namespace DCS_SR_Client
                 logger.Error((Exception) e.ExceptionObject, "Received unhandled exception, {0}", e.IsTerminating ? "exiting" : "continuing");
             }
         }
+        
+        /// <summary>
+        /// Gets the current <see cref="App"/> instance in use
+        /// </summary>
+        public new static App Current => (App)Application.Current;
+
+        /// <summary>
+        /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
+        /// </summary>
+        public IServiceProvider Services { get; }
+
+        /// <summary>
+        /// Configures the services for the application.
+        /// </summary>
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            services.AddSingleton<ISrsSettings, SrsSettingsService>();
+            
+            return services.BuildServiceProvider();
+        }
+        
     }
 }
