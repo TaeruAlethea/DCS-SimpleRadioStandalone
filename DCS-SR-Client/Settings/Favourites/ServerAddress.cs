@@ -1,9 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 {
-    public class ServerAddress : INotifyPropertyChanged
+    public partial class ServerAddress : ObservableObject
     {
         public ServerAddress(string name, string address, string eamCoalitionPassword, bool isDefault)
         {
@@ -14,72 +16,42 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             IsDefault = isDefault; // Explicitly use property setter here since IsDefault change includes additional logic
         }
 
-        private string _name;
-        public string Name {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                if (_name != value)
-                {
-                    _name = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        [ObservableProperty] private string _name;
 
-        private string _address;
-        public string Address
+        [ObservableProperty] private string _address;
+
+        [ObservableProperty] private string _eamCoalitionPassword;
+
+        [ObservableProperty] private bool _isDefault;
+
+        public string HostName
         {
             get
             {
-                return _address;
-            }
-            set
-            {
-                if (_address != value)
-                {
-                    _address = value;
-                    OnPropertyChanged();
-                }
+                var addr = Address.Trim();
+                if (addr.Contains(":")) { return addr.Split(':')[0]; }
+                return addr;
             }
         }
 
-        private string _eamCoalitionPassword;
-        public string EAMCoalitionPassword
+        public int Port
         {
             get
             {
-                return _eamCoalitionPassword;
-            }
-            set
-            {
-                if (_eamCoalitionPassword != value)
+                var addr = Address.Trim();
+
+                if (addr.Contains(":"))
                 {
-                    _eamCoalitionPassword = value;
-                    OnPropertyChanged();
+                    int port;
+                    if (int.TryParse(addr.Split(':')[1], out port))
+                    {
+                        return port;
+                    }
+                    throw new ArgumentException("specified port is not valid");
                 }
+
+                return 5002;
             }
-        }
-
-        private bool _isDefault;
-        public bool IsDefault
-        {
-            get { return _isDefault; }
-            set
-            {
-                _isDefault = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

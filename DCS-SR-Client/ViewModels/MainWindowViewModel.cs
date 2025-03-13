@@ -1,7 +1,14 @@
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Runtime;
+using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Windows;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
@@ -15,6 +22,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NLog;
+using SharpDX.Multimedia;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
@@ -74,9 +82,124 @@ public partial class MainWindowViewModel : ObservableObject
 	}
 
 	[RelayCommand]
-	private void Connect()
+	[MethodImpl(MethodImplOptions.Synchronized)]
+	public void Connect()
 	{
-		ToBeDepricatedMainWindow.Connect();
+	
+        if (ClientState.IsConnected)
+        {
+            ToBeDepricatedMainWindow.Stop();
+        }
+        else
+        {
+            ToBeDepricatedMainWindow.SaveSelectedInputAndOutput();
+
+            try
+            {
+                //process hostname
+                var resolvedAddresses = Dns.GetHostAddresses(ServerAddress.HostName);
+                var ip = resolvedAddresses.FirstOrDefault(xa => xa.AddressFamily == AddressFamily.InterNetwork); // Ensure we get an IPv4 address in case the host resolves to both IPv6 and IPv4
+
+                if (ip != null)
+                {
+                    ResolvedIp = ip;
+                    Port = ServerAddress.Port;
+
+                    try
+                    {
+                        Client.Disconnect();
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+
+                    if (Client == null)
+                    {
+                        Client = new SRSClientSyncHandler(Guid, ToBeDepricatedMainWindow.UpdateUICallback, delegate(string name, int seat)
+                        {
+                            try
+                            {
+                                //on MAIN thread
+                                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                    new ThreadStart(() =>
+                                    {
+                                        //Handle Aircraft Name - find matching profile and select if you can
+                                        name = Regex.Replace(name.Trim().ToLower(), "[^a-zA-Z0-9]", "");
+                                        //add one to seat so seat_2 is copilot
+                                        var nameSeat = $"_{seat + 1}";
+
+                                        foreach (var profileName in GlobalSettings.ProfileSettingsStore
+                                                     .ProfileNames)
+                                        {
+                                            //find matching seat
+                                            var splitName = profileName.Trim().ToLowerInvariant().Split('_')
+                                                .First();
+                                            if (name.StartsWith(Regex.Replace(splitName, "[^a-zA-Z0-9]", "")) &&
+                                                profileName.Trim().EndsWith(nameSeat))
+                                            {
+                                                ToBeDepricatedMainWindow.ControlsProfile.SelectedItem = profileName;
+                                                return;
+                                            }
+                                        }
+
+                                        foreach (var profileName in GlobalSettings.ProfileSettingsStore
+                                                     .ProfileNames)
+                                        {
+                                            //find matching seat
+                                            if (name.StartsWith(Regex.Replace(profileName.Trim().ToLower(),
+                                                    "[^a-zA-Z0-9_]", "")))
+                                            {
+                                                ToBeDepricatedMainWindow.ControlsProfile.SelectedItem = profileName;
+                                                return;
+                                            }
+                                        }
+
+                                        ToBeDepricatedMainWindow.ControlsProfile.SelectedIndex = 0;
+
+                                    }));
+                            }
+                            catch (Exception)
+                            {
+                            }
+
+                        });
+                    }
+
+                    Client.TryConnect(new IPEndPoint(ResolvedIp, Port), ToBeDepricatedMainWindow.ConnectCallback);
+
+                    ToBeDepricatedMainWindow.StartStop.Content = Properties.Resources.StartStopConnecting;
+                    ToBeDepricatedMainWindow.StartStop.IsEnabled = false;
+                    ToBeDepricatedMainWindow.Mic.IsEnabled = false;
+                    ToBeDepricatedMainWindow.Speakers.IsEnabled = false;
+                    ToBeDepricatedMainWindow.MicOutput.IsEnabled = false;
+                    ToBeDepricatedMainWindow.Preview.IsEnabled = false;
+
+                    if (AudioPreview != null)
+                    {
+                        ToBeDepricatedMainWindow.Preview.Content = Properties.Resources.PreviewAudio;
+                        AudioPreview.StopEncoding();
+                        AudioPreview = null;
+                    }
+                }
+                else
+                {
+                    //invalid ID
+                    MessageBox.Show(Properties.Resources.MsgBoxInvalidIPText, Properties.Resources.MsgBoxInvalidIP, MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+
+                    ClientState.IsConnected = false;
+                    ToBeDepricatedMainWindow.ToggleServerSettings.IsEnabled = false;
+                }
+            }
+            catch (Exception ex) when (ex is SocketException || ex is ArgumentException)
+            {
+                MessageBox.Show(Properties.Resources.MsgBoxInvalidIPText, Properties.Resources.MsgBoxInvalidIP, MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+
+                ClientState.IsConnected = false;
+                ToBeDepricatedMainWindow.ToggleServerSettings.IsEnabled = false;
+            }
+        }
 	}
 	
 	private void InitDefaultAddress()

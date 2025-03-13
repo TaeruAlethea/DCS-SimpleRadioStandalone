@@ -152,9 +152,9 @@
                                 Width="140"
                                 Margin="5"
                                 HorizontalAlignment="Center"
-                                Command="{Binding Path=ConnectCommand}"
+                                Command="{Binding ConnectCommand}"
                                 Content="{x:Static p:Resources.StartStop}"
-                                ToolTip="{Binding Path=AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
+                                ToolTip="{Binding AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
                         <Button x:Name="ToggleServerSettings"
                                 Width="140"
                                 Margin="5"

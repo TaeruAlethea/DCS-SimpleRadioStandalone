@@ -823,156 +823,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                                          / double.Parse(ProfileSettingsStore.DefaultSettingsProfileSettings[ProfileSettingsKeys.AmbientCockpitNoiseEffectVolume.ToString()], CultureInfo.InvariantCulture)) * 100;
             AmbientCockpitEffectVolume.IsEnabled = true;
         }
-
-        [MethodImpl(MethodImplOptions.Synchronized)]
-        public void Connect()
-        {
-            if (ViewModel.ClientState.IsConnected)
-            {
-                Stop();
-            }
-            else
-            {
-                SaveSelectedInputAndOutput();
-
-                try
-                {
-                    //process hostname
-                    var resolvedAddresses = Dns.GetHostAddresses(GetAddressFromTextBox());
-                    var ip = resolvedAddresses.FirstOrDefault(xa => xa.AddressFamily == AddressFamily.InterNetwork); // Ensure we get an IPv4 address in case the host resolves to both IPv6 and IPv4
-
-                    if (ip != null)
-                    {
-                        ViewModel.ResolvedIp = ip;
-                        ViewModel.Port = GetPortFromTextBox();
-
-                        try
-                        {
-                            ViewModel.Client.Disconnect();
-                        }
-                        catch (Exception ex)
-                        {
-                        }
-
-                        if (ViewModel.Client == null)
-                        {
-                            ViewModel.Client = new SRSClientSyncHandler(ViewModel.Guid, UpdateUICallback, delegate(string name, int seat)
-                            {
-                                try
-                                {
-                                    //on MAIN thread
-                                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
-                                        new ThreadStart(() =>
-                                        {
-                                            //Handle Aircraft Name - find matching profile and select if you can
-                                            name = Regex.Replace(name.Trim().ToLower(), "[^a-zA-Z0-9]", "");
-                                            //add one to seat so seat_2 is copilot
-                                            var nameSeat = $"_{seat + 1}";
-
-                                            foreach (var profileName in ViewModel.GlobalSettings.ProfileSettingsStore
-                                                         .ProfileNames)
-                                            {
-                                                //find matching seat
-                                                var splitName = profileName.Trim().ToLowerInvariant().Split('_')
-                                                    .First();
-                                                if (name.StartsWith(Regex.Replace(splitName, "[^a-zA-Z0-9]", "")) &&
-                                                    profileName.Trim().EndsWith(nameSeat))
-                                                {
-                                                    ControlsProfile.SelectedItem = profileName;
-                                                    return;
-                                                }
-                                            }
-
-                                            foreach (var profileName in ViewModel.GlobalSettings.ProfileSettingsStore
-                                                         .ProfileNames)
-                                            {
-                                                //find matching seat
-                                                if (name.StartsWith(Regex.Replace(profileName.Trim().ToLower(),
-                                                        "[^a-zA-Z0-9_]", "")))
-                                                {
-                                                    ControlsProfile.SelectedItem = profileName;
-                                                    return;
-                                                }
-                                            }
-
-                                            ControlsProfile.SelectedIndex = 0;
-
-                                        }));
-                                }
-                                catch (Exception)
-                                {
-                                }
-
-                            });
-                        }
-
-                        ViewModel.Client.TryConnect(new IPEndPoint(ViewModel.ResolvedIp, ViewModel.Port), ConnectCallback);
-
-                        StartStop.Content = Properties.Resources.StartStopConnecting;
-                        StartStop.IsEnabled = false;
-                        Mic.IsEnabled = false;
-                        Speakers.IsEnabled = false;
-                        MicOutput.IsEnabled = false;
-                        Preview.IsEnabled = false;
-
-                        if (ViewModel.AudioPreview != null)
-                        {
-                            Preview.Content = Properties.Resources.PreviewAudio;
-                            ViewModel.AudioPreview.StopEncoding();
-                            ViewModel.AudioPreview = null;
-                        }
-                    }
-                    else
-                    {
-                        //invalid ID
-                        MessageBox.Show(Properties.Resources.MsgBoxInvalidIPText, Properties.Resources.MsgBoxInvalidIP, MessageBoxButton.OK,
-                            MessageBoxImage.Error);
-
-                        ViewModel.ClientState.IsConnected = false;
-                        ToggleServerSettings.IsEnabled = false;
-                    }
-                }
-                catch (Exception ex) when (ex is SocketException || ex is ArgumentException)
-                {
-                    MessageBox.Show(Properties.Resources.MsgBoxInvalidIPText, Properties.Resources.MsgBoxInvalidIP, MessageBoxButton.OK,
-                        MessageBoxImage.Error);
-
-                    ViewModel.ClientState.IsConnected = false;
-                    ToggleServerSettings.IsEnabled = false;
-                }
-            }
-        }
-
-        private string GetAddressFromTextBox()
-        {
-            var addr = ServerIp.Text.Trim();
-
-            if (addr.Contains(":"))
-            {
-                return addr.Split(':')[0];
-            }
-
-            return addr;
-        }
-
-        private int GetPortFromTextBox()
-        {
-            var addr = ServerIp.Text.Trim();
-
-            if (addr.Contains(":"))
-            {
-                int port;
-                if (int.TryParse(addr.Split(':')[1], out port))
-                {
-                    return port;
-                }
-                throw new ArgumentException("specified port is not valid");
-            }
-
-            return 5002;
-        }
-
-        private void Stop(bool connectionError = false)
+        
+        public void Stop(bool connectionError = false)
         {
             if (ViewModel.ClientState.IsConnected && ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.PlayConnectionSounds))
             {
@@ -1028,7 +880,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             ViewModel.ClientState.PlayerCoaltionLocationMetadata.Reset();
         }
 
-        private void SaveSelectedInputAndOutput()
+        public void SaveSelectedInputAndOutput()
         {
             //save app settings
             // Only save selected microphone if one is actually available, resulting in a crash otherwise
@@ -1080,7 +932,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             }
         }
 
-        private void ConnectCallback(bool result, bool connectionError, string connection)
+        public void ConnectCallback(bool result, bool connectionError, string connection)
         {
             string currentConnection = ServerIp.Text.Trim();
             if (!currentConnection.Contains(":"))
@@ -1225,7 +1077,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             }
         }
 
-        private void UpdateUICallback()
+        public void UpdateUICallback()
         {
             if (ViewModel.ClientState.IsConnected)
             {
@@ -1474,7 +1326,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 if (connectToServer)
                 {
                     ServerIp.Text = connection;
-                    Connect();
+                    ViewModel.Connect();
                 }
             }
         }
@@ -1510,7 +1362,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 await Task.Delay(2000);
                 StartStop.IsEnabled = true;
                 ServerIp.Text = advertisedConnection;
-                Connect();
+                ViewModel.Connect();
             }
         }
 
@@ -2089,7 +1941,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             if (ViewModel != null)
             {
                 // Special Case Binding
-                ViewModel.ServerAddress.EAMCoalitionPassword = ((PasswordBox)sender).Password;
+                ViewModel.ServerAddress.EamCoalitionPassword = ((PasswordBox)sender).Password;
             } 
         }
     }
