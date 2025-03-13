@@ -52,7 +52,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Preferences
                 var sb = new StringBuilder();
                 foreach (var address in addresses)
                 {
-                    sb.AppendLine($"{address.Name},{address.Address},{address.IsDefault},{address.EAMCoalitionPassword}");
+                    sb.AppendLine($"{address.Name},{address.Address},{address.IsDefault},{address.EamCoalitionPassword}");
                 }
                 File.WriteAllText(_fileNameAndPath, sb.ToString());
 
