@@ -8,7 +8,6 @@ using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
-using System.Windows.Forms.VisualStyles;
 using System.Windows.Threading;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
@@ -22,7 +21,6 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NLog;
-using SharpDX.Multimedia;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
@@ -88,7 +86,7 @@ public partial class MainWindowViewModel : ObservableObject
 	
         if (ClientState.IsConnected)
         {
-            ToBeDepricatedMainWindow.Stop();
+            Stop();
         }
         else
         {
@@ -200,6 +198,62 @@ public partial class MainWindowViewModel : ObservableObject
                 ToBeDepricatedMainWindow.ToggleServerSettings.IsEnabled = false;
             }
         }
+	}
+	
+	public void Stop(bool connectionError = false)
+	{
+		if (ClientState.IsConnected && GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.PlayConnectionSounds))
+		{
+			try
+			{
+				Sounds.BeepDisconnected.Play();
+			}
+			catch (Exception ex)
+			{
+				_logger.Warn(ex, "Failed to play disconnect sound");
+			}
+		}
+
+		ClientState.IsConnectionErrored = connectionError;
+
+		ToBeDepricatedMainWindow.StartStop.Content = Properties.Resources.StartStop;
+		ToBeDepricatedMainWindow.StartStop.IsEnabled = true;
+		ToBeDepricatedMainWindow.Mic.IsEnabled = true;
+		ToBeDepricatedMainWindow.Speakers.IsEnabled = true;
+		ToBeDepricatedMainWindow.MicOutput.IsEnabled = true;
+		ToBeDepricatedMainWindow.Preview.IsEnabled = true;
+		ClientState.IsConnected = false;
+		ToBeDepricatedMainWindow.ToggleServerSettings.IsEnabled = false;
+
+		ToBeDepricatedMainWindow.ConnectExternalAwacsMode.IsEnabled = false;
+		ToBeDepricatedMainWindow.ConnectExternalAwacsMode.Content = Properties.Resources.ConnectExternalAWACSMode;
+
+		if (!string.IsNullOrWhiteSpace(ClientState.LastSeenName) &&
+		    GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastSeenName).StringValue != ClientState.LastSeenName)
+		{
+			GlobalSettings.SetClientSetting(GlobalSettingsKeys.LastSeenName, ClientState.LastSeenName);
+		}
+
+		try
+		{
+			AudioManager.StopEncoding();
+		}
+		catch (Exception)
+		{
+			// ignored
+		}
+
+		try
+		{
+			Client.Disconnect();
+		}
+		catch (Exception)
+		{
+			// ignored
+		}
+
+		ClientState.DcsPlayerRadioInfo.Reset();
+		ClientState.PlayerCoaltionLocationMetadata.Reset();
 	}
 	
 	private void InitDefaultAddress()

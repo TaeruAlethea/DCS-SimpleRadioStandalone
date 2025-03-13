@@ -824,61 +824,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             AmbientCockpitEffectVolume.IsEnabled = true;
         }
         
-        public void Stop(bool connectionError = false)
-        {
-            if (ViewModel.ClientState.IsConnected && ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.PlayConnectionSounds))
-            {
-                try
-                {
-                    Sounds.BeepDisconnected.Play();
-                }
-                catch (Exception ex)
-                {
-                    Logger.Warn(ex, "Failed to play disconnect sound");
-                }
-            }
-
-            ViewModel.ClientState.IsConnectionErrored = connectionError;
-
-            StartStop.Content = Properties.Resources.StartStop;
-            StartStop.IsEnabled = true;
-            Mic.IsEnabled = true;
-            Speakers.IsEnabled = true;
-            MicOutput.IsEnabled = true;
-            Preview.IsEnabled = true;
-            ViewModel.ClientState.IsConnected = false;
-            ToggleServerSettings.IsEnabled = false;
-
-            ConnectExternalAwacsMode.IsEnabled = false;
-            ConnectExternalAwacsMode.Content = Properties.Resources.ConnectExternalAWACSMode;
-
-            if (!string.IsNullOrWhiteSpace(ViewModel.ClientState.LastSeenName) &&
-                ViewModel.GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastSeenName).StringValue != ViewModel.ClientState.LastSeenName)
-            {
-                ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.LastSeenName, ViewModel.ClientState.LastSeenName);
-            }
-
-            try
-            {
-                ViewModel.AudioManager.StopEncoding();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            try
-            {
-                ViewModel.Client.Disconnect();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            ViewModel.ClientState.DcsPlayerRadioInfo.Reset();
-            ViewModel.ClientState.PlayerCoaltionLocationMetadata.Reset();
-        }
 
         public void SaveSelectedInputAndOutput()
         {
@@ -974,7 +919,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                         Logger.Error(ex,
                             "Unable to get audio device - likely output device error - Pick another. Error:" +
                             ex.Message);
-                        Stop();
+                        ViewModel.Stop();
 
                         var messageBoxResult = CustomMessageBox.ShowYesNo(
                             Properties.Resources.MsgBoxAudioErrorText,
@@ -991,13 +936,13 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             {
                 // Only stop connection/reset state if connection is currently active
                 // Autoconnect mismatch will quickly disconnect/reconnect, leading to double-callbacks
-                Stop(connectionError);
+                ViewModel.Stop(connectionError);
             }
             else
             {
                 if (!ViewModel.ClientState.IsConnected)
                 {
-                    Stop(connectionError);
+                    ViewModel.Stop(connectionError);
                 }
             }
         }
@@ -1016,7 +961,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             //save window position
             base.OnClosing(e);
             
-            Stop();
+            ViewModel.Stop();
 
             ViewModel.AudioPreview?.StopEncoding();
             ViewModel.AudioPreview = null;
@@ -1355,7 +1300,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
             if (switchServer)
             {
-                Stop();
+                ViewModel.Stop();
 
                 StartStop.IsEnabled = false;
                 StartStop.Content = Properties.Resources.StartStopConnecting;
