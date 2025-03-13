@@ -666,8 +666,7 @@
                                           Grid.Column="1"
                                           HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center"
-                                          Click="AutoConnectToggle_Click"
-                                          IsChecked="{Binding GlobalSettings.SettingsCache[GlobalSettingsKeys.AutoConnect]}"/>
+                                          IsChecked="{Binding GlobalSettingsProperties.AutoConnect}"/>
 
                                     <Label Grid.Row="1"
                                    Grid.Column="0"
@@ -681,7 +680,7 @@
                                           HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center"
                                           Click="AutoConnectPromptToggle_Click"
-                                          IsChecked="{Binding GlobalSettings.SettingsCache[GlobalSettingsKeys.AutoConnectPrompt]}"/>
+                                          IsChecked="{Binding GlobalSettingsProperties.AutoConnectPrompt}"/>
 
 
                                     <Label Grid.Row="2"

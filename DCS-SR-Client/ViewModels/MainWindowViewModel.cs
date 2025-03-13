@@ -58,12 +58,14 @@ public partial class MainWindowViewModel : ObservableObject
 	
 	[ObservableProperty]
 	private GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+	[ObservableProperty] public GlobalSettingsModel _globalSettingsProperties;
 	
 	public MainWindowViewModel(MainWindow mainWindowView)
 	{
 		ToBeDepricatedMainWindow = mainWindowView;
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
+		GlobalSettingsProperties = new GlobalSettingsModel(GlobalSettings);
 		
 		_audioManager = new AudioManager(AudioOutput.WindowsN);
 		Guid = ClientStateSingleton.Instance.ShortGUID;
