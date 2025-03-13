@@ -16,7 +16,9 @@
                       ResizeMode="CanMinimize"
                       mc:Ignorable="d" 
                       d:DesignHeight="*" d:DesignWidth="550"
-                      d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}">
+                      d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
+                      Left="{Binding GlobalSettingsProperties.ClientX}"
+                      Top="{Binding GlobalSettingsProperties.ClientY}">
 	
 	<TabControl x:Name="TabControl">
         <TabControl.Resources>
@@ -243,13 +245,13 @@
                                        HorizontalContentAlignment="Center"
                                        Margin="0,10,0,0"
                                        Content="{x:Static p:Resources.ExternalAWACSModeNameLabel}" />
-                                    <TextBox x:Name="ExternalAwacsModeName"
-                                         Width="200"
+                                    <TextBox Width="200"
                                          Height="23"
                                          Margin="0,0,0,0"
                                          MaxLines="1"
                                          TextWrapping="Wrap"
-                                         HorizontalAlignment="Center" />
+                                         HorizontalAlignment="Center"
+                                         Text="{Binding GlobalSettingsProperties.LastSeenName}"/>
                                 </StackPanel>
 
                             </StackPanel>
@@ -1062,7 +1064,10 @@
                             <ComboBox x:Name="ControlsProfile"
                                       Width="200"
                                       HorizontalAlignment="Center"
-                                      VerticalAlignment="Top" Margin="5" Padding="5" />
+                                      VerticalAlignment="Top" Margin="5" Padding="5"
+                                      ItemsSource="{Binding GlobalSettings.ProfileSettingsStore.ProfileNames}"
+                                      SelectedValue="{Binding GlobalSettings.ProfileSettingsStore.CurrentProfileName}" 
+                                      SelectionChanged="ControlsProfile_OnSelectionChanged"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                                 <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CreateProfile}" Click="CreateProfile" />
                                 <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CopyProfile}" Click="CopyProfile" />
@@ -1143,17 +1148,17 @@
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioSwitchIsPTT}" />
                                     <ToggleButton Grid.Row="0" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.SettingsProfiles.RadioSwitchIsPtt}" />
+                                                  IsChecked="{Binding GlobalSettingsProperties.ProfileSettingsProperties.RadioSwitchIsPtt}" />
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoSelectChannel}" />
                                     <ToggleButton Grid.Row="1" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.SettingsProfiles.AutoSelectPresetChannel}" />
+                                                  IsChecked="{Binding GlobalSettingsProperties.ProfileSettingsProperties.AutoSelectPresetChannel}" />
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.AlwaysAllowHotas}" />
                                     <ToggleButton Grid.Row="2" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.SettingsProfiles.AlwaysAllowHotasControls}" />
+                                                  IsChecked="{Binding GlobalSettingsProperties.ProfileSettingsProperties.AlwaysAllowHotasControls}" />
 
                                     <Label Grid.Row="3"
                                            Grid.Column="0"

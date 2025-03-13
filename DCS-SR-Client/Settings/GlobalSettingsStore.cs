@@ -14,7 +14,6 @@ using SharpConfig;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 {
-  
     public enum GlobalSettingsKeys
     {
         MinimiseToTray,
@@ -222,8 +221,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         AwacsOverlayToggle = 137,
         ModifierAwacsOverlayToggle = 237
     }
-
-
+    
     public partial class GlobalSettingsStore : ObservableObject
     {
         private static readonly string CFG_FILE_NAME = "global.cfg";
@@ -242,7 +240,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 
         //cache all the settings in their correct types for speed
         //fixes issue where we access settings a lot and have issues
-        [ObservableProperty] private ConcurrentDictionary<string, object> _settingsCache = new ConcurrentDictionary<string, object>();
+        private ConcurrentDictionary<string, object> _settingsCache = new ConcurrentDictionary<string, object>();
 
         public string Path { get; } = "";
 
@@ -317,7 +315,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             }
 
             _profileSettingsStore = new ProfileSettingsStore(this);
-            ProfileSettingsProperties = new ProfileSettingsModel(ProfileSettingsStore);
+            _profileSettingsProperties = new ProfileSettingsModel(ProfileSettingsStore);
         }
 
         public static bool IsFileLocked(FileInfo file)

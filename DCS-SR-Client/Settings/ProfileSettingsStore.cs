@@ -5,10 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Microsoft.Win32;
 using NLog;
 using SharpConfig;
 
@@ -85,62 +82,82 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         private ConcurrentDictionary<string, object> _settingsCache = new ConcurrentDictionary<string, object>();
 
         [ObservableProperty] private string _currentProfileName = "default";
-        partial void OnCurrentProfileNameChanged(string oldValue, string newValue) => _settingsCache.Clear();
+        partial void OnCurrentProfileNameChanged(string oldValue, string newValue)
+        {
+            _settingsCache.Clear();
+            OnPropertyChanged(nameof(_globalSettings.ProfileSettingsProperties));
+        }
 
         public string Path { get; }
 
-        public static readonly Dictionary<string, string> DefaultSettingsProfileSettings = new Dictionary<string, string>()
+        public static readonly Dictionary<string, string> DefaultSettingsProfileSettings =
+            new Dictionary<string, string>()
+            {
+                { ProfileSettingsKeys.RadioEffects.ToString(), "true" },
+                { ProfileSettingsKeys.RadioEffectsClipping.ToString(), "false" },
+
+                { ProfileSettingsKeys.RadioEncryptionEffects.ToString(), "true" },
+                { ProfileSettingsKeys.NATOTone.ToString(), "true" },
+                { ProfileSettingsKeys.HAVEQUICKTone.ToString(), "true" },
+
+                { ProfileSettingsKeys.RadioRxEffects_Start.ToString(), "true" },
+                { ProfileSettingsKeys.RadioRxEffects_End.ToString(), "true" },
+
+                {
+                    ProfileSettingsKeys.RadioTransmissionStartSelection.ToString(),
+                    CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_START + ".wav"
+                },
+                {
+                    ProfileSettingsKeys.RadioTransmissionEndSelection.ToString(),
+                    CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_END + ".wav"
+                },
+
+
+                { ProfileSettingsKeys.RadioTxEffects_Start.ToString(), "true" },
+                { ProfileSettingsKeys.RadioTxEffects_End.ToString(), "true" },
+                { ProfileSettingsKeys.MIDSRadioEffect.ToString(), "true" },
+
+                { ProfileSettingsKeys.AutoSelectPresetChannel.ToString(), "true" },
+
+                { ProfileSettingsKeys.AlwaysAllowHotasControls.ToString(), "false" },
+                { ProfileSettingsKeys.AllowDCSPTT.ToString(), "true" },
+                { ProfileSettingsKeys.RadioSwitchIsPTT.ToString(), "false" },
+                { ProfileSettingsKeys.RadioSwitchIsPTTOnlyWhenValid.ToString(), "false" },
+                { ProfileSettingsKeys.AlwaysAllowTransponderOverlay.ToString(), "false" },
+
+                { ProfileSettingsKeys.PTTReleaseDelay.ToString(), "0" },
+                { ProfileSettingsKeys.PTTStartDelay.ToString(), "0" },
+
+                { ProfileSettingsKeys.RadioBackgroundNoiseEffect.ToString(), "true" },
+
+                { ProfileSettingsKeys.NATOToneVolume.ToString(), "1.2" },
+                { ProfileSettingsKeys.HQToneVolume.ToString(), "0.3" },
+
+                { ProfileSettingsKeys.VHFNoiseVolume.ToString(), "0.15" },
+                { ProfileSettingsKeys.HFNoiseVolume.ToString(), "0.15" },
+                { ProfileSettingsKeys.UHFNoiseVolume.ToString(), "0.15" },
+                { ProfileSettingsKeys.FMNoiseVolume.ToString(), "0.4" },
+
+                { ProfileSettingsKeys.AMCollisionVolume.ToString(), "1.0" },
+
+                { ProfileSettingsKeys.RotaryStyleIncrement.ToString(), "false" },
+
+                { ProfileSettingsKeys.AmbientCockpitNoiseEffect.ToString(), "true" },
+                {
+                    ProfileSettingsKeys.AmbientCockpitNoiseEffectVolume.ToString(), "1.0"
+                }, //relative volume as the incoming volume is variable
+                { ProfileSettingsKeys.AmbientCockpitIntercomNoiseEffect.ToString(), "false" },
+                { ProfileSettingsKeys.DisableExpansionRadios.ToString(), "false" },
+            };
+        
+        public List<string> ProfileNames
         {
-            {ProfileSettingsKeys.RadioEffects.ToString(), "true"},
-            {ProfileSettingsKeys.RadioEffectsClipping.ToString(), "false"},
-
-            {ProfileSettingsKeys.RadioEncryptionEffects.ToString(), "true"},
-            {ProfileSettingsKeys.NATOTone.ToString(), "true"},
-            {ProfileSettingsKeys.HAVEQUICKTone.ToString(), "true"},
-
-            {ProfileSettingsKeys.RadioRxEffects_Start.ToString(), "true"},
-            {ProfileSettingsKeys.RadioRxEffects_End.ToString(), "true"},
-
-            {ProfileSettingsKeys.RadioTransmissionStartSelection.ToString(), CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_START+".wav"},
-            {ProfileSettingsKeys.RadioTransmissionEndSelection.ToString(), CachedAudioEffect.AudioEffectTypes.RADIO_TRANS_END+".wav"},
-
-
-            {ProfileSettingsKeys.RadioTxEffects_Start.ToString(), "true"},
-            {ProfileSettingsKeys.RadioTxEffects_End.ToString(), "true"},
-            {ProfileSettingsKeys.MIDSRadioEffect.ToString(), "true"},
-
-            {ProfileSettingsKeys.AutoSelectPresetChannel.ToString(), "true"},
-
-            {ProfileSettingsKeys.AlwaysAllowHotasControls.ToString(),"false" },
-            {ProfileSettingsKeys.AllowDCSPTT.ToString(),"true" },
-            {ProfileSettingsKeys.RadioSwitchIsPTT.ToString(), "false"},
-            {ProfileSettingsKeys.RadioSwitchIsPTTOnlyWhenValid.ToString(), "false"},
-            {ProfileSettingsKeys.AlwaysAllowTransponderOverlay.ToString(), "false"},
-
-            {ProfileSettingsKeys.PTTReleaseDelay.ToString(), "0"},
-            {ProfileSettingsKeys.PTTStartDelay.ToString(), "0"},
-
-            {ProfileSettingsKeys.RadioBackgroundNoiseEffect.ToString(), "true"},
-
-            {ProfileSettingsKeys.NATOToneVolume.ToString(), "1.2"},
-            {ProfileSettingsKeys.HQToneVolume.ToString(), "0.3"},
-
-            {ProfileSettingsKeys.VHFNoiseVolume.ToString(), "0.15"},
-            {ProfileSettingsKeys.HFNoiseVolume.ToString(), "0.15"},
-            {ProfileSettingsKeys.UHFNoiseVolume.ToString(), "0.15"},
-            {ProfileSettingsKeys.FMNoiseVolume.ToString(), "0.4"},
-
-            {ProfileSettingsKeys.AMCollisionVolume.ToString(), "1.0"},
-
-            {ProfileSettingsKeys.RotaryStyleIncrement.ToString(), "false"},
-
-            {ProfileSettingsKeys.AmbientCockpitNoiseEffect.ToString(), "true"},
-            {ProfileSettingsKeys.AmbientCockpitNoiseEffectVolume.ToString(), "1.0"}, //relative volume as the incoming volume is variable
-            {ProfileSettingsKeys.AmbientCockpitIntercomNoiseEffect.ToString(), "false"},
-            {ProfileSettingsKeys.DisableExpansionRadios.ToString(), "false"},
-        };
-
-        public List<string> ProfileNames => new List<string>(InputProfiles.Keys);
+            get
+            {
+                OnPropertyChanging(nameof(CurrentProfileName));
+                return new List<string>(InputProfiles.Keys); 
+            }
+        }
 
         public Dictionary<InputBinding, InputDevice> GetCurrentInputProfile() => InputProfiles[GetProfileName(CurrentProfileName)];
 
@@ -278,6 +295,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 
             var inputProfile = new Dictionary<InputBinding, InputDevice>();
             InputProfiles[GetProfileName(profileName)] = inputProfile;
+            
+            OnPropertyChanged(nameof(ProfileNames));
         }
 
         private string GetProfileCfgFileName(string prof)
@@ -562,6 +581,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             { }
 
             CurrentProfileName = "default";
+            OnPropertyChanged(nameof(ProfileNames));
         }
 
         public void RenameProfile(string oldName,string newName)
@@ -585,6 +605,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             }
             catch
             { }
+            OnPropertyChanged(nameof(ProfileNames));
         }
 
         public void CopyProfile(string profileToCopy, string profileName)
@@ -611,7 +632,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             CurrentProfileName = "default";
 
             InputConfigs[GetProfileCfgFileName(profileName)].SaveToFile(Path+GetProfileCfgFileName(profileName));
-
+            OnPropertyChanged(nameof(ProfileNames));
         }
     }
 }

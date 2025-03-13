@@ -18,6 +18,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites;
+using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using NLog;
@@ -64,7 +65,9 @@ public partial class MainWindowViewModel : ObservableObject
 		ToBeDepricatedMainWindow = mainWindowView;
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
-		GlobalSettingsProperties = new GlobalSettingsModel(GlobalSettings);
+		GlobalSettingsProperties = new GlobalSettingsModel(_globalSettings);
+		UpdaterChecker.CheckForUpdate(GlobalSettingsProperties.CheckForBetaUpdates);
+
 		
 		_audioManager = new AudioManager(AudioOutput.WindowsN);
 		Guid = ClientStateSingleton.Instance.ShortGUID;
@@ -136,7 +139,7 @@ public partial class MainWindowViewModel : ObservableObject
                                             if (name.StartsWith(Regex.Replace(splitName, "[^a-zA-Z0-9]", "")) &&
                                                 profileName.Trim().EndsWith(nameSeat))
                                             {
-                                                ToBeDepricatedMainWindow.ControlsProfile.SelectedItem = profileName;
+	                                            GlobalSettings.ProfileSettingsStore.CurrentProfileName = profileName;
                                                 return;
                                             }
                                         }
@@ -148,13 +151,11 @@ public partial class MainWindowViewModel : ObservableObject
                                             if (name.StartsWith(Regex.Replace(profileName.Trim().ToLower(),
                                                     "[^a-zA-Z0-9_]", "")))
                                             {
-                                                ToBeDepricatedMainWindow.ControlsProfile.SelectedItem = profileName;
+	                                            GlobalSettings.ProfileSettingsStore.CurrentProfileName = profileName;
                                                 return;
                                             }
                                         }
-
-                                        ToBeDepricatedMainWindow.ControlsProfile.SelectedIndex = 0;
-
+                                        GlobalSettings.ProfileSettingsStore.CurrentProfileName = GlobalSettings.ProfileSettingsStore.ProfileNames.First();
                                     }));
                             }
                             catch (Exception)

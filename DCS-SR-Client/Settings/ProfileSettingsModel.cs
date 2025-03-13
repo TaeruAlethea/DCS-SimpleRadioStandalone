@@ -1,8 +1,10 @@
 using System.Configuration;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
-public class ProfileSettingsModel(ProfileSettingsStore store) : ConfigurationSection
+[ObservableObject]
+public partial class ProfileSettingsModel(ProfileSettingsStore store) : ConfigurationSection
 {
 	[ConfigurationProperty("RadioEffects", DefaultValue = true, IsRequired = true)]
 	public bool RadioEffects

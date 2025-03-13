@@ -1,8 +1,10 @@
 using System.Configuration;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
-public sealed class GlobalSettingsModel(GlobalSettingsStore store) : ConfigurationSection
+[ObservableObject]
+public sealed partial class GlobalSettingsModel(GlobalSettingsStore store) : ConfigurationSection
 {
 	[ConfigurationProperty("AutoConnect", DefaultValue = true, IsRequired = true)]
 	public bool AutoConnect
@@ -298,9 +300,14 @@ public sealed class GlobalSettingsModel(GlobalSettingsStore store) : Configurati
 		get => store.GetClientSettingBool(GlobalSettingsKeys.RequireAdmin);
 		set => store.SetClientSetting(GlobalSettingsKeys.RequireAdmin, value);
 	}
-	
-	//TODO Make this property a Config Property.
-	public ProfileSettingsModel SettingsProfiles => store.ProfileSettingsProperties;
+
+	public ProfileSettingsModel ProfileSettingsProperties
+	{
+		get
+		{
+			return store.ProfileSettingsProperties;
+		}
+	}
 	
 	[ConfigurationProperty("AutoSelectSettingsProfile", DefaultValue = false, IsRequired = true)]
 	public bool AutoSelectSettingsProfile

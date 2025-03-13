@@ -74,18 +74,14 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             InitToolTips();
 
             WindowStartupLocation = WindowStartupLocation.Manual;
-            Left = ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.ClientX).DoubleValue;
-            Top = ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.ClientY).DoubleValue;
-
             Title = Title + " - " + UpdaterChecker.VERSION;
 
             CheckWindowVisibility();
 
-            if (ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.StartMinimised))
+            if (ViewModel.GlobalSettingsProperties.StartMinimised)
             {
                 Hide();
                 WindowState = WindowState.Minimized;
-
                 Logger.Info("Started DCS-SimpleRadio Client " + UpdaterChecker.VERSION + " minimized");
             }
             else
@@ -93,35 +89,27 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 Logger.Info("Started DCS-SimpleRadio Client " + UpdaterChecker.VERSION);
             }
 
-            Analytics.Log("Client", "Startup", ViewModel.GlobalSettings.GetClientSetting(GlobalSettingsKeys.ClientIdLong).RawValue);
+            Analytics.Log("Client", "Startup", ViewModel.GlobalSettingsProperties.ClientIdLong);
 
             InitSettingsScreen();
 
-            InitSettingsProfiles();
             ReloadProfile();
 
             InitInput();
             
-            SpeakerVu.Value = -100;
-            MicVu.Value = -100;
-
-            ExternalAwacsModeName.Text = ViewModel.GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastSeenName).RawValue;
             UpdatePresetsFolderLabel();
 
             if ((SpeakerBoostLabel != null) && (SpeakerBoost != null))
             {
                 SpeakerBoostLabel.Content = VolumeConversionHelper.ConvertLinearDiffToDB( ViewModel.AudioManager.SpeakerBoost);
             }
-
-            UpdaterChecker.CheckForUpdate(ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.CheckForBetaUpdates));
-
+            
             InitFlowDocument();
-
         }
 
         private void CheckWindowVisibility()
         {
-            if (ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.DisableWindowVisibilityCheck))
+            if (ViewModel.GlobalSettingsProperties.DisableWindowVisibilityCheck)
             {
                 Logger.Info("Window visibility check is disabled, skipping");
                 return;
@@ -131,12 +119,12 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             bool radioWindowVisible = false;
             bool awacsWindowVisible = false;
 
-            int mainWindowX = (int)ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.ClientX).DoubleValue;
-            int mainWindowY = (int)ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.ClientY).DoubleValue;
-            int radioWindowX = (int)ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.RadioX).DoubleValue;
-            int radioWindowY = (int)ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.RadioY).DoubleValue;
-            int awacsWindowX = (int)ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.AwacsX).DoubleValue;
-            int awacsWindowY = (int)ViewModel.GlobalSettings.GetPositionSetting(GlobalSettingsKeys.AwacsY).DoubleValue;
+            int mainWindowX = (int)Left;
+            int mainWindowY = (int)Top; 
+            int radioWindowX = (int)ViewModel.GlobalSettingsProperties.RadioX;
+            int radioWindowY = (int)ViewModel.GlobalSettingsProperties.RadioY;
+            int awacsWindowX = (int)ViewModel.GlobalSettingsProperties.AwacsX;
+            int awacsWindowY = (int)ViewModel.GlobalSettingsProperties.AwacsY;
 
             Logger.Info($"Checking window visibility for main client window {{X={mainWindowX},Y={mainWindowY}}}");
             Logger.Info($"Checking window visibility for radio overlay {{X={radioWindowX},Y={radioWindowY}}}");
@@ -172,10 +160,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                     MessageBoxImage.Warning);
 
                 Logger.Warn($"Main client window outside visible area of monitors, resetting position ({mainWindowX},{mainWindowY}) to defaults");
-
-                ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.ClientX, 200);
-                ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.ClientY, 200);
-
+                
                 Left = 200;
                 Top = 200;
             }
@@ -190,8 +175,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
                 Logger.Warn($"Radio overlay window outside visible area of monitors, resetting position ({radioWindowX},{radioWindowY}) to defaults");
 
-                ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.RadioX, 300);
-                ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.RadioY, 300);
+                ViewModel.GlobalSettingsProperties.RadioX = 300;
+                ViewModel.GlobalSettingsProperties.RadioY = 300;
 
                 if (_radioOverlayWindow != null)
                 {
@@ -210,8 +195,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
                 Logger.Warn($"AWACS overlay window outside visible area of monitors, resetting position ({awacsWindowX},{awacsWindowY}) to defaults");
 
-                ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.AwacsX, 300);
-                ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.AwacsY, 300);
+                ViewModel.GlobalSettingsProperties.AwacsX = 300;
+                ViewModel.GlobalSettingsProperties.AwacsY = 300;
 
                 if (_awacsRadioOverlay != null)
                 {
@@ -233,45 +218,21 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 });
         }
 
-
-
-        private void InitSettingsProfiles()
-        {
-            ControlsProfile.IsEnabled = false;
-            ControlsProfile.Items.Clear();
-            foreach (var profile in ViewModel.GlobalSettings.ProfileSettingsStore.InputProfiles.Keys)
-            {
-                ControlsProfile.Items.Add(profile);
-            }
-            ControlsProfile.IsEnabled = true;
-            ControlsProfile.SelectedIndex = 0;
-
-            CurrentProfile.Content = ViewModel.GlobalSettings.ProfileSettingsStore.CurrentProfileName;
-
-        }
-
         void ReloadProfile()
         {
             //switch profiles
             Logger.Info(ControlsProfile.SelectedValue as string + " - Profile now in use");
-            ViewModel.GlobalSettings.ProfileSettingsStore.CurrentProfileName = ControlsProfile.SelectedValue as string;
 
             //redraw UI
             ReloadInputBindings();
             ReloadProfileSettings();
             ReloadRadioAudioChannelSettings();
-
-            CurrentProfile.Content = ViewModel.GlobalSettings.ProfileSettingsStore.CurrentProfileName;
         }
 
         private void InitInput()
         {
             InputManager = new InputDeviceManager(this, ToggleOverlay);
-
-            InitSettingsProfiles();
-
-            ControlsProfile.SelectionChanged += OnProfileDropDownChanged;
-
+            
             RadioStartTransmitEffect.SelectionChanged += OnRadioStartTransmitEffectChanged;
             RadioEndTransmitEffect.SelectionChanged += OnRadioEndTransmitEffectChanged;
 
@@ -432,12 +393,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             RadioVolumeDown.InputDeviceManager = InputManager;
         }
 
-        private void OnProfileDropDownChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (ControlsProfile.IsEnabled)
-                ReloadProfile();
-        }
-
         private void OnRadioStartTransmitEffectChanged(object sender, SelectionChangedEventArgs e)
         {
             if (RadioStartTransmitEffect.IsEnabled)
@@ -529,7 +484,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         private void InitToolTips()
         {
             ExternalAwacsModePassword.ToolTip = ToolTips.ExternalAWACSModePassword;
-            ExternalAwacsModeName.ToolTip = ToolTips.ExternalAWACSModeName;
+            //ExternalAwacsModeName.ToolTip = ToolTips.ExternalAWACSModeName;
             ConnectExternalAwacsMode.ToolTip = ToolTips.ExternalAWACSMode;
         }
 
@@ -885,15 +840,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.ClientX, Left);
-            ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.ClientY, Top);
-
-            if (!string.IsNullOrWhiteSpace(ViewModel.ClientState.LastSeenName) &&
-                ViewModel.GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastSeenName).StringValue != ViewModel.ClientState.LastSeenName)
-            {
-                ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.LastSeenName, ViewModel.ClientState.LastSeenName);
-            }
-
             //save window position
             base.OnClosing(e);
             
@@ -1371,7 +1317,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             }
             else if (!ViewModel.ClientState.IsGameExportConnected) //only if we're not in game
             {
-                ViewModel.ClientState.LastSeenName = ExternalAwacsModeName.Text;
                 ViewModel.Client.ConnectExternalAWACSMode(ExternalAwacsModePassword.Password.Trim(), ExternalAWACSModeConnectionChanged);
             }
         }
@@ -1398,7 +1343,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
                 ConnectExternalAwacsMode.Content = Properties.Resources.ConnectExternalAWACSMode;
                 ExternalAwacsModePassword.IsEnabled = ViewModel.ServerSettings.GetSettingAsBool(Common.Setting.ServerSettingsKeys.EXTERNAL_AWACS_MODE);
-                ExternalAwacsModeName.IsEnabled = ViewModel.ServerSettings.GetSettingAsBool(Common.Setting.ServerSettingsKeys.EXTERNAL_AWACS_MODE);
+                //ExternalAwacsModeName.IsEnabled = ViewModel.ServerSettings.GetSettingAsBool(Common.Setting.ServerSettingsKeys.EXTERNAL_AWACS_MODE);
             }
         }
 
@@ -1437,8 +1382,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                     if (name.Trim().Length > 0)
                     {
                         ViewModel.GlobalSettings.ProfileSettingsStore.AddNewProfile(name);
-                        InitSettingsProfiles();
-
                     }
                 });
             inputProfileWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -1470,7 +1413,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 {
                     ControlsProfile.SelectedIndex = 0;
                     ViewModel.GlobalSettings.ProfileSettingsStore.RemoveProfile(current);
-                    InitSettingsProfiles();
                 }
 
             }
@@ -1479,7 +1421,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         private void RenameProfile(object sender, RoutedEventArgs e)
         {
-
             var current = ControlsProfile.SelectedValue as string;
             if (current.Equals("default"))
             {
@@ -1497,7 +1438,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                     if (name.Trim().Length > 0)
                     {
                         ViewModel.GlobalSettings.ProfileSettingsStore.RenameProfile(oldName, name);
-                        InitSettingsProfiles();
+
                     }
                 }, true, oldName);
                 inputProfileWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -1530,7 +1471,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 if (name.Trim().Length > 0)
                 {
                     ViewModel.GlobalSettings.ProfileSettingsStore.CopyProfile(current, name);
-                    InitSettingsProfiles();
+
                 }
             });
             inputProfileWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -1672,6 +1613,11 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 // Special Case Binding
                 ViewModel.ServerAddress.EamCoalitionPassword = ((PasswordBox)sender).Password;
             } 
+        }
+
+        private void ControlsProfile_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
         }
     }
 }
