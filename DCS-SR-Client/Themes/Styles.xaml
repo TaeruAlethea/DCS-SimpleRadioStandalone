@@ -213,6 +213,10 @@
            BasedOn="{StaticResource MahApps.Styles.ToggleButton}">
         <Setter Property="FontSize" Value="10" />
         <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="Content" Value="{x:Static p:Resources.ValueON}" />
         <Style.Triggers>
             <Trigger Property="IsChecked" Value="True">
@@ -249,6 +253,10 @@
     <Style TargetType="{x:Type Label}"
            BasedOn="{StaticResource MahApps.Styles.Label}">
         <Setter Property="FontSize" Value="12" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
     </Style>
     <Style TargetType="{x:Type GroupBox}"
            BasedOn="{StaticResource MahApps.Styles.GroupBox}" />
@@ -283,8 +291,8 @@
         <!-- Tag Field is a Boolean used to detect if there is a connection error.-->
         <Setter Property="Height" Value="26" />
         <Setter Property="Margin" Value="5" />
-        <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Source" Value="{DynamicResource IconDisconnected}"/>
         <Style.Triggers>
             <MultiTrigger>

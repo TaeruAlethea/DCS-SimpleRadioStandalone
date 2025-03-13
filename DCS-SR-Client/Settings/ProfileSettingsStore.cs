@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Win32;
 using NLog;
 using SharpConfig;
@@ -74,7 +75,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         DisableExpansionRadios
     }
 
-    public class ProfileSettingsStore
+    public partial class ProfileSettingsStore : ObservableObject
     {
         private static readonly object _lock = new object();
         private readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -83,16 +84,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         //fixes issue where we access settings a lot and have issues
         private ConcurrentDictionary<string, object> _settingsCache = new ConcurrentDictionary<string, object>();
 
-        public string CurrentProfileName
-        {
-            get => _currentProfileName;
-            set
-            {
-                _settingsCache.Clear();
-                _currentProfileName = value;
-
-            }
-        }
+        [ObservableProperty] private string _currentProfileName = "default";
+        partial void OnCurrentProfileNameChanged(string oldValue, string newValue) => _settingsCache.Clear();
 
         public string Path { get; }
 
@@ -147,31 +140,17 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             {ProfileSettingsKeys.DisableExpansionRadios.ToString(), "false"},
         };
 
+        public List<string> ProfileNames => new List<string>(InputProfiles.Keys);
 
-        public List<string> ProfileNames
-        {
-            get
-            {
-                return new List<string>(InputProfiles.Keys);
-            }
-            
-        }
+        public Dictionary<InputBinding, InputDevice> GetCurrentInputProfile() => InputProfiles[GetProfileName(CurrentProfileName)];
 
-        public Dictionary<InputBinding, InputDevice> GetCurrentInputProfile()
-        {
-            return InputProfiles[GetProfileName(CurrentProfileName)];
-        }
-
-        public Configuration GetCurrentProfile()
-        {
-            return InputConfigs[GetProfileCfgFileName(CurrentProfileName)];
-        }
+        public Configuration GetCurrentProfile() => InputConfigs[GetProfileCfgFileName(CurrentProfileName)];
+        
         public Dictionary<string, Dictionary<InputBinding, InputDevice>> InputProfiles { get; set; } = new Dictionary<string, Dictionary<InputBinding, InputDevice>>();
 
         private Dictionary<string, Configuration> InputConfigs = new Dictionary<string, Configuration>();
 
         private readonly GlobalSettingsStore _globalSettings;
-        private string _currentProfileName = "default";
 
         public ProfileSettingsStore(GlobalSettingsStore globalSettingsStore)
         {

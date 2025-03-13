@@ -15,7 +15,7 @@
                       Height="710"
                       ResizeMode="CanMinimize"
                       mc:Ignorable="d" 
-                      d:DesignHeight="*" d:DesignWidth="*"
+                      d:DesignHeight="*" d:DesignWidth="550"
                       d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}">
 	
 	<TabControl x:Name="TabControl">
@@ -655,45 +655,21 @@
                                         <RowDefinition />
 
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Row="0"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.AutoConnectEnabled}" />
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Content="{x:Static p:Resources.AutoConnectEnabled}" />
+                                    <ToggleButton Grid.Row="0" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.AutoConnect}"/>
 
-                                    <ToggleButton Name="AutoConnectEnabledToggle"
-                                          Grid.Row="0"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          IsChecked="{Binding GlobalSettingsProperties.AutoConnect}"/>
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Content="{x:Static p:Resources.AutoConnectPrompt}" />
+                                    <ToggleButton Grid.Row="1" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.AutoConnectPrompt}"/>
 
-                                    <Label Grid.Row="1"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.AutoConnectPrompt}" />
+                                    <Label Grid.Row="2" Grid.Column="0"
+                                           Content="{x:Static p:Resources.AutoConnectMismatchPrompt}" />
 
-                                    <ToggleButton Name="AutoConnectPromptToggle"
-                                          Grid.Row="1"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          IsChecked="{Binding GlobalSettingsProperties.AutoConnectPrompt}"/>
-
-
-                                    <Label Grid.Row="2"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.AutoConnectMismatchPrompt}" />
-
-                                    <ToggleButton Name="AutoConnectMismatchPromptToggle"
-                                          Grid.Row="2"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          IsChecked="{Binding GlobalSettingsProperties.AutoConnectMismatchPrompt}" />
+                                    <ToggleButton Grid.Row="2" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.AutoConnectMismatchPrompt}" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="{x:Static p:Resources.SRSInterfaceHeader}">
@@ -712,84 +688,37 @@
                                         <RowDefinition />
 
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Row="0"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.ResetRadioOverlay}" />
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Content="{x:Static p:Resources.ResetRadioOverlay}" />
+                                    <Button Grid.Row="0" Grid.Column="1"
+                                            Click="ResetRadioWindow_Click"
+                                            Content="{x:Static p:Resources.Reset}" />
 
-                                    <Button Grid.Row="0"
-                                    Grid.Column="1"
-                                    HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    Click="ResetRadioWindow_Click"
-                                    Content="{x:Static p:Resources.Reset}" />
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Content="{x:Static p:Resources.RadioOverlayTaskbarItem}" />
+                                    <ToggleButton Grid.Row="1" Grid.Column="1"
+                                                  Click="RadioOverlayTaskbarItem_Click"
+                                                  IsChecked="{Binding GlobalSettingsProperties.RadioOverlayTaskbarHide}"/>
 
-
-                                    <Label Grid.Row="1"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.RadioOverlayTaskbarItem}" />
-
-                                    <ToggleButton Name="RadioOverlayTaskbarItem"
-                                          Grid.Row="1"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="RadioOverlayTaskbarItem_Click" />
-
-                                    <Label Grid.Row="2"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.RefocusDCS}" />
+                                    <ToggleButton Grid.Row="2" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.RefocusDCS}"/>
 
-                                    <ToggleButton Name="RefocusDcs"
-                                                  Grid.Row="2"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="DCSRefocus_OnClick_Click" />
-
-                                    <Label Grid.Row="3"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.Minimisetotray}" />
-
-                                    <ToggleButton Name="MinimiseToTray"
-                                          Grid.Row="3"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="MinimiseToTray_OnClick" />
-
-                                    <Label Grid.Row="4"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.Startminimised}" />
-
-                                    <ToggleButton Name="StartMinimised"
-                                          Grid.Row="4"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="StartMinimised_OnClick" />
-
-                                    <Label Grid.Row="5"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="3" Grid.Column="0"
+                                           Content="{x:Static p:Resources.Minimisetotray}" />
+                                    <ToggleButton Grid.Row="3" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.MinimiseToTray}"/>
+                                    
+                                    <Label Grid.Row="4" Grid.Column="0"
+                                           Content="{x:Static p:Resources.Startminimised}" />
+                                    <ToggleButton Grid.Row="4" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.StartMinimised}"/>
+                                    
+                                    <Label Grid.Row="5" Grid.Column="0"
                                            Content="{x:Static p:Resources.ShowTransmitterName}" />
-
-                                    <ToggleButton Name="ShowTransmitterName"
-                                                  Grid.Row="5"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="ShowTransmitterName_OnClick_OnClick" />
+                                    <ToggleButton Grid.Row="5" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.ShowTransmitterName}"/>
                                 </Grid>
                             </GroupBox>
 
@@ -811,35 +740,15 @@
 
                                     </Grid.RowDefinitions>
 
-                                    <Label Grid.Row="1"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.MicAGC}" />
-
-                                    <ToggleButton Name="MicAutoGainControl"
-                                          Grid.Row="1"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="MicAGC_OnClick" />
-
-
-                                    <Label Grid.Row="2"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.MicDenoise}" />
-
-                                    <ToggleButton Name="MicDenoise"
-                                          Grid.Row="2"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="MicDenoise_OnClick" />
-
-
-
+                                    <Label Grid.Row="1" Grid.Column="0"
+                                           Content="{x:Static p:Resources.MicAGC}" />
+                                    <ToggleButton Grid.Row="1" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.AutomaticGainControl}"/>
+                                    
+                                    <Label Grid.Row="2" Grid.Column="0"
+                                           Content="{x:Static p:Resources.MicDenoise}" />
+                                    <ToggleButton Grid.Row="2" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.Denoise}"/>
                                 </Grid>
                             </GroupBox>
 
@@ -858,33 +767,18 @@
 
                                     </Grid.RowDefinitions>
 
-                                    <Label Grid.Row="0"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.VOXEnabled}" />
+                                    <ToggleButton Grid.Row="0" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.VOX}"
+                                                  ToolTip="{x:Static p:Resources.ToolTipVOXButton}"
+                                                  ToolTipService.ShowOnDisabled="True" />
 
-                                    <ToggleButton Name="VoxEnabled"
-                                          Grid.Row="0"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="VoxEnabled_OnClick"
-                                          ToolTip="{x:Static p:Resources.ToolTipVOXButton}"
-                                          ToolTipService.ShowOnDisabled="True"
-                                           />
-
-                                    <Label Grid.Row="1"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.VOXMinimimumTXTime}" />
-
-                                    <StackPanel Grid.Row="1"
-                                                Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="VoxMinimimumTxTime"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="1" Grid.Column="1" 
+                                                Margin="10">
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="100"
                                                 LargeChange="200"
                                                 IsSnapToTickEnabled="True"
@@ -892,9 +786,9 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="2000"
-                                                Value="500"
+                                                Value="{Binding GlobalSettingsProperties.VOXMinimumTime}"
                                                 Minimum="0"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding GlobalSettingsProperties.VOX}"/>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -903,8 +797,7 @@
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.VOXMinimimumTXTime0}" HorizontalAlignment="Left" />
                                             <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.VOXMinimimumTXTime1000}" HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.VOXMinimimumTXTime2000}"
-                                                   HorizontalAlignment="Right" />
+                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.VOXMinimimumTXTime2000}" HorizontalAlignment="Right" />
                                         </Grid>
                                     </StackPanel>
 
@@ -926,10 +819,10 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="3"
-                                                Value="0"
+                                                Value="{Binding GlobalSettingsProperties.VOXMode}"
                                                 Minimum="0"
                                                 ToolTip="{x:Static p:Resources.ToolTipVOXSensitivity}"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding GlobalSettingsProperties.VOX}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -943,17 +836,11 @@
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="3"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.VOXMinimumRMS}" />
 
-                                    <StackPanel Grid.Row="3"
-                                                Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="VoxMinimumRms"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="10">
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="2"
                                                 LargeChange="4"
                                                 IsSnapToTickEnabled="True"
@@ -961,9 +848,9 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="0"
-                                                Value="-50"
+                                                Value="{Binding GlobalSettingsProperties.VOXMinimumDB}"
                                                 Minimum="-96"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding GlobalSettingsProperties.VOX}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -971,8 +858,7 @@
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.VOXMinimumRMSLower}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.VOXMinimumRMSHigher}"
-                                                   HorizontalAlignment="Right" />
+                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.VOXMinimumRMSHigher}" HorizontalAlignment="Right" />
                                         </Grid>
                                     </StackPanel>
 
@@ -995,56 +881,29 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Row="0"
-                                   Grid.Column="0"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.AllowTransmissionsRecord}" />
-
-                                    <ToggleButton Name="AllowTransmissionsRecord"
-                                          Grid.Row="0"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="AllowTransmissionsRecord_OnClick"
-                                          ToolTipService.ShowOnDisabled="True" />
-                                    <Label Grid.Row="1"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="0" Grid.Column="0"
+                                           Content="{x:Static p:Resources.AllowTransmissionsRecord}" />
+                                    <ToggleButton Grid.Row="0" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.AllowRecording}"
+                                                  ToolTipService.ShowOnDisabled="True" />
+                                    
+                                    <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.RecordTransmissions}" />
+                                    <ToggleButton Grid.Row="1" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.RecordAudio}"
+                                                  ToolTipService.ShowOnDisabled="True" />
 
-                                    <ToggleButton Name="RecordTransmissions"
-                                          Grid.Row="1"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="RecordTransmissions_OnClick"
-                                          ToolTipService.ShowOnDisabled="True" />
-
-                                    <Label Grid.Row="2"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.SingleFileMixdown}" />
+                                    <ToggleButton Grid.Row="2" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.SingleFileMixdown}"
+                                                  IsEnabled="{Binding GlobalSettingsProperties.RecordAudio}"
+                                                  ToolTip="{x:Static p:Resources.ToolTipRecordQuality}"
+                                                  ToolTipService.ShowOnDisabled="True" />
 
-                                    <ToggleButton Name="SingleFileMixdown"
-                                          Grid.Row="2"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="SingleFileMixdown_OnClick"
-                                          ToolTip="{x:Static p:Resources.ToolTipRecordQuality}"
-                                          ToolTipService.ShowOnDisabled="True" />
-
-                                    <Label Grid.Row="3"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.RecordingQuality}" />
-                                    <StackPanel Grid.Row="3"
-                                                Grid.Column="1" Margin="10">
-
+                                    <StackPanel Grid.Row="3" Grid.Column="1" Margin="10">
                                         <Slider x:Name="RecordingQuality"
                                                 TickPlacement="BottomRight"
                                                 SmallChange="1"
@@ -1054,35 +913,25 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="9"
-                                                Value="0"
+                                                Value="{Binding GlobalSettingsProperties.RecordingQuality}"
                                                 Minimum="0"
-                                                IsEnabled="True"
+                                                IsEnabled="{Binding GlobalSettingsProperties.RecordAudio}"
                                                 ToolTip="{x:Static p:Resources.ToolTipRecordQuality}"
-                                                ToolTipService.ShowOnDisabled="True"
-                                                />
+                                                ToolTipService.ShowOnDisabled="True" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RecordingQuality0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RecordingQuality9}"
-                                                   HorizontalAlignment="Right" />
+                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RecordingQuality9}" HorizontalAlignment="Right" />
                                         </Grid>
                                     </StackPanel>
 
-                                    <Label Grid.Row="4"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.DisallowedAudioTone}" />
-                                    <ToggleButton Name="DisallowedAudioTone"
-                                          Grid.Row="4"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="DisallowedAudioTone_OnClick"
-                                           />
+                                    <ToggleButton Grid.Row="4" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.DisallowedAudioTone}" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="{x:Static p:Resources.MiscellanousHeader}">
@@ -1134,122 +983,58 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
                                     
-                                    <Label Grid.Row="0"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoSelectInputProfile}" />
+                                    <ToggleButton Grid.Row="0" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.AutoSelectSettingsProfile}"/>
 
-                                    <ToggleButton Name="AutoSelectInputProfile"
-                                                  Grid.Row="0"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="AutoSelectInputProfile_OnClick" />
-
-                                    <Label Grid.Row="1"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.CheckForBetaUpdates}" />
-
-                                    <ToggleButton Name="CheckForBetaUpdates"
-                                          Grid.Row="1"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="CheckForBetaUpdates_OnClick" />
+                                    <ToggleButton Grid.Row="1" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.CheckForBetaUpdates}"/>
                                     
-                                    <Label Grid.Row="2"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.SetSRSPath}" />
-
-                                    <Button Grid.Row="2"
-                                            Grid.Column="1"
-                                            HorizontalContentAlignment="Center"
-                                            VerticalContentAlignment="Center"
+                                    <Button Grid.Row="2" Grid.Column="1"
                                             Click="SetSRSPath_Click"
                                             Content="{x:Static p:Resources.SetSRSPathBtn}" />
 
-                                    <Label Grid.Row="3"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.RequireAdminToggle}" />
 
-                                    <ToggleButton Name="RequireAdminToggle"
-                                                  Grid.Row="3"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="RequireAdminToggle_OnClick" />
-                                    <Label Grid.Row="4"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <ToggleButton Grid.Row="3" Grid.Column="1"
+                                                  Click="RequireAdminToggle_OnClick"
+                                                  IsChecked="{Binding GlobalSettingsProperties.RequireAdmin}"/>
+                                    
+                                    <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.VAICOMTXInhibitEnabled}" />
 
-                                    <ToggleButton Name="VaicomtxInhibitEnabled"
-                                          Grid.Row="4"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="VAICOMTXInhibit_OnClick" />
+                                    <ToggleButton Grid.Row="4" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.VAICOMTXInhibitEnabled}"/>
 
-
-                                    <Label Grid.Row="5"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="5" Grid.Column="0"
                                            Content="{x:Static p:Resources.AllowAnonymousUsage}" />
-
                                     <ToggleButton Name="AllowAnonymousUsage"
-                                          Grid.Row="5"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="AllowAnonymousUsage_OnClick" />
+                                                  Grid.Row="5" Grid.Column="1"
+                                                  Click="AllowAnonymousUsage_OnClick" />
 
-                                    <Label Grid.Row="6"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="6" Grid.Column="0"
                                            Content="{x:Static p:Resources.ExpandInputDevices}" />
 
-                                    <ToggleButton Name="ExpandInputDevices"
-                                          Grid.Row="6"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="ExpandInputDevices_OnClick_Click" />
+                                    <ToggleButton Grid.Row="6" Grid.Column="1"
+                                                  Click="ExpandInputDevices_OnClick"
+                                                  IsChecked="{Binding GlobalSettingsProperties.ExpandControls}"/>
 
-                                    <Label Grid.Row="7"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="7" Grid.Column="0"
                                            Content="{x:Static p:Resources.AllowXInputController}" />
+                                    <ToggleButton Grid.Row="7" Grid.Column="1"
+                                                  Click="AllowXInputController_OnClick"
+                                                  IsChecked="{Binding GlobalSettingsProperties.AllowXInputController}"/>
 
-                                    <ToggleButton Name="AllowXInputController"
-                                          Grid.Row="7"
-                                          Grid.Column="1"
-                                          HorizontalContentAlignment="Center"
-                                          VerticalContentAlignment="Center"
-                                          Click="AllowXInputController_OnClick_Click" />
-
-                                    <Label Grid.Row="8"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="8" Grid.Column="0"
                                            Content="{x:Static p:Resources.PlayConnectionSounds}" />
-
-                                    <ToggleButton Name="PlayConnectionSounds"
-                                                  Grid.Row="8"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="PlayConnectionSounds_OnClick" />
+                                    <ToggleButton Grid.Row="8" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.PlayConnectionSounds}"/>
                                 </Grid>
                             </GroupBox>
 
@@ -1272,7 +1057,8 @@
                         </StackPanel>
                     </GroupBox>
                     <GroupBox Header="{x:Static p:Resources.ProfileHeader}">
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
+	                    <!-- Todo: Reimplement Settings Profile controls using DataBinding -->
+	                    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
                             <ComboBox x:Name="ControlsProfile"
                                       Width="200"
                                       HorizontalAlignment="Center"
@@ -1354,45 +1140,20 @@
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
 
-                                    <Label Grid.Row="0"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioSwitchIsPTT}" />
+                                    <ToggleButton Grid.Row="0" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.SettingsProfiles.RadioSwitchIsPtt}" />
 
-                                    <ToggleButton Name="RadioSwitchIsPtt"
-                                                  Grid.Row="0"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="RadioSwitchPTT_Click" />
-
-
-                                    <Label Grid.Row="1"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoSelectChannel}" />
+                                    <ToggleButton Grid.Row="1" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.SettingsProfiles.AutoSelectPresetChannel}" />
 
-                                    <ToggleButton Name="AutoSelectChannel"
-                                                  Grid.Row="1"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="AudioSelectChannel_OnClick" />
-
-                                    <Label Grid.Row="2"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.AlwaysAllowHotas}" />
-
-                                    <ToggleButton Name="AlwaysAllowHotas"
-                                                  Grid.Row="2"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="AlwaysAllowHotas_OnClick" />
+                                    <ToggleButton Grid.Row="2" Grid.Column="1"
+                                                  IsChecked="{Binding GlobalSettingsProperties.SettingsProfiles.AlwaysAllowHotasControls}" />
 
                                     <Label Grid.Row="3"
                                            Grid.Column="0"

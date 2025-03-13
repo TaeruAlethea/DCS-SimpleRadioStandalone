@@ -299,6 +299,9 @@ public sealed class GlobalSettingsModel(GlobalSettingsStore store) : Configurati
 		set => store.SetClientSetting(GlobalSettingsKeys.RequireAdmin, value);
 	}
 	
+	//TODO Make this property a Config Property.
+	public ProfileSettingsModel SettingsProfiles => store.ProfileSettingsProperties;
+	
 	[ConfigurationProperty("AutoSelectSettingsProfile", DefaultValue = false, IsRequired = true)]
 	public bool AutoSelectSettingsProfile
 	{
@@ -369,10 +372,10 @@ public sealed class GlobalSettingsModel(GlobalSettingsStore store) : Configurati
 		get => store.GetClientSettingBool(GlobalSettingsKeys.SingleFileMixdown);
 		set => store.SetClientSetting(GlobalSettingsKeys.SingleFileMixdown, value);
 	}
-	[ConfigurationProperty("RecordingQuality", DefaultValue = "V3", IsRequired = true)]
-	public string RecordingQuality
+	[ConfigurationProperty("RecordingQuality", DefaultValue = 3, IsRequired = true)]
+	public int RecordingQuality
 	{
-		get => store.GetClientSetting(GlobalSettingsKeys.RecordingQuality).ToString();
+		get => store.GetClientSettingInt(GlobalSettingsKeys.RecordingQuality);
 		set => store.SetClientSetting(GlobalSettingsKeys.RecordingQuality, value);
 	}
 	[ConfigurationProperty("DisallowedAudioTone", DefaultValue = false, IsRequired = true)]

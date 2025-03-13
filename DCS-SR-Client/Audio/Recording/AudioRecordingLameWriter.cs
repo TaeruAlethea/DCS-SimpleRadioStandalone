@@ -80,8 +80,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Recording
             string sanitisedTime = String.Join("-", DateTime.Now.ToLongTimeString().Split(Path.GetInvalidFileNameChars()));
             string filePathBase = $"Recordings\\{sanitisedDate}-{sanitisedTime}";
 
-            var lamePreset = (LAMEPreset)Enum.Parse(typeof(LAMEPreset),
-                    GlobalSettingsStore.Instance.GetClientSetting(GlobalSettingsKeys.RecordingQuality).RawValue);
+            int recordQualitySetting = GlobalSettingsStore.Instance.GetClientSettingInt(GlobalSettingsKeys.RecordingQuality);
+            var lamePreset = (LAMEPreset)Enum.Parse(typeof(LAMEPreset), $"V{recordQualitySetting}");
 
             for (int i = 0; i < _streams.Count; i++)
             {

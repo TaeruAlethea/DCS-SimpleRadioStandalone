@@ -56,9 +56,8 @@ public partial class MainWindowViewModel : ObservableObject
 	[ObservableProperty]
 	private SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 	
-	[ObservableProperty]
-	private GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
-	[ObservableProperty] public GlobalSettingsModel _globalSettingsProperties;
+	[ObservableProperty] private GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+	[ObservableProperty] private GlobalSettingsModel _globalSettingsProperties;
 	
 	public MainWindowViewModel(MainWindow mainWindowView)
 	{

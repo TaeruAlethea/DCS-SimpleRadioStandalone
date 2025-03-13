@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
@@ -236,7 +237,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 
         public string ConfigFileName { get; } = CFG_FILE_NAME;
 
-        [ObservableProperty] private  ProfileSettingsStore _profileSettingsStore;
+        [ObservableProperty] private ProfileSettingsStore _profileSettingsStore;
+        [ObservableProperty] private ProfileSettingsModel _profileSettingsProperties;
 
         //cache all the settings in their correct types for speed
         //fixes issue where we access settings a lot and have issues
@@ -249,7 +251,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 
             //Try migrating
             MigrateSettings();
-
+            
             //check commandline
             var args = Environment.GetCommandLineArgs();
             
@@ -315,6 +317,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             }
 
             _profileSettingsStore = new ProfileSettingsStore(this);
+            ProfileSettingsProperties = new ProfileSettingsModel(ProfileSettingsStore);
         }
 
         public static bool IsFileLocked(FileInfo file)
@@ -466,7 +469,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             {GlobalSettingsKeys.AllowRecording.ToString(), "false" },
             {GlobalSettingsKeys.RecordAudio.ToString(), "false" },
             {GlobalSettingsKeys.SingleFileMixdown.ToString(), "false" },
-            {GlobalSettingsKeys.RecordingQuality.ToString(), "V3" },
+            {GlobalSettingsKeys.RecordingQuality.ToString(), "3" },
             {GlobalSettingsKeys.DisallowedAudioTone.ToString(), "false"},
 
             {GlobalSettingsKeys.VOX.ToString(), "false" },
@@ -496,6 +499,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             SetSetting("Position Settings", key.ToString(), value.ToString(CultureInfo.InvariantCulture));
         }
 
+        private static readonly Regex regex = new Regex("v\\d", RegexOptions.IgnoreCase);
         public int GetClientSettingInt(GlobalSettingsKeys key)
         {
             if (_settingsCache.TryGetValue(key.ToString(), out var val))
@@ -508,8 +512,14 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             {
                 return 0;
             }
-            _settingsCache[key.ToString()] = setting.IntValue;
-            return setting.IntValue;
+
+            if (!int.TryParse(setting.RawValue, out var result))
+            {
+                _settingsCache[key.ToString()] = Int32.Parse(regex.Match(setting.ToString()).Value);
+                return setting.IntValue;
+            }
+            
+            return result;
         }
 
         public double GetClientSettingDouble(GlobalSettingsKeys key)

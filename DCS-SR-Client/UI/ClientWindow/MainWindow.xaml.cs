@@ -566,44 +566,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         private void InitSettingsScreen()
         {
-            //AutoConnectEnabledToggle.IsChecked = 
-            //    ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnect);
-            //AutoConnectPromptToggle.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnectPrompt);
-            //AutoConnectMismatchPromptToggle.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnectMismatchPrompt);
-            RadioOverlayTaskbarItem.IsChecked =
-                ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.RadioOverlayTaskbarHide);
-            RefocusDcs.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.RefocusDCS);
-            ExpandInputDevices.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.ExpandControls);
-
-            MinimiseToTray.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.MinimiseToTray);
-            StartMinimised.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.StartMinimised);
-
-            MicAutoGainControl.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AGC);
-            MicDenoise.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.Denoise);
-
-            CheckForBetaUpdates.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.CheckForBetaUpdates);
-            PlayConnectionSounds.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.PlayConnectionSounds);
-
-            RequireAdminToggle.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.RequireAdmin);
-
-            AutoSelectInputProfile.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoSelectSettingsProfile);
-
-            VaicomtxInhibitEnabled.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.VAICOMTXInhibitEnabled);
-
-            ShowTransmitterName.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.ShowTransmitterName);
-
-            AllowTransmissionsRecord.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AllowRecording);
-            RecordTransmissions.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.RecordAudio);
-            SingleFileMixdown.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.SingleFileMixdown);
-            DisallowedAudioTone.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.DisallowedAudioTone);
-            RecordTransmissions_IsEnabled();
-
-            RecordingQuality.IsEnabled = false;
-            RecordingQuality.ValueChanged += RecordingQuality_ValueChanged;
-            RecordingQuality.Value = double.Parse(
-                ViewModel.GlobalSettings.GetClientSetting(GlobalSettingsKeys.RecordingQuality).StringValue[1].ToString());
-            RecordingQuality.IsEnabled = true;
-
             var objValue = Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\DCS-SR-Standalone", "SRSAnalyticsOptOut", "FALSE");
             if (objValue == null || (string)objValue == "TRUE")
             {
@@ -613,35 +575,11 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             {
                 AllowAnonymousUsage.IsChecked = true;
             }
-
-            VoxEnabled.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.VOX);
-
-            VoxMode.IsEnabled = false;
-            VoxMode.Value =
-                ViewModel.GlobalSettings.GetClientSettingInt(GlobalSettingsKeys.VOXMode);
-            VoxMode.ValueChanged += VOXMode_ValueChanged;
-            VoxMode.IsEnabled = true;
-
-            VoxMinimimumTxTime.IsEnabled = false;
-            VoxMinimimumTxTime.Value =
-                ViewModel.GlobalSettings.GetClientSettingInt(GlobalSettingsKeys.VOXMinimumTime);
-            VoxMinimimumTxTime.ValueChanged += VOXMinimumTime_ValueChanged;
-            VoxMinimimumTxTime.IsEnabled = true;
-
-            VoxMinimumRms.IsEnabled = false;
-            VoxMinimumRms.Value =
-                ViewModel.GlobalSettings.GetClientSettingDouble(GlobalSettingsKeys.VOXMinimumDB);
-            VoxMinimumRms.ValueChanged += VOXMinimumRMS_ValueChanged;
-            VoxMinimumRms.IsEnabled = true;
-
-            AllowXInputController.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AllowXInputController);
         }
 
         private void ReloadProfileSettings()
         {
             RadioEncryptionEffectsToggle.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.RadioEncryptionEffects);
-            RadioSwitchIsPtt.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.RadioSwitchIsPTT);
-
             RadioTxStartToggle.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.RadioTxEffects_Start);
             RadioTxEndToggle.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.RadioTxEffects_End);
 
@@ -657,10 +595,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             BackgroundRadioNoiseToggle.IsChecked =
                 ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(
                     ProfileSettingsKeys.RadioBackgroundNoiseEffect);
-
-            AutoSelectChannel.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.AutoSelectPresetChannel);
-
-            AlwaysAllowHotas.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.AlwaysAllowHotasControls);
             AllowDcsPtt.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.AllowDCSPTT);
             AllowRotaryIncrement.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.RotaryStyleIncrement);
             AlwaysAllowTransponderOverlay.IsChecked = ViewModel.GlobalSettings.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.AlwaysAllowTransponderOverlay);
@@ -1073,11 +1007,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 (bool)NatoRadioToneToggle.IsChecked);
         }
 
-        private void RadioSwitchPTT_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.RadioSwitchIsPTT, (bool)RadioSwitchIsPtt.IsChecked);
-        }
-
         private void ShowOverlay_OnClick(object sender, RoutedEventArgs e)
         {
             ToggleOverlay(true, false);
@@ -1313,19 +1242,20 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             }
         }
 
+        //Todo: See if there is a more elegant reset method.
         private void ResetRadioWindow_Click(object sender, RoutedEventArgs e)
         {
             //close overlay
             _radioOverlayWindow?.Close();
             _radioOverlayWindow = null;
 
-            ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.RadioX, 300);
-            ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.RadioY, 300);
-
-            ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.RadioWidth, 122);
-            ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.RadioHeight, 270);
-
-            ViewModel.GlobalSettings.SetPositionSetting(GlobalSettingsKeys.RadioOpacity, 1.0);
+            ViewModel.GlobalSettingsProperties.RadioX = 300;
+            ViewModel.GlobalSettingsProperties.RadioY = 300;
+            
+            ViewModel.GlobalSettingsProperties.RadioWidth = 122;
+            ViewModel.GlobalSettingsProperties.RadioHeight = 270;
+            
+            ViewModel.GlobalSettingsProperties.RadioOpacity = 1.0;
         }
 
         private void ToggleServerSettings_OnClick(object sender, RoutedEventArgs e)
@@ -1349,51 +1279,30 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         private void RadioOverlayTaskbarItem_Click(object sender, RoutedEventArgs e)
         {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.RadioOverlayTaskbarHide, (bool)RadioOverlayTaskbarItem.IsChecked);
-
             if (_radioOverlayWindow != null)
                 _radioOverlayWindow.ShowInTaskbar = !ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.RadioOverlayTaskbarHide);
             else if (_awacsRadioOverlay != null) _awacsRadioOverlay.ShowInTaskbar = !ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.RadioOverlayTaskbarHide);
         }
 
-        private void DCSRefocus_OnClick_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.RefocusDCS, (bool)RefocusDcs.IsChecked);
-        }
-
-        private void ExpandInputDevices_OnClick_Click(object sender, RoutedEventArgs e)
+        private void ExpandInputDevices_OnClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(
                 Properties.Resources.MsgBoxRestartExpandText,
                 Properties.Resources.MsgBoxRestart, MessageBoxButton.OK,
                 MessageBoxImage.Warning);
-
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.ExpandControls, (bool)ExpandInputDevices.IsChecked);
         }
 
-        private void AllowXInputController_OnClick_Click(object sender, RoutedEventArgs e)
+        private void AllowXInputController_OnClick(object sender, RoutedEventArgs e)
         {
             MessageBox.Show(
                 Properties.Resources.MsgBoxRestartXInputText,
                 Properties.Resources.MsgBoxRestart, MessageBoxButton.OK,
                 MessageBoxImage.Warning);
-
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.AllowXInputController, (bool)AllowXInputController.IsChecked);
         }
 
         private void LaunchAddressTab(object sender, RoutedEventArgs e)
         {
             TabControl.SelectedItem = FavouritesSeversTab;
-        }
-
-        private void MicAGC_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.AGC, (bool)MicAutoGainControl.IsChecked);
-        }
-
-        private void MicDenoise_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.Denoise, (bool)MicDenoise.IsChecked);
         }
 
         private void RadioSoundEffects_OnClick(object sender, RoutedEventArgs e)
@@ -1427,26 +1336,12 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             ViewModel.GlobalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.MIDSRadioEffect, (bool)RadioMidsToggle.IsChecked);
         }
 
-        private void AudioSelectChannel_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.AutoSelectPresetChannel, (bool)AutoSelectChannel.IsChecked);
-        }
 
         private void RadioSoundEffectsClipping_OnClick(object sender, RoutedEventArgs e)
         {
             ViewModel.GlobalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.RadioEffectsClipping,
                 (bool)RadioSoundEffectsClipping.IsChecked);
 
-        }
-
-        private void MinimiseToTray_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.MinimiseToTray, (bool)MinimiseToTray.IsChecked);
-        }
-
-        private void StartMinimised_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.StartMinimised, (bool)StartMinimised.IsChecked);
         }
 
         private void AllowDCSPTT_OnClick(object sender, RoutedEventArgs e)
@@ -1458,22 +1353,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         {
             ViewModel.GlobalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.RotaryStyleIncrement, (bool)AllowRotaryIncrement.IsChecked);
         }
-
-        private void AlwaysAllowHotas_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.ProfileSettingsStore.SetClientSettingBool(ProfileSettingsKeys.AlwaysAllowHotasControls, (bool)AlwaysAllowHotas.IsChecked);
-        }
-
-        private void CheckForBetaUpdates_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.CheckForBetaUpdates, (bool)CheckForBetaUpdates.IsChecked);
-        }
-
-        private void PlayConnectionSounds_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.PlayConnectionSounds, (bool)PlayConnectionSounds.IsChecked);
-        }
-
         private void ConnectExternalAWACSMode_OnClick(object sender, RoutedEventArgs e)
         {
             if (ViewModel.Client == null ||
@@ -1546,11 +1425,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         private void RequireAdminToggle_OnClick(object sender, RoutedEventArgs e)
         {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.RequireAdmin, (bool)RequireAdminToggle.IsChecked);
             MessageBox.Show(this,
                 Properties.Resources.MsgBoxAdminText,
                 Properties.Resources.MsgBoxAdmin, MessageBoxButton.OK, MessageBoxImage.Warning);
-
         }
 
         private void CreateProfile(object sender, RoutedEventArgs e)
@@ -1645,11 +1522,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             }
         }
 
-        private void AutoSelectInputProfile_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.AutoSelectSettingsProfile, ((bool)AutoSelectInputProfile.IsChecked).ToString());
-        }
-
         private void CopyProfile(object sender, RoutedEventArgs e)
         {
             var current = ControlsProfile.SelectedValue as string;
@@ -1664,11 +1536,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             inputProfileWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             inputProfileWindow.Owner = this;
             inputProfileWindow.ShowDialog();
-        }
-
-        private void VAICOMTXInhibit_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.VAICOMTXInhibitEnabled, ((bool)VaicomtxInhibitEnabled.IsChecked).ToString());
         }
 
         private void AlwaysAllowTransponderOverlay_OnClick(object sender, RoutedEventArgs e)
@@ -1707,12 +1574,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 _clientListWindow = null;
             }
         }
-
-        private void ShowTransmitterName_OnClick_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.ShowTransmitterName, ((bool)ShowTransmitterName.IsChecked).ToString());
-        }
-
+        
         private void PushToTalkReleaseDelay_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (PttReleaseDelay.IsEnabled)
@@ -1769,69 +1631,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                     MessageBoxImage.Warning);
                 Registry.SetValue("HKEY_CURRENT_USER\\SOFTWARE\\DCS-SR-Standalone", "SRSAnalyticsOptOut", "FALSE");
             }
-        }
-
-        private void AllowTransmissionsRecord_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.AllowRecording, (bool)AllowTransmissionsRecord.IsChecked);
-        }
-
-        private void RecordTransmissions_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.RecordAudio, (bool)RecordTransmissions.IsChecked);
-            RecordTransmissions_IsEnabled();
-        }
-
-        private void RecordTransmissions_IsEnabled()
-        {
-            if ((bool)RecordTransmissions.IsChecked)
-            {
-                SingleFileMixdown.IsEnabled = false;
-                RecordingQuality.IsEnabled = false;
-            }
-            else
-            {
-                SingleFileMixdown.IsEnabled = true;
-                RecordingQuality.IsEnabled = true;
-            }
-        }
-
-        private void SingleFileMixdown_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.SingleFileMixdown, (bool)SingleFileMixdown.IsChecked);
-        }
-
-        private void RecordingQuality_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.RecordingQuality, $"V{(int)e.NewValue}");
-        }
-
-        private void DisallowedAudioTone_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.DisallowedAudioTone, (bool)DisallowedAudioTone.IsChecked);
-        }
-
-        private void VoxEnabled_OnClick(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.VOX, (bool)VoxEnabled.IsChecked);
-        }
-
-        private void VOXMode_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if(VoxMode.IsEnabled)
-                ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.VOXMode, (int)e.NewValue);
-        }
-
-        private void VOXMinimumTime_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (VoxMinimimumTxTime.IsEnabled)
-                ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.VOXMinimumTime, (int)e.NewValue);
-        }
-
-        private void VOXMinimumRMS_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (VoxMinimumRms.IsEnabled)
-                ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.VOXMinimumDB, (double)e.NewValue);
         }
 
         private void AmbientCockpitEffectToggle_OnClick(object sender, RoutedEventArgs e)
