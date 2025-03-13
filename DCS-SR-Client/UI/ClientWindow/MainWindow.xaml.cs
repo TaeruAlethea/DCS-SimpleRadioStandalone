@@ -43,7 +43,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private readonly MainWindowViewModel ViewModel;
+        private readonly IMainViewModel ViewModel;
         
         public delegate void ReceivedAutoConnect(string address, int port);
         public delegate void ToggleOverlayCallback(bool uiButton, bool awacs);
@@ -59,9 +59,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         private long _toggleShowHide;
         
 
-        public MainWindow()
+        public MainWindow(IMainViewModel viewModel)
         {
-            DataContext = ViewModel = new MainWindowViewModel(this);
+            DataContext = ViewModel = viewModel;
             InitializeComponent();
 
             // Initialize ToolTip controls
@@ -810,7 +810,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                         Logger.Error(ex,
                             "Unable to get audio device - likely output device error - Pick another. Error:" +
                             ex.Message);
-                        ViewModel.Stop();
+                        ViewModel.StopCommand.Execute(null);
 
                         var messageBoxResult = CustomMessageBox.ShowYesNo(
                             Properties.Resources.MsgBoxAudioErrorText,
@@ -827,13 +827,13 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             {
                 // Only stop connection/reset state if connection is currently active
                 // Autoconnect mismatch will quickly disconnect/reconnect, leading to double-callbacks
-                ViewModel.Stop(connectionError);
+                ViewModel.StopCommand.Execute(true);
             }
             else
             {
                 if (!ViewModel.ClientState.IsConnected)
                 {
-                    ViewModel.Stop(connectionError);
+                    ViewModel.StopCommand.Execute(connectionError);
                 }
             }
         }
@@ -843,7 +843,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             //save window position
             base.OnClosing(e);
             
-            ViewModel.Stop();
+            ViewModel.StopCommand.Execute(true);
 
             ViewModel.AudioPreview?.StopEncoding();
             ViewModel.AudioPreview = null;
@@ -1148,7 +1148,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
                 if (connectToServer)
                 {
                     ServerIp.Text = connection;
-                    ViewModel.Connect();
+                    ViewModel.ConnectCommand.Execute(null);
                 }
             }
         }
@@ -1177,14 +1177,14 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
             if (switchServer)
             {
-                ViewModel.Stop();
+                ViewModel.StopCommand.Execute(null);
 
                 StartStop.IsEnabled = false;
                 StartStop.Content = Properties.Resources.StartStopConnecting;
                 await Task.Delay(2000);
                 StartStop.IsEnabled = true;
                 ServerIp.Text = advertisedConnection;
-                ViewModel.Connect();
+                ViewModel.ConnectCommand.Execute(null);
             }
         }
 

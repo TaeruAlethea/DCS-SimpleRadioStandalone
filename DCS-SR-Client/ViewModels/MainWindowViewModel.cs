@@ -7,7 +7,9 @@ using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
@@ -25,7 +27,7 @@ using NLog;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 {
 	[Obsolete("MainWindow Reference is not MVVM compliant.")]
 	public MainWindow ToBeDepricatedMainWindow { get; init; }
@@ -34,6 +36,12 @@ public partial class MainWindowViewModel : ObservableObject
 	
 	[ObservableProperty] private AudioManager _audioManager;
 	[ObservableProperty] private AudioPreview _audioPreview;
+	/// <remarks>Used in the XAML for DataBinding many things</remarks>
+	public AudioInputSingleton AudioInput { get; } = AudioInputSingleton.Instance;
+	/// <remarks>Used in the XAML for DataBinding output audio related UI elements</remarks>
+	public AudioOutputSingleton AudioOutput { get; } = AudioOutputSingleton.Instance;
+	
+	
 	
 	[ObservableProperty] private ClientStateSingleton _clientState = ClientStateSingleton.Instance;
 	[ObservableProperty] private ConnectedClientsSingleton _clients = ConnectedClientsSingleton.Instance;
@@ -47,10 +55,7 @@ public partial class MainWindowViewModel : ObservableObject
 	[ObservableProperty] private string _guid; // Does not need to be observable.
 	[ObservableProperty] private int _port = 5002;
 	
-	/// <remarks>Used in the XAML for DataBinding many things</remarks>
-	public AudioInputSingleton AudioInput { get; } = AudioInputSingleton.Instance;
-	/// <remarks>Used in the XAML for DataBinding output audio related UI elements</remarks>
-	public AudioOutputSingleton AudioOutput { get; } = AudioOutputSingleton.Instance;
+
 
 	public FavouriteServersViewModel FavouriteServersViewModel { get; }
 	
@@ -66,25 +71,23 @@ public partial class MainWindowViewModel : ObservableObject
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
 		GlobalSettingsProperties = new GlobalSettingsModel(_globalSettings);
+		
 		UpdaterChecker.CheckForUpdate(GlobalSettingsProperties.CheckForBetaUpdates);
 
 		
 		_audioManager = new AudioManager(AudioOutput.WindowsN);
 		Guid = ClientStateSingleton.Instance.ShortGUID;
 		
-		InitDefaultAddress();
-		
 		AudioManager.SpeakerBoost = GlobalSettings.GetClientSetting(GlobalSettingsKeys.SpeakerBoost).FloatValue;
 		
 		DcsAutoConnectListener = new DCSAutoConnectHandler(ToBeDepricatedMainWindow.AutoConnect);
-		
+
 		_updateTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
 		_updateTimer.Tick += ToBeDepricatedMainWindow.UpdateVUMeters;
 		_updateTimer.Start();
 	}
-
-	[RelayCommand]
-	[MethodImpl(MethodImplOptions.Synchronized)]
+	
+	[RelayCommand, MethodImpl(MethodImplOptions.Synchronized)]
 	public void Connect()
 	{
 	
@@ -202,6 +205,7 @@ public partial class MainWindowViewModel : ObservableObject
         }
 	}
 	
+	[RelayCommand]
 	public void Stop(bool connectionError = false)
 	{
 		if (ClientState.IsConnected && GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.PlayConnectionSounds))
@@ -276,11 +280,5 @@ public partial class MainWindowViewModel : ObservableObject
 	{
 		//stop timer
 		_updateTimer?.Stop();
-	}
-	
-	// Used for Design DataContext
-	public MainWindowViewModel()
-	{
-		ToBeDepricatedMainWindow = new MainWindow();
 	}
 }
