@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -565,9 +566,10 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         private void InitSettingsScreen()
         {
-            AutoConnectEnabledToggle.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnect);
-            AutoConnectPromptToggle.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnectPrompt);
-            AutoConnectMismatchPromptToggle.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnectMismatchPrompt);
+            //AutoConnectEnabledToggle.IsChecked = 
+            //    ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnect);
+            //AutoConnectPromptToggle.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnectPrompt);
+            //AutoConnectMismatchPromptToggle.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.AutoConnectMismatchPrompt);
             RadioOverlayTaskbarItem.IsChecked =
                 ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.RadioOverlayTaskbarHide);
             RefocusDcs.IsChecked = ViewModel.GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.RefocusDCS);

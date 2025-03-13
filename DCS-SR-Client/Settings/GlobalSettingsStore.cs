@@ -7,6 +7,7 @@ using System.Threading;
 using System.Windows;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
+using CommunityToolkit.Mvvm.ComponentModel;
 using NLog;
 using SharpConfig;
 
@@ -222,7 +223,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
     }
 
 
-    public class GlobalSettingsStore
+    public partial class GlobalSettingsStore : ObservableObject
     {
         private static readonly string CFG_FILE_NAME = "global.cfg";
 
@@ -235,12 +236,11 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 
         public string ConfigFileName { get; } = CFG_FILE_NAME;
 
-        private  ProfileSettingsStore _profileSettingsStore;
-        public ProfileSettingsStore ProfileSettingsStore => _profileSettingsStore;
+        [ObservableProperty] private  ProfileSettingsStore _profileSettingsStore;
 
         //cache all the settings in their correct types for speed
         //fixes issue where we access settings a lot and have issues
-        private ConcurrentDictionary<string, object> _settingsCache = new ConcurrentDictionary<string, object>();
+        [ObservableProperty] private ConcurrentDictionary<string, object> _settingsCache = new ConcurrentDictionary<string, object>();
 
         public string Path { get; } = "";
 
@@ -527,6 +527,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             _settingsCache[key.ToString()] = setting.DoubleValue;
             return setting.DoubleValue;
         }
+        
         public bool GetClientSettingBool(GlobalSettingsKeys key)
         {
             if (_settingsCache.TryGetValue(key.ToString(), out var val))
