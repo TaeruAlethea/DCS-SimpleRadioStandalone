@@ -1347,16 +1347,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             }
         }
 
-        private void AutoConnectPromptToggle_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.AutoConnectPrompt, (bool)AutoConnectPromptToggle.IsChecked);
-        }
-
-        private void AutoConnectMismatchPromptToggle_Click(object sender, RoutedEventArgs e)
-        {
-            ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.AutoConnectMismatchPrompt, (bool)AutoConnectMismatchPromptToggle.IsChecked);
-        }
-
         private void RadioOverlayTaskbarItem_Click(object sender, RoutedEventArgs e)
         {
             ViewModel.GlobalSettings.SetClientSetting(GlobalSettingsKeys.RadioOverlayTaskbarHide, (bool)RadioOverlayTaskbarItem.IsChecked);

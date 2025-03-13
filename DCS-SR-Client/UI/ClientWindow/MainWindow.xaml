@@ -679,7 +679,6 @@
                                           Grid.Column="1"
                                           HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center"
-                                          Click="AutoConnectPromptToggle_Click"
                                           IsChecked="{Binding GlobalSettingsProperties.AutoConnectPrompt}"/>
 
 
@@ -694,8 +693,7 @@
                                           Grid.Column="1"
                                           HorizontalContentAlignment="Center"
                                           VerticalContentAlignment="Center"
-                                          Click="AutoConnectMismatchPromptToggle_Click"
-                                          IsChecked="{Binding GlobalSettings.SettingsCache[GlobalSettingsKeys.AutoConnectMismatchPrompt]}" />
+                                          IsChecked="{Binding GlobalSettingsProperties.AutoConnectMismatchPrompt}" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="{x:Static p:Resources.SRSInterfaceHeader}">
