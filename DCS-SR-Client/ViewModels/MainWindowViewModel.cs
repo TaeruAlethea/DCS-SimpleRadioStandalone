@@ -41,8 +41,6 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	/// <remarks>Used in the XAML for DataBinding output audio related UI elements</remarks>
 	public AudioOutputSingleton AudioOutput { get; } = AudioOutputSingleton.Instance;
 	
-	
-	
 	[ObservableProperty] private ClientStateSingleton _clientState = ClientStateSingleton.Instance;
 	[ObservableProperty] private ConnectedClientsSingleton _clients = ConnectedClientsSingleton.Instance;
 	[ObservableProperty] private SRSClientSyncHandler _client;
@@ -55,30 +53,27 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	[ObservableProperty] private string _guid; // Does not need to be observable.
 	[ObservableProperty] private int _port = 5002;
 	
-
-
 	public FavouriteServersViewModel FavouriteServersViewModel { get; }
 	
 	[ObservableProperty]
 	private SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 	
-	[ObservableProperty] private GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
-	[ObservableProperty] private GlobalSettingsModel _globalSettingsProperties;
+	[ObservableProperty] ISrsSettings _srsSettings;
 	
-	public MainWindowViewModel(MainWindow mainWindowView)
+	public MainWindowViewModel(MainWindow mainWindowView, ISrsSettings srsSettings)
 	{
 		ToBeDepricatedMainWindow = mainWindowView;
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
-		GlobalSettingsProperties = new GlobalSettingsModel(_globalSettings);
+		_srsSettings = srsSettings;
 		
-		UpdaterChecker.CheckForUpdate(GlobalSettingsProperties.CheckForBetaUpdates);
+		UpdaterChecker.CheckForUpdate(SrsSettings.GlobalSettings.CheckForBetaUpdates);
 
 		
 		_audioManager = new AudioManager(AudioOutput.WindowsN);
 		Guid = ClientStateSingleton.Instance.ShortGUID;
 		
-		AudioManager.SpeakerBoost = GlobalSettings.GetClientSetting(GlobalSettingsKeys.SpeakerBoost).FloatValue;
+		AudioManager.SpeakerBoost = (float)SrsSettings.GlobalSettings.SpeakerBoost;
 		
 		DcsAutoConnectListener = new DCSAutoConnectHandler(ToBeDepricatedMainWindow.AutoConnect);
 
@@ -133,32 +128,32 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
                                         //add one to seat so seat_2 is copilot
                                         var nameSeat = $"_{seat + 1}";
 
-                                        foreach (var profileName in GlobalSettings.ProfileSettingsStore
-                                                     .ProfileNames)
+                                        foreach (var profile in SrsSettings.ProfileSettings)
                                         {
+	                                        string profileName = profile.ProfileName;
                                             //find matching seat
                                             var splitName = profileName.Trim().ToLowerInvariant().Split('_')
                                                 .First();
                                             if (name.StartsWith(Regex.Replace(splitName, "[^a-zA-Z0-9]", "")) &&
                                                 profileName.Trim().EndsWith(nameSeat))
                                             {
-	                                            GlobalSettings.ProfileSettingsStore.CurrentProfileName = profileName;
+	                                            SrsSettings.GlobalSettings.CurrentProfileName = profileName;
                                                 return;
                                             }
                                         }
 
-                                        foreach (var profileName in GlobalSettings.ProfileSettingsStore
-                                                     .ProfileNames)
+                                        foreach (var profile in SrsSettings.ProfileSettings)
                                         {
+	                                        string profileName = profile.ProfileName;
                                             //find matching seat
                                             if (name.StartsWith(Regex.Replace(profileName.Trim().ToLower(),
                                                     "[^a-zA-Z0-9_]", "")))
                                             {
-	                                            GlobalSettings.ProfileSettingsStore.CurrentProfileName = profileName;
+	                                            SrsSettings.GlobalSettings.CurrentProfileName = profileName;
                                                 return;
                                             }
                                         }
-                                        GlobalSettings.ProfileSettingsStore.CurrentProfileName = GlobalSettings.ProfileSettingsStore.ProfileNames.First();
+                                        SrsSettings.GlobalSettings.CurrentProfileName = SrsSettings.ProfileSettings[0].ProfileName;
                                     }));
                             }
                             catch (Exception)
@@ -208,7 +203,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	[RelayCommand]
 	public void Stop(bool connectionError = false)
 	{
-		if (ClientState.IsConnected && GlobalSettings.GetClientSettingBool(GlobalSettingsKeys.PlayConnectionSounds))
+		if (ClientState.IsConnected && SrsSettings.GlobalSettings.PlayConnectionSounds)
 		{
 			try
 			{
@@ -235,9 +230,9 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		ToBeDepricatedMainWindow.ConnectExternalAwacsMode.Content = Properties.Resources.ConnectExternalAWACSMode;
 
 		if (!string.IsNullOrWhiteSpace(ClientState.LastSeenName) &&
-		    GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastSeenName).StringValue != ClientState.LastSeenName)
+		    SrsSettings.GlobalSettings.LastSeenName != ClientState.LastSeenName)
 		{
-			GlobalSettings.SetClientSetting(GlobalSettingsKeys.LastSeenName, ClientState.LastSeenName);
+			SrsSettings.GlobalSettings.LastSeenName = ClientState.LastSeenName;
 		}
 
 		try
@@ -259,17 +254,17 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		}
 
 		ClientState.DcsPlayerRadioInfo.Reset();
-		ClientState.PlayerCoaltionLocationMetadata.Reset();
+		ClientState.PlayerCoalitionLocationMetadata.Reset();
 	}
 	
 	private void InitDefaultAddress()
 	{
 		// legacy setting migration
-		if (!string.IsNullOrEmpty(GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue) &&
+		if (!string.IsNullOrEmpty(SrsSettings.GlobalSettings.LastServer) &&
 		    FavouriteServersViewModel.Addresses.Count == 0)
 		{
-			var oldAddress = new ServerAddress(GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue,
-				GlobalSettings.GetClientSetting(GlobalSettingsKeys.LastServer).StringValue, null, true);
+			var oldAddress = new ServerAddress(SrsSettings.GlobalSettings.LastServer,
+				SrsSettings.GlobalSettings.LastServer, null, true);
 			FavouriteServersViewModel.Addresses.Add(oldAddress);
 		}
 

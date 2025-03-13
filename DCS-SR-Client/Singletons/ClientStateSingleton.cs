@@ -24,7 +24,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
         private List<RadioUpdatedCallback> _radioCallbacks = new List<RadioUpdatedCallback>();
 
         [ObservableProperty] private DCSPlayerRadioInfo _dcsPlayerRadioInfo;
-        [ObservableProperty] private DCSPlayerSideInfo _playerCoaltionLocationMetadata;
+        [ObservableProperty] private DCSPlayerSideInfo _playerCoalitionLocationMetadata;
 
         // Timestamp the last UDP Game GUI broadcast was received from DCS, used for determining active game connection
         public long DcsGameGuiLastReceived { get; set; }
@@ -86,7 +86,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
 
             ShortGUID = ShortGuid.NewGuid();
             DcsPlayerRadioInfo = new DCSPlayerRadioInfo();
-            PlayerCoaltionLocationMetadata = new DCSPlayerSideInfo();
+            PlayerCoalitionLocationMetadata = new DCSPlayerSideInfo();
 
             // The following members are not updated due to events. Therefore we need to setup a polling action so that they are
             // periodically checked.
@@ -96,7 +96,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
             _timer.Tick += (s, e) =>
             {
                 OnPropertyChanged(nameof(DcsPlayerRadioInfo));
-                OnPropertyChanged(nameof(PlayerCoaltionLocationMetadata));
+                OnPropertyChanged(nameof(PlayerCoalitionLocationMetadata));
                 
                 OnPropertyChanged(nameof(IsGameConnected));
                 OnPropertyChanged(nameof(IsLotATCConnected));
@@ -161,13 +161,13 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
             //not game or Lotatc - clear it!
             if (!IsLotATCConnected && !IsGameExportConnected)
             {
-                PlayerCoaltionLocationMetadata.LngLngPosition = new DCSLatLngPosition();
+                PlayerCoalitionLocationMetadata.LngLngPosition = new DCSLatLngPosition();
             }
         }
 
         public void UpdatePlayerPosition( DCSLatLngPosition latLngPosition)
         {
-            PlayerCoaltionLocationMetadata.LngLngPosition = latLngPosition;
+            PlayerCoalitionLocationMetadata.LngLngPosition = latLngPosition;
             DcsPlayerRadioInfo.latLng = latLngPosition;
             
         }

@@ -236,7 +236,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         public string ConfigFileName { get; } = CFG_FILE_NAME;
 
         [ObservableProperty] private ProfileSettingsStore _profileSettingsStore;
-        [ObservableProperty] private ProfileSettingsModel _profileSettingsProperties;
 
         //cache all the settings in their correct types for speed
         //fixes issue where we access settings a lot and have issues
@@ -315,7 +314,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
             }
 
             _profileSettingsStore = new ProfileSettingsStore(this);
-            _profileSettingsProperties = new ProfileSettingsModel(ProfileSettingsStore);
         }
 
         public static bool IsFileLocked(FileInfo file)

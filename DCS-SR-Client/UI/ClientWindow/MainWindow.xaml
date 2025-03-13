@@ -17,8 +17,8 @@
                       mc:Ignorable="d" 
                       d:DesignHeight="*" d:DesignWidth="550"
                       d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
-                      Left="{Binding GlobalSettingsProperties.ClientX}"
-                      Top="{Binding GlobalSettingsProperties.ClientY}">
+                      Left="{Binding SrsSettings.GlobalSettings.ClientX}"
+                      Top="{Binding SrsSettings.GlobalSettings.ClientY}">
 	
 	<TabControl x:Name="TabControl">
         <TabControl.Resources>
@@ -89,7 +89,6 @@
                                 Maximum="1.0"
                                 Minimum="0.0"
                                 IsMoveToPointEnabled="true"
-                                ValueChanged="SpeakerBoost_ValueChanged"
                                 Value="{Binding Path=AudioManager.SpeakerBoost}" />
 																<!-- TODO: Verify that NAudio is happy with a raw float like this. It seems to work, but may have quietly changed the functionality. -->
                         <ProgressBar Name="SpeakerVu"
@@ -251,7 +250,7 @@
                                          MaxLines="1"
                                          TextWrapping="Wrap"
                                          HorizontalAlignment="Center"
-                                         Text="{Binding GlobalSettingsProperties.LastSeenName}"/>
+                                         Text="{Binding SrsSettings.GlobalSettings.LastSeenName}"/>
                                 </StackPanel>
 
                             </StackPanel>
@@ -281,7 +280,7 @@
                         <Label Content="{x:Static p:Resources.ConnectedClientsLabel}" />
                         <Label Content="{Binding Path=Clients.Total}" />
                         <Label Content="{x:Static p:Resources.CurrentPositionLabel}" />
-                        <Label Content="{Binding ClientState.PlayerCoaltionLocationMetadata.LngLngPosition.PrettyPrint}" 
+                        <Label Content="{Binding ClientState.PlayerCoalitionLocationMetadata.LngLngPosition.PrettyPrint}" 
                                MouseLeftButtonUp="CurrentPosition_OnClick" />
                     </StackPanel>
 
@@ -660,18 +659,18 @@
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoConnectEnabled}" />
                                     <ToggleButton Grid.Row="0" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.AutoConnect}"/>
+                                                  IsChecked="{Binding }"/>
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoConnectPrompt}" />
                                     <ToggleButton Grid.Row="1" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.AutoConnectPrompt}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.AutoConnectPrompt}"/>
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoConnectMismatchPrompt}" />
 
                                     <ToggleButton Grid.Row="2" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.AutoConnectMismatchPrompt}" />
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.AutoConnectMismatchPrompt}" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="{x:Static p:Resources.SRSInterfaceHeader}">
@@ -700,27 +699,27 @@
                                            Content="{x:Static p:Resources.RadioOverlayTaskbarItem}" />
                                     <ToggleButton Grid.Row="1" Grid.Column="1"
                                                   Click="RadioOverlayTaskbarItem_Click"
-                                                  IsChecked="{Binding GlobalSettingsProperties.RadioOverlayTaskbarHide}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.RadioOverlayTaskbarHide}"/>
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.RefocusDCS}" />
                                     <ToggleButton Grid.Row="2" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.RefocusDCS}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.RefocusDCS}"/>
 
                                     <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.Minimisetotray}" />
                                     <ToggleButton Grid.Row="3" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.MinimiseToTray}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.MinimiseToTray}"/>
                                     
                                     <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.Startminimised}" />
                                     <ToggleButton Grid.Row="4" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.StartMinimised}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.StartMinimised}"/>
                                     
                                     <Label Grid.Row="5" Grid.Column="0"
                                            Content="{x:Static p:Resources.ShowTransmitterName}" />
                                     <ToggleButton Grid.Row="5" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.ShowTransmitterName}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.ShowTransmitterName}"/>
                                 </Grid>
                             </GroupBox>
 
@@ -745,12 +744,12 @@
                                     <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.MicAGC}" />
                                     <ToggleButton Grid.Row="1" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.AutomaticGainControl}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.AutomaticGainControl}"/>
                                     
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.MicDenoise}" />
                                     <ToggleButton Grid.Row="2" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.Denoise}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.Denoise}"/>
                                 </Grid>
                             </GroupBox>
 
@@ -772,7 +771,7 @@
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.VOXEnabled}" />
                                     <ToggleButton Grid.Row="0" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.VOX}"
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.VOX}"
                                                   ToolTip="{x:Static p:Resources.ToolTipVOXButton}"
                                                   ToolTipService.ShowOnDisabled="True" />
 
@@ -788,9 +787,9 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="2000"
-                                                Value="{Binding GlobalSettingsProperties.VOXMinimumTime}"
+                                                Value="{Binding SrsSettings.GlobalSettings.VOXMinimumTime}"
                                                 Minimum="0"
-                                                IsEnabled="{Binding GlobalSettingsProperties.VOX}"/>
+                                                IsEnabled="{Binding SrsSettings.GlobalSettings.VOX}"/>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -821,10 +820,10 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="3"
-                                                Value="{Binding GlobalSettingsProperties.VOXMode}"
+                                                Value="{Binding SrsSettings.GlobalSettings.VOXMode}"
                                                 Minimum="0"
                                                 ToolTip="{x:Static p:Resources.ToolTipVOXSensitivity}"
-                                                IsEnabled="{Binding GlobalSettingsProperties.VOX}" />
+                                                IsEnabled="{Binding SrsSettings.GlobalSettings.VOX}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -850,9 +849,9 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="0"
-                                                Value="{Binding GlobalSettingsProperties.VOXMinimumDB}"
+                                                Value="{Binding SrsSettings.GlobalSettings.VOXMinimumDB}"
                                                 Minimum="-96"
-                                                IsEnabled="{Binding GlobalSettingsProperties.VOX}" />
+                                                IsEnabled="{Binding SrsSettings.GlobalSettings.VOX}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -886,20 +885,20 @@
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.AllowTransmissionsRecord}" />
                                     <ToggleButton Grid.Row="0" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.AllowRecording}"
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.AllowRecording}"
                                                   ToolTipService.ShowOnDisabled="True" />
                                     
                                     <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.RecordTransmissions}" />
                                     <ToggleButton Grid.Row="1" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.RecordAudio}"
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.RecordAudio}"
                                                   ToolTipService.ShowOnDisabled="True" />
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.SingleFileMixdown}" />
                                     <ToggleButton Grid.Row="2" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.SingleFileMixdown}"
-                                                  IsEnabled="{Binding GlobalSettingsProperties.RecordAudio}"
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.SingleFileMixdown}"
+                                                  IsEnabled="{Binding SrsSettings.GlobalSettings.RecordAudio}"
                                                   ToolTip="{x:Static p:Resources.ToolTipRecordQuality}"
                                                   ToolTipService.ShowOnDisabled="True" />
 
@@ -915,9 +914,9 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="9"
-                                                Value="{Binding GlobalSettingsProperties.RecordingQuality}"
+                                                Value="{Binding SrsSettings.GlobalSettings.RecordingQuality}"
                                                 Minimum="0"
-                                                IsEnabled="{Binding GlobalSettingsProperties.RecordAudio}"
+                                                IsEnabled="{Binding SrsSettings.GlobalSettings.RecordAudio}"
                                                 ToolTip="{x:Static p:Resources.ToolTipRecordQuality}"
                                                 ToolTipService.ShowOnDisabled="True" />
                                         <Grid>
@@ -933,11 +932,10 @@
                                     <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.DisallowedAudioTone}" />
                                     <ToggleButton Grid.Row="4" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.DisallowedAudioTone}" />
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.DisallowedAudioTone}" />
                                 </Grid>
                             </GroupBox>
                             <GroupBox Header="{x:Static p:Resources.MiscellanousHeader}">
-
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="2*" />
@@ -988,12 +986,12 @@
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoSelectInputProfile}" />
                                     <ToggleButton Grid.Row="0" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.AutoSelectSettingsProfile}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.AutoSelectSettingsProfile}"/>
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.CheckForBetaUpdates}" />
                                     <ToggleButton Grid.Row="1" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.CheckForBetaUpdates}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.CheckForBetaUpdates}"/>
                                     
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.SetSRSPath}" />
@@ -1003,16 +1001,14 @@
 
                                     <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.RequireAdminToggle}" />
-
                                     <ToggleButton Grid.Row="3" Grid.Column="1"
                                                   Click="RequireAdminToggle_OnClick"
-                                                  IsChecked="{Binding GlobalSettingsProperties.RequireAdmin}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.RequireAdmin}"/>
                                     
                                     <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.VAICOMTXInhibitEnabled}" />
-
                                     <ToggleButton Grid.Row="4" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.VAICOMTXInhibitEnabled}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.VAICOMTXInhibitEnabled}"/>
 
                                     <Label Grid.Row="5" Grid.Column="0"
                                            Content="{x:Static p:Resources.AllowAnonymousUsage}" />
@@ -1022,21 +1018,20 @@
 
                                     <Label Grid.Row="6" Grid.Column="0"
                                            Content="{x:Static p:Resources.ExpandInputDevices}" />
-
                                     <ToggleButton Grid.Row="6" Grid.Column="1"
                                                   Click="ExpandInputDevices_OnClick"
-                                                  IsChecked="{Binding GlobalSettingsProperties.ExpandControls}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.ExpandControls}"/>
 
                                     <Label Grid.Row="7" Grid.Column="0"
                                            Content="{x:Static p:Resources.AllowXInputController}" />
                                     <ToggleButton Grid.Row="7" Grid.Column="1"
                                                   Click="AllowXInputController_OnClick"
-                                                  IsChecked="{Binding GlobalSettingsProperties.AllowXInputController}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.AllowXInputController}"/>
 
                                     <Label Grid.Row="8" Grid.Column="0"
                                            Content="{x:Static p:Resources.PlayConnectionSounds}" />
                                     <ToggleButton Grid.Row="8" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.PlayConnectionSounds}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.PlayConnectionSounds}"/>
                                 </Grid>
                             </GroupBox>
 
@@ -1065,8 +1060,8 @@
                                       Width="200"
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Top" Margin="5" Padding="5"
-                                      ItemsSource="{Binding GlobalSettings.ProfileSettingsStore.ProfileNames}"
-                                      SelectedValue="{Binding GlobalSettings.ProfileSettingsStore.CurrentProfileName}" 
+                                      ItemsSource="{Binding SrsSettings.ProfileNames}"
+                                      SelectedValue="{Binding SrsSettings.GlobalSettings.CurrentProfileName}" 
                                       SelectionChanged="ControlsProfile_OnSelectionChanged"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                                 <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CreateProfile}" Click="CreateProfile" />
@@ -1148,68 +1143,37 @@
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioSwitchIsPTT}" />
                                     <ToggleButton Grid.Row="0" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.ProfileSettingsProperties.RadioSwitchIsPtt}" />
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.AllowDcsPtt}" />
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoSelectChannel}" />
                                     <ToggleButton Grid.Row="1" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.ProfileSettingsProperties.AutoSelectPresetChannel}" />
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.AutoSelectPresetChannel}" />
 
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.AlwaysAllowHotas}" />
                                     <ToggleButton Grid.Row="2" Grid.Column="1"
-                                                  IsChecked="{Binding GlobalSettingsProperties.ProfileSettingsProperties.AlwaysAllowHotasControls}" />
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.AlwaysAllowHotasControls}" />
 
-                                    <Label Grid.Row="3"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.AlwaysAllowTransponderOverlay}" />
+                                    <ToggleButton Grid.Row="3" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.AlwaysAllowTransponderOverlay}"/>
 
-                                    <ToggleButton Name="AlwaysAllowTransponderOverlay"
-                                                  Grid.Row="3"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="AlwaysAllowTransponderOverlay_OnClick" />
-
-                                    <Label Grid.Row="4"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.AllowDCSPTT}" />
+                                    <ToggleButton Grid.Row="4" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.AllowDcsPtt}"/>
 
-                                    <ToggleButton Name="AllowDcsPtt"
-                                                  Grid.Row="4"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="AllowDCSPTT_OnClick" />
-
-                                    <Label Grid.Row="5"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="5" Grid.Column="0" 
                                            Content="{x:Static p:Resources.AllowRotaryIncrement}" />
+                                    <ToggleButton Grid.Row="5" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.RotaryStyleIncrement}"/>
 
-                                    <ToggleButton Name="AllowRotaryIncrement"
-                                                  Grid.Row="5"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="AllowRotaryIncrement_OnClick" />
-
-                                    <Label Grid.Row="6"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="6" Grid.Column="0"
                                            Content="{x:Static p:Resources.PTTReleaseDelay}" />
-
-                                    <StackPanel Grid.Row="6"
-                                                Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="PttReleaseDelay"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="6" Grid.Column="1" Margin="10">
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="20"
                                                 LargeChange="50"
                                                 IsSnapToTickEnabled="True"
@@ -1217,7 +1181,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="1000"
-                                                Value="0"
+                                                Value="{Binding SrsSettings.CurrentProfile.PttReleaseDelay}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1235,17 +1199,10 @@
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="7"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="7" Grid.Column="0"
                                            Content="{x:Static p:Resources.PTTStartDelay}" />
-
-                                    <StackPanel Grid.Row="7"
-                                                Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="PttStartDelay"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="7" Grid.Column="1" Margin="10">
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="20"
                                                 LargeChange="50"
                                                 IsSnapToTickEnabled="True"
@@ -1253,7 +1210,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="1000"
-                                                Value="0"
+                                                Value="{Binding SrsSettings.CurrentProfile.PTTStartDelay}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1263,26 +1220,16 @@
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.PTTStartDelay0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.PTTStartDelay500}"
-                                                   HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.PTTStartDelay1000}"
-                                                   HorizontalAlignment="Right" />
+                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.PTTStartDelay500}" HorizontalAlignment="Center" />
+                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.PTTStartDelay1000}" HorizontalAlignment="Right" />
                                         </Grid>
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="8"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="8" Grid.Column="0"
                                            Content="{x:Static p:Resources.DisableExpansionRadios}" />
-
-                                    <ToggleButton Name="DisableExpansionRadios"
-                                                  Grid.Row="8"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="DisableExpansionRadios_OnClick" />
+                                    <ToggleButton Grid.Row="8" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.DisableExpansionRadios}"/>
 
                                 </Grid>
                             </GroupBox>
@@ -1318,184 +1265,100 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-
-
-                                    <Label Grid.Row="0"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+	                                
+                                    <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioRxEffects}" />
 
-                                    <WrapPanel Grid.Row="0"
-                                               Grid.Column="1"
+                                    <WrapPanel Grid.Row="0" Grid.Column="1"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Orientation="Horizontal">
                                         <Label Content="{x:Static p:Resources.RadioRxStart}" />
-
-                                        <ToggleButton Name="RadioRxStartToggle"
-                                                      HorizontalContentAlignment="Center"
-                                                      VerticalContentAlignment="Center"
-                                                      Click="RadioRxStart_Click" />
+                                        <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.RadioRxEffects_Start}"/>
                                         <Label Content="{x:Static p:Resources.RadioRxEnd}" />
-                                        <ToggleButton Name="RadioRxEndToggle"
-                                                      HorizontalContentAlignment="Center"
-                                                      VerticalContentAlignment="Center"
-                                                      Click="RadioRxEnd_Click" />
+                                        <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.RadioRxEffects_End}" />
                                     </WrapPanel>
 
-
-                                    <Label Grid.Row="1"
-                                           Grid.Column="0"
-
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioTxEffects}" />
 
-                                    <WrapPanel Grid.Row="1"
-                                               Grid.Column="1"
+                                    <WrapPanel Grid.Row="1" Grid.Column="1"
                                                HorizontalAlignment="Center"
                                                VerticalAlignment="Center"
                                                Orientation="Vertical">
                                         <WrapPanel Orientation="Horizontal">
                                             <Label Content="{x:Static p:Resources.RadioTxStart}" />
-
-                                            <ToggleButton Name="RadioTxStartToggle"
-                                                          HorizontalContentAlignment="Center"
-                                                          VerticalContentAlignment="Center"
-                                                          Click="RadioTxStart_Click" />
+                                            <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.RadioTxEffects_Start}" />
                                             <Label Content="{x:Static p:Resources.RadioTxEnd}" />
-                                            <ToggleButton Name="RadioTxEndToggle"
-                                                          HorizontalContentAlignment="Center"
-                                                          VerticalContentAlignment="Center"
-                                                          Click="RadioTxEnd_Click" />
+                                            <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.RadioTxEffects_End}" />
                                         </WrapPanel>
 
                                     </WrapPanel>
 
-                                    <Label Grid.Row="2"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioStartTransmitEffect}" />
 
                                     <ComboBox x:Name="RadioStartTransmitEffect"
-                                              Grid.Row="2"
-                                              Grid.Column="1"
+                                              Grid.Row="2" Grid.Column="1"
                                               Width="215"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Top" />
 
-                                    <Label Grid.Row="3"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioEndTransmitEffect}" />
 
                                     <ComboBox x:Name="RadioEndTransmitEffect"
-                                              Grid.Row="3"
-                                              Grid.Column="1"
+                                              Grid.Row="3" Grid.Column="1"
                                               Width="215"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Top" />
 
-                                    <Label Grid.Row="4"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.IntercomStartTransmitEffect}" />
 
                                     <ComboBox x:Name="IntercomStartTransmitEffect"
-                                              Grid.Row="4"
-                                              Grid.Column="1"
+                                              Grid.Row="4" Grid.Column="1"
                                               Width="215"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Top" />
 
-                                    <Label Grid.Row="5"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="5" Grid.Column="0"
                                            Content="{x:Static p:Resources.IntercomEndTransmitEffect}" />
 
                                     <ComboBox x:Name="IntercomEndTransmitEffect"
-                                              Grid.Row="5"
-                                              Grid.Column="1"
+                                              Grid.Row="5" Grid.Column="1"
                                               Width="215"
                                               HorizontalAlignment="Center"
                                               VerticalAlignment="Top" />
 
-                                    <Label Grid.Row="6"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="6" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioEncryptionEffectsToggle}" />
+                                    <ToggleButton Grid.Row="6" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.RadioEncryptionEffects}" />
 
-                                    <ToggleButton Name="RadioEncryptionEffectsToggle"
-                                                  Grid.Row="6"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="RadioEncryptionEffects_Click" />
-
-                                    <Label Grid.Row="7"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="7" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioMIDSToggle}" />
+                                    <ToggleButton Grid.Row="7" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.MidsRadioEffect}"/>
 
-                                    <ToggleButton Name="RadioMidsToggle"
-                                                  Grid.Row="7"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="RadioMIDS_Click" />
-
-                                    <Label Grid.Row="8"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="8" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioSoundEffects}" />
+                                    <ToggleButton Grid.Row="8" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.RadioEffects}"/>
 
-                                    <ToggleButton Name="RadioSoundEffects"
-                                                  Grid.Row="8"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="RadioSoundEffects_OnClick" />
-
-
-
-                                    <Label Grid.Row="9"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="9" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioSoundEffectsClipping}" />
-
-                                    <ToggleButton Name="RadioSoundEffectsClipping"
-                                                  Grid.Row="9"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="RadioSoundEffectsClipping_OnClick" />
-
-
-                                    <Label Grid.Row="10"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <ToggleButton Grid.Row="9" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.RadioEffectsClipping}"/>
+                                    
+                                    <Label Grid.Row="10" Grid.Column="0"
                                            Content="{x:Static p:Resources.NATORadioTone}" />
-
-                                    <StackPanel Grid.Row="10"
+                                    <StackPanel Grid.Row="10" 
                                                 Grid.Column="1" Margin="10">
+                                        <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.NatoFmTone}"/>
 
-                                        <ToggleButton Name="NatoRadioToneToggle"
-                                                      HorizontalContentAlignment="Center"
-                                                      VerticalContentAlignment="Center"
-                                                      Click="NATORadioTone_Click" />
-
-                                        <Slider x:Name="NatoToneVolume"
-                                                TickPlacement="BottomRight"
+                                        <!-- Todo: Validate all slider Values -->
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="5"
                                                 LargeChange="10"
                                                 IsSnapToTickEnabled="True"
@@ -1503,7 +1366,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="200"
-                                                Value="100"
+                                                Value="{Binding SrsSettings.CurrentProfile.NatoFmToneVolume}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1512,31 +1375,25 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.EffectVolume0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.EffectVolume100}"
+                                            <Label Grid.Column="0" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume0}" 
+                                                   HorizontalAlignment="Left" />
+                                            <Label Grid.Column="1" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume100}"
                                                    HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.EffectVolume200}"
+                                            <Label Grid.Column="2" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume200}"
                                                    HorizontalAlignment="Right" />
                                         </Grid>
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="11"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="11" Grid.Column="0"
                                            Content="{x:Static p:Resources.HQEffect}" />
-
-                                    <StackPanel Grid.Row="11"
-                                                Grid.Column="1" Margin="10">
-
-                                        <ToggleButton Name="HqEffectToggle"
-                                                      HorizontalContentAlignment="Center"
-                                                      VerticalContentAlignment="Center"
-                                                      Click="HQEffect_Click" />
-
-                                        <Slider x:Name="HqToneVolume"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="11" Grid.Column="1" Margin="10">
+                                        <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.HaveQuickTone}" />
+                                        <!-- Todo: Validate all slider Values -->
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="5"
                                                 LargeChange="10"
                                                 IsSnapToTickEnabled="True"
@@ -1544,7 +1401,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="200"
-                                                Value="100"
+                                                Value="{Binding SrsSettings.CurrentProfile.HqToneVolume}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1553,39 +1410,28 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.EffectVolume0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.EffectVolume100}"
+                                            <Label Grid.Column="0" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume0}" 
+                                                   HorizontalAlignment="Left" />
+                                            <Label Grid.Column="1" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume100}"
                                                    HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.EffectVolume200}"
+                                            <Label Grid.Column="2" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume200}"
                                                    HorizontalAlignment="Right" />
                                         </Grid>
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="12"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="12" Grid.Column="0"
                                            Content="{x:Static p:Resources.BackgroundRadioNoise}" />
-
-                                    <ToggleButton Name="BackgroundRadioNoiseToggle"
-                                                  Grid.Row="12"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="BackgroundRadioNoiseToggle_OnClick" />
-
-                                    <Label Grid.Row="13"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <ToggleButton Grid.Row="12" Grid.Column="1" 
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.RadioBackgroundNoiseEffect }"/>
+                                    
+                                    <Label Grid.Row="13" Grid.Column="0"
                                            Content="{x:Static p:Resources.UHFEffectVolume}" />
-
-                                    <StackPanel Grid.Row="13"
-                                                Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="UhfEffectVolume"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="13" Grid.Column="1" Margin="10">
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="5"
                                                 LargeChange="10"
                                                 IsSnapToTickEnabled="True"
@@ -1593,7 +1439,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="200"
-                                                Value="100"
+                                                Value="{Binding SrsSettings.CurrentProfile.UhfNoiseVolume}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1602,26 +1448,23 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.EffectVolume0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.EffectVolume100}"
+                                            <Label Grid.Column="0" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume0}" 
+                                                   HorizontalAlignment="Left" />
+                                            <Label Grid.Column="1" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume100}"
                                                    HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.EffectVolume200}"
+                                            <Label Grid.Column="2" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume200}"
                                                    HorizontalAlignment="Right" />
                                         </Grid>
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="14"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="14" Grid.Column="0"
                                            Content="{x:Static p:Resources.VHFEffectVolume}" />
-
-                                    <StackPanel Grid.Row="14"
-                                                Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="VhfEffectVolume"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="14" Grid.Column="1" Margin="10">
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="5"
                                                 LargeChange="10"
                                                 IsSnapToTickEnabled="True"
@@ -1629,7 +1472,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="200"
-                                                Value="100"
+                                                Value="{Binding SrsSettings.CurrentProfile.VhfNoiseVolume}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1638,26 +1481,23 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.EffectVolume0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.EffectVolume100}"
+                                            <Label Grid.Column="0" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume0}" 
+                                                   HorizontalAlignment="Left" />
+                                            <Label Grid.Column="1" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume100}"
                                                    HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.EffectVolume200}"
+                                            <Label Grid.Column="2" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume200}"
                                                    HorizontalAlignment="Right" />
                                         </Grid>
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="15"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="15" Grid.Column="0"
                                            Content="{x:Static p:Resources.HFEffectVolume}" />
-
-                                    <StackPanel Grid.Row="15"
-                                                Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="HfEffectVolume"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="15" Grid.Column="1" Margin="10">
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="5"
                                                 LargeChange="10"
                                                 IsSnapToTickEnabled="True"
@@ -1665,7 +1505,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="200"
-                                                Value="100"
+                                                Value="{Binding SrsSettings.CurrentProfile.HfNoiseVolume}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1674,26 +1514,23 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.EffectVolume0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.EffectVolume100}"
+                                            <Label Grid.Column="0" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume0}" 
+                                                   HorizontalAlignment="Left" />
+                                            <Label Grid.Column="1" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume100}"
                                                    HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.EffectVolume200}"
+                                            <Label Grid.Column="2" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume200}"
                                                    HorizontalAlignment="Right" />
                                         </Grid>
 
                                     </StackPanel>
 
-                                    <Label Grid.Row="16"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="16" Grid.Column="0"
                                            Content="{x:Static p:Resources.FMEffectVolume}" />
-
-                                    <StackPanel Grid.Row="16"
-                                                Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="FmEffectVolume"
-                                                TickPlacement="BottomRight"
+                                    <StackPanel Grid.Row="16" Grid.Column="1" Margin="10">
+                                        <Slider TickPlacement="BottomRight"
                                                 SmallChange="5"
                                                 LargeChange="10"
                                                 IsSnapToTickEnabled="True"
@@ -1701,7 +1538,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="200"
-                                                Value="100"
+                                                Value="{Binding SrsSettings.CurrentProfile.FmNoiseVolume}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1710,82 +1547,64 @@
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.EffectVolume0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.EffectVolume100}"
+                                            <Label Grid.Column="0" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume0}" 
+                                                   HorizontalAlignment="Left" />
+                                            <Label Grid.Column="1" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume100}"
                                                    HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.EffectVolume200}"
+                                            <Label Grid.Column="2" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume200}"
                                                    HorizontalAlignment="Right" />
                                         </Grid>
 
                                     </StackPanel>
-
-                                    <Label Grid.Row="17"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="17" Grid.Column="0"
                                            Content="{x:Static p:Resources.AmbientEffectToggle}" />
+                                    <ToggleButton Grid.Row="17" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.AmbientCockpitNoiseEffect}"/>
 
-                                    <ToggleButton Name="AmbientCockpitEffectToggle"
-                                                  Grid.Row="17"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="AmbientCockpitEffectToggle_OnClick" />
-
-
-                                    <Label Grid.Row="18"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="18" Grid.Column="0"
                                            Content="{x:Static p:Resources.AmbientEffectIntercomToggle}" />
+                                    <ToggleButton Grid.Row="18" Grid.Column="1"
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.AmbientCockpitIntercomNoiseEffect}"/>
 
-                                    <ToggleButton Name="AmbientIntercomEffectToggle"
-                                                  Grid.Row="18"
-                                                  Grid.Column="1"
-                                                  HorizontalContentAlignment="Center"
-                                                  VerticalContentAlignment="Center"
-                                                  Click="AmbientCockpitEffectIntercomToggle_OnClick" />
-
-
-                                    <Label Grid.Row="19"
-                                               Grid.Column="0"
-                                               HorizontalContentAlignment="Center"
-                                               VerticalContentAlignment="Center"
-                                               Content="{x:Static p:Resources.AmbientEffectVolume}" />
-
-                                    <StackPanel Grid.Row="19"
-                                                    Grid.Column="1" Margin="10">
-
-                                        <Slider x:Name="AmbientCockpitEffectVolume"
-                                                    TickPlacement="BottomRight"
-                                                    SmallChange="5"
-                                                    LargeChange="10"
-                                                    IsSnapToTickEnabled="True"
-                                                    TickFrequency="10"
-                                                    VerticalAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    Maximum="200"
-                                                    Value="100"
-                                                    Minimum="0"
-                                                    IsEnabled="False" />
+                                    <Label Grid.Row="19" Grid.Column="0"
+                                           Content="{x:Static p:Resources.AmbientEffectVolume}" />
+                                    <StackPanel Grid.Row="19" 
+                                                Grid.Column="1" Margin="10">
+                                        <Slider TickPlacement="BottomRight"
+                                                SmallChange="5"
+                                                LargeChange="10"
+                                                IsSnapToTickEnabled="True"
+                                                TickFrequency="10"
+                                                VerticalAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                Maximum="200"
+                                                Value="{Binding SrsSettings.CurrentProfile.AmbientCockpitNoiseEffectVolume}"
+                                                Minimum="0"
+                                                IsEnabled="False" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.EffectVolume0}" HorizontalAlignment="Left" />
-                                            <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.EffectVolume100}"
-                                                       HorizontalAlignment="Center" />
-                                            <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.EffectVolume200}"
-                                                       HorizontalAlignment="Right" />
+                                            <Label Grid.Column="0" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume0}" 
+                                                   HorizontalAlignment="Left" />
+                                            <Label Grid.Column="1" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume100}"
+                                                   HorizontalAlignment="Center" />
+                                            <Label Grid.Column="2" FontSize="10" 
+                                                   Content="{x:Static p:Resources.EffectVolume200}"
+                                                   HorizontalAlignment="Right" />
                                         </Grid>
 
                                     </StackPanel>
 
                                 </Grid>
                             </GroupBox>
-
 
                             <GroupBox Header="{x:Static p:Resources.AudioHeader}"
                                       Grid.Row="2"
@@ -1814,12 +1633,8 @@
                                         <RowDefinition />
                                         <RowDefinition />
                                     </Grid.RowDefinitions>
-
-
-                                    <Label Grid.Row="0"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+	                                
+                                    <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio1Config}" />
                                     <local:RadioChannelConfigUi x:Name="Radio1Config"
                                                                 Grid.Row="0"

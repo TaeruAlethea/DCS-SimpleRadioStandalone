@@ -104,7 +104,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
             {
                 return 0;
             }
-            var currentClientPos = ClientStateSingleton.Instance.PlayerCoaltionLocationMetadata;
+            var currentClientPos = ClientStateSingleton.Instance.PlayerCoalitionLocationMetadata;
             var currentUnitId = ClientStateSingleton.Instance.DcsPlayerRadioInfo.unitId;
             var coalitionSecurity = SyncedServerSettings.Instance.GetSettingAsBool(ServerSettingsKeys.COALITION_AUDIO_SECURITY);
             var globalFrequencies = _serverSettings.GlobalFrequencies;

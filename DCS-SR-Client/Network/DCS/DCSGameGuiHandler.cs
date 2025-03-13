@@ -72,7 +72,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS
                         {
                             var shouldUpdate = _serverSettings.GetSettingAsBool(ServerSettingsKeys.DISTANCE_ENABLED) || _serverSettings.GetSettingAsBool(ServerSettingsKeys.LOS_ENABLED);
 
-                            var currentInfo = _clientStateSingleton.PlayerCoaltionLocationMetadata;
+                            var currentInfo = _clientStateSingleton.PlayerCoalitionLocationMetadata;
 
                             bool changed = !updatedPlayerInfo.Equals(currentInfo);
                             //copy the bits we need  - leave position

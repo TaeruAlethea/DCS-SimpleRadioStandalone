@@ -71,7 +71,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS
                 //check if we've had an update
                 if (_clientStateSingleton.DcsPlayerRadioInfo.LastUpdate > 0)
                 {
-                    _clientStateSingleton.PlayerCoaltionLocationMetadata.Reset();
+                    _clientStateSingleton.PlayerCoalitionLocationMetadata.Reset();
                     _clientStateSingleton.DcsPlayerRadioInfo.Reset();
 
                     _clientRadioUpdate();

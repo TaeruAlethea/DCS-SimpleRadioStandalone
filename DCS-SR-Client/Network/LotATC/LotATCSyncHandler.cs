@@ -215,8 +215,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.LotATC
 
             var requests = new List<LotATCLineOfSightRequest>();
 
-            if (_clientStateSingleton.PlayerCoaltionLocationMetadata.LngLngPosition != null
-                && _clientStateSingleton.PlayerCoaltionLocationMetadata.LngLngPosition.isValid()
+            if (_clientStateSingleton.PlayerCoalitionLocationMetadata.LngLngPosition != null
+                && _clientStateSingleton.PlayerCoalitionLocationMetadata.LngLngPosition.isValid()
                 && _clientStateSingleton.ShouldUseLotATCPosition() 
                 && _serverSettings.GetSettingAsBool(ServerSettingsKeys.LOS_ENABLED))
             {
@@ -230,9 +230,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.LotATC
                     {
                         requests.Add(new LotATCLineOfSightRequest()
                         {
-                            lat1 = _clientStateSingleton.PlayerCoaltionLocationMetadata.LngLngPosition.lat,
-                            long1 = _clientStateSingleton.PlayerCoaltionLocationMetadata.LngLngPosition.lng,
-                            alt1 = _clientStateSingleton.PlayerCoaltionLocationMetadata.LngLngPosition.alt,
+                            lat1 = _clientStateSingleton.PlayerCoalitionLocationMetadata.LngLngPosition.lat,
+                            long1 = _clientStateSingleton.PlayerCoalitionLocationMetadata.LngLngPosition.lng,
+                            alt1 = _clientStateSingleton.PlayerCoalitionLocationMetadata.LngLngPosition.alt,
 
                             lat2 = client.LatLngPosition.lat,
                             long2 = client.LatLngPosition.lng,

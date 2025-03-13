@@ -10,10 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
-using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
-using MahApps.Metro.Controls;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NLog.Config;
@@ -31,8 +28,6 @@ namespace DCS_SR_Client
         private System.Windows.Forms.NotifyIcon _notifyIcon;
         private bool loggingReady = false;
         private static Logger Logger = LogManager.GetCurrentClassLogger();
-
-        private IServiceProvider _serviceProvider;
         
         public App()
         {
@@ -111,7 +106,6 @@ namespace DCS_SR_Client
             RequireAdmin();
 
             InitNotificationIcon();
-            this.InitializeComponent();
         }
         
         private void ListArgs()
@@ -341,7 +335,11 @@ namespace DCS_SR_Client
         {
             var services = new ServiceCollection();
 
+            // Services
             services.AddSingleton<ISrsSettings, SrsSettingsService>();
+
+            // ViewModels
+            services.AddSingleton<IMainViewModel, MainWindowViewModel>();
             
             return services.BuildServiceProvider();
         }

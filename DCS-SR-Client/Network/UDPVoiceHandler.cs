@@ -709,7 +709,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
             SRClient transmittingClient;
             if (_clients.TryGetValue(udpVoicePacket.Guid, out transmittingClient))
             {
-                var myLatLng= _clientStateSingleton.PlayerCoaltionLocationMetadata.LngLngPosition;
+                var myLatLng= _clientStateSingleton.PlayerCoalitionLocationMetadata.LngLngPosition;
                 var clientLatLng = transmittingClient.LatLngPosition;
                 if (myLatLng == null || clientLatLng == null || !myLatLng.isValid() || !clientLatLng.isValid())
                 {
@@ -738,7 +738,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
             {
                 double dist = 0;
                
-                var myLatLng = _clientStateSingleton.PlayerCoaltionLocationMetadata.LngLngPosition;
+                var myLatLng = _clientStateSingleton.PlayerCoalitionLocationMetadata.LngLngPosition;
                 var clientLatLng = transmittingClient.LatLngPosition;
                 //No DCS Position - do we have LotATC Position?
                 if (myLatLng == null || clientLatLng == null || !myLatLng.isValid() || !clientLatLng.isValid())

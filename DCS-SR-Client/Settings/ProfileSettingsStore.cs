@@ -85,7 +85,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         partial void OnCurrentProfileNameChanged(string oldValue, string newValue)
         {
             _settingsCache.Clear();
-            OnPropertyChanged(nameof(_globalSettings.ProfileSettingsProperties));
         }
 
         public string Path { get; }

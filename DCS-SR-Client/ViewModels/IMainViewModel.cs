@@ -27,15 +27,12 @@ public interface IMainViewModel
 	public IPAddress ResolvedIp { get;  }
 	public string Guid { get;  }
 	public int Port { get;  }
-
-
-
+	
 	public SyncedServerSettings ServerSettings { get; }
 
-	public GlobalSettingsStore GlobalSettings { get; }
-	public GlobalSettingsModel GlobalSettingsProperties { get; }
+	ISrsSettings SrsSettings { get; set; }
 	
-	ICommand StopCommand { get; set; }
-	ICommand ConnectCommand { get;  }
+	IRelayCommand<bool> StopCommand { get; }
+	IRelayCommand ConnectCommand { get; }
 
 }

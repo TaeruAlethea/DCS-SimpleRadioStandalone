@@ -99,7 +99,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
 
             _externalAWACSModeCallback = callback;
 
-            var sideInfo = _clientStateSingleton.PlayerCoaltionLocationMetadata;
+            var sideInfo = _clientStateSingleton.PlayerCoalitionLocationMetadata;
             sideInfo.name = _clientStateSingleton.LastSeenName;
             SendToServer(new NetworkMessage
             {
@@ -211,7 +211,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
             }
 
             Logger.Debug("Sending Radio Update to Server");
-            var sideInfo = _clientStateSingleton.PlayerCoaltionLocationMetadata;
+            var sideInfo = _clientStateSingleton.PlayerCoalitionLocationMetadata;
 
             var message = new NetworkMessage
             {
@@ -243,7 +243,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
 
         private void ClientCoalitionUpdate()
         {
-            var sideInfo = _clientStateSingleton.PlayerCoaltionLocationMetadata;
+            var sideInfo = _clientStateSingleton.PlayerCoalitionLocationMetadata;
 
             var message =  new NetworkMessage
             {
@@ -320,7 +320,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
             {
                 try
                 {
-                    var sideInfo = _clientStateSingleton.PlayerCoaltionLocationMetadata;
+                    var sideInfo = _clientStateSingleton.PlayerCoalitionLocationMetadata;
                     //start the loop off by sending a SYNC Request
                     SendToServer(new NetworkMessage
                     {
