@@ -1,28 +1,20 @@
 using System;
-using System.Configuration;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
 
-public class InputSettingsModel : ConfigurationSection, ICloneable
+public class InputSettingsModel : ICloneable
 {
 	public string InputName { get; set; } = "InputName";
 	public InputModel Primary { get; set; } = new InputModel();
 	public InputModel Modifier { get; set; } = new InputModel();
 	
-	public class InputModel : ConfigurationSection, ICloneable
+	public class InputModel : ICloneable
 	{
-		[ConfigurationProperty("Device Guid", DefaultValue = "", IsRequired = true)]
-		public Guid Guid { get; internal set; }
-	
-		[ConfigurationProperty("Device Name", DefaultValue = "None", IsRequired = false)]
-		public string DeviceName { get; set; }
-	
-		[ConfigurationProperty("Button", DefaultValue = (int)0, IsRequired = true)]
-		public int Button { get; set; }
-	
-		[ConfigurationProperty("ButtonValue", DefaultValue = (int)0, IsRequired = false)]
-		public int ButtonValue { get; internal set; }
+		public Guid Guid { get; internal set; } = Guid.Empty;
+		public string DeviceName { get; set; } = string.Empty;
+		public int Button { get; set; } = (int)0;
+		public int ButtonValue { get; internal set; } = (int)0;
 	
 		public object Clone()
 		{

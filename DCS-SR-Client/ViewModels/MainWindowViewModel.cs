@@ -31,7 +31,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 {
 	[Obsolete("MainWindow Reference is not MVVM compliant.")]
-	public MainWindow ToBeDepricatedMainWindow { get; init; }
+	//public MainWindow ToBeDepricatedMainWindow { get; init; }
 	
 	private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 	
@@ -61,17 +61,11 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	
 	[ObservableProperty] private ISrsSettings _srsSettings;
 
-	public MainWindowViewModel()
-	{
-		_srsSettings = new SrsSettingsService();
-	}
-
 	public MainWindowViewModel(ISrsSettings srsSettings)
 	{
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
-		ToBeDepricatedMainWindow = new MainWindow(viewModel:this);
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
-		_srsSettings = srsSettings;
+		_srsSettings = new SrsSettingsService();
 		
 		UpdaterChecker.CheckForUpdate(SrsSettings.GlobalSettings.CheckForBetaUpdates);
 
@@ -81,10 +75,10 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		
 		AudioManager.SpeakerBoost = (float)SrsSettings.GlobalSettings.SpeakerBoost;
 		
-		DcsAutoConnectListener = new DCSAutoConnectHandler(ToBeDepricatedMainWindow.AutoConnect);
+		//DcsAutoConnectListener = new DCSAutoConnectHandler(ToBeDepricatedMainWindow.AutoConnect);
 
 		_updateTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
-		_updateTimer.Tick += ToBeDepricatedMainWindow.UpdateVUMeters;
+		//_updateTimer.Tick += ToBeDepricatedMainWindow.UpdateVUMeters;
 		_updateTimer.Start();
 	}
 	
@@ -98,8 +92,8 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
         }
         else
         {
-            ToBeDepricatedMainWindow.SaveSelectedInputAndOutput();
-
+            //ToBeDepricatedMainWindow.SaveSelectedInputAndOutput();
+            /*
             try
             {
                 //process hostname
@@ -203,6 +197,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
                 ClientState.IsConnected = false;
                 ToBeDepricatedMainWindow.ToggleServerSettings.IsEnabled = false;
             }
+            */
         }
 	}
 	
@@ -222,7 +217,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		}
 
 		ClientState.IsConnectionErrored = connectionError;
-
+		/*
 		ToBeDepricatedMainWindow.StartStop.Content = Properties.Resources.StartStop;
 		ToBeDepricatedMainWindow.StartStop.IsEnabled = true;
 		ToBeDepricatedMainWindow.Mic.IsEnabled = true;
@@ -240,7 +235,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		{
 			SrsSettings.GlobalSettings.LastSeenName = ClientState.LastSeenName;
 		}
-
+		*/
 		try
 		{
 			AudioManager.StopEncoding();

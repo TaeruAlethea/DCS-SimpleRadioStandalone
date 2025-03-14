@@ -30,7 +30,7 @@ namespace DCS_SR_Client
         private System.Windows.Forms.NotifyIcon _notifyIcon;
         private bool loggingReady = false;
         private static Logger Logger = LogManager.GetCurrentClassLogger();
-     
+        
         /// <summary>
         /// Gets the current <see cref="App"/> instance in use
         /// </summary>
@@ -53,9 +53,6 @@ namespace DCS_SR_Client
 
             // ViewModels
             services.AddSingleton<IMainViewModel, MainWindowViewModel>();
-            
-            // Views
-            services.AddSingleton<IMainWindow, MainWindow>();
             
             return services.BuildServiceProvider();
         }
@@ -81,7 +78,6 @@ namespace DCS_SR_Client
             }
             if (!File.Exists(location + "\\speexdsp.dll"))
             {
-
                 MessageBox.Show(
                     $"You are missing the speexdsp.dll - Reinstall using the Installer and don't move the client from the installation directory!",
                     "Installation Error!", MessageBoxButton.OK,
@@ -137,8 +133,15 @@ namespace DCS_SR_Client
             RequireAdmin();
 
             InitNotificationIcon();
+            
+            InitializeComponent();
+            // Boostrap the DataContext for MVVM. 
+            var viewModel = Services.GetRequiredService<IMainViewModel>();
+            var mainWindow = new MainWindow(viewModel);
+            mainWindow.DataContext = viewModel;
+            mainWindow.Show();
         }
-        
+
         private void ListArgs()
         {
             Logger.Info("Arguments:");

@@ -1,165 +1,98 @@
-using System.Configuration;
-
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
-public sealed partial class GlobalSettingsModel : ConfigurationSection
+public class GlobalSettingsModel
 {
-	[ConfigurationProperty("AutoConnect", DefaultValue = true, IsRequired = true)]
-	public bool AutoConnect { get; set; }
-	[ConfigurationProperty("AutoConnectPrompt", DefaultValue = false, IsRequired = true)]
-	public bool AutoConnectPrompt { get; set; }
-	[ConfigurationProperty("AutoConnectMismatchPrompt", DefaultValue = true, IsRequired = true)]
-	public bool AutoConnectMismatchPrompt { get; set; }
-	[ConfigurationProperty("RadioOverlayTaskbarHide", DefaultValue = false, IsRequired = true)]
-	public bool RadioOverlayTaskbarHide { get; set; }
-	[ConfigurationProperty("RefocusDCS", DefaultValue = false, IsRequired = true)]
-	public bool RefocusDCS { get; set; }
-	[ConfigurationProperty("ExpandControls", DefaultValue = false, IsRequired = true)]
-	public bool ExpandControls { get; set; }
+	public bool AutoConnect { get; set; } = true;
+	public bool AutoConnectPrompt { get; set; } = false;
+	public bool AutoConnectMismatchPrompt { get; set; } = true;
+	public bool RadioOverlayTaskbarHide { get; set; } = false;
+	public bool RefocusDCS { get; set; } = false;
+	public bool ExpandControls { get; set; } = false;
 	
-	[ConfigurationProperty("MinimiseToTray", DefaultValue = false, IsRequired = true)]
-	public bool MinimiseToTray { get; set; }
-	[ConfigurationProperty("StartMinimised", DefaultValue = false, IsRequired = true)]
-	public bool StartMinimised { get; set; }
+	public bool MinimiseToTray { get; set; } = false;
+	public bool StartMinimised { get; set; } = false;
 	
-	[ConfigurationProperty("AudioInputDeviceId", DefaultValue = "", IsRequired = true)]
-	public string AudioInputDeviceId { get; set; }
-	[ConfigurationProperty("AudioOutputDeviceId", DefaultValue = "", IsRequired = true)]
-	public string AudioOutputDeviceId { get; set; }
-	[ConfigurationProperty("MicAudioOutputDeviceId", DefaultValue = "", IsRequired = true)]
-	public string MicAudioOutputDeviceId { get; set; }
+	public string AudioInputDeviceId { get; set; } = string.Empty;
+	public string AudioOutputDeviceId { get; set; } = string.Empty;
+	public string MicAudioOutputDeviceId { get; set; } = string.Empty;
 	
-	[ConfigurationProperty("LastServer", DefaultValue = "127.0.0.1", IsRequired = true)]
-	public string LastServer { get; set; }
+	public string LastServer { get; set; } = "127.0.0.1";
 	
-	[ConfigurationProperty("MicBoost", DefaultValue = (double)0.514, IsRequired = true)]
-	public double MicBoost { get; set; }
-	[ConfigurationProperty("SpeakerBoost", DefaultValue = (double)0.514, IsRequired = true)]
-	public double SpeakerBoost { get; set; }
+	public double MicBoost { get; set; } = (double)0.514;
+	public double SpeakerBoost { get; set; } = (double)0.514;
 	
-	[ConfigurationProperty("RadioX", DefaultValue = (double)300, IsRequired = true)]
-	public double RadioX { get; set; }
-	[ConfigurationProperty("RadioY", DefaultValue = (double)300, IsRequired = true)]
-	public double RadioY { get; set; }
-	[ConfigurationProperty("RadioSize", DefaultValue = (double)1.0, IsRequired = true)]
-	public double RadioSize { get; set; }
-	[ConfigurationProperty("RadioOpacity", DefaultValue = (double)1.0, IsRequired = true)]
-	public double RadioOpacity { get; set; }
+	public double RadioX { get; set; } = (double)300;
+	public double RadioY { get; set; } = (double)300;
+	public double RadioSize { get; set; } = (double)1.0;
+	public double RadioOpacity { get; set; } = (double)1.0;
 	
-	[ConfigurationProperty("RadioWidth", DefaultValue = (double)122, IsRequired = true)]
-	public double RadioWidth { get; set; }
-	[ConfigurationProperty("RadioHeight", DefaultValue = (double)270, IsRequired = true)]
-	public double RadioHeight { get; set; }
+	public double RadioWidth { get; set; } = (double)122;
+	public double RadioHeight { get; set; } = (double)270;
 	
-	[ConfigurationProperty("ClientX", DefaultValue = (double)200, IsRequired = true)]
-	public double ClientX { get; set; }
-	[ConfigurationProperty("ClientY", DefaultValue = (double)200, IsRequired = true)]
-	public double ClientY { get; set; }
+	public double ClientX { get; set; } = (double)200;
+	public double ClientY { get; set; } = (double)200;
 	
-	[ConfigurationProperty("AwacsX", DefaultValue = (double)300, IsRequired = true)]
-	public double AwacsX { get; set; }
-	[ConfigurationProperty("AwacsY", DefaultValue = (double)300, IsRequired = true)]
-	public double AwacsY { get; set; }
+	public double AwacsX { get; set; } = 0;
+	public double AwacsY { get; set; } = (double)300;
 	
 	
-	[ConfigurationProperty("CliendIdShort", DefaultValue = "", IsRequired = false)]
-	public string CliendIdShort { get; set; }
-	[ConfigurationProperty("ClientIdLong", DefaultValue = "", IsRequired = true)]
-	public string ClientIdLong { get; set; }
+	public string CliendIdShort { get; set; } = string.Empty;
+	public string ClientIdLong { get; set; } = string.Empty;
 	
-	[ConfigurationProperty("DCSLOSOutgoingUDP", DefaultValue = (int)9086, IsRequired = true)]
-	public int DCSLOSOutgoingUDP { get; set; }
-	[ConfigurationProperty("DCSIncomingUDP", DefaultValue = (int)9084, IsRequired = true)]
-	public int DCSIncomingUDP { get; set; }
-	[ConfigurationProperty("CommandListenerUDP", DefaultValue = (int)9040, IsRequired = true)]
-	public int CommandListenerUDP { get; set; }
-	[ConfigurationProperty("OutgoingDCSUDPInfo", DefaultValue = (int)7080, IsRequired = true)]
-	public int OutgoingDCSUDPInfo { get; set; }
-	[ConfigurationProperty("OutgoingDCSUDPOther", DefaultValue = (int)7082, IsRequired = true)]
-	public int OutgoingDCSUDPOther { get; set; }
-	[ConfigurationProperty("DCSIncomingGameGUIUDP", DefaultValue = (int)5068, IsRequired = true)]
-	public int DCSIncomingGameGUIUDP { get; set; }
-	[ConfigurationProperty("DCSLOSIncomingUDP", DefaultValue = (int)9085, IsRequired = true)]
-	public int DCSLOSIncomingUDP { get; set; }
-	[ConfigurationProperty("DCSAutoConnectUDP", DefaultValue = (int)5069, IsRequired = true)]
-	public int DCSAutoConnectUDP { get; set; }
+	public int DCSLOSOutgoingUDP { get; set; } = (int)9086;
+	public int DCSIncomingUDP { get; set; } = (int)9084;
+	public int CommandListenerUDP { get; set; } = (int)9040;
+	public int OutgoingDCSUDPInfo { get; set; } = (int)7080;
+	public int OutgoingDCSUDPOther { get; set; } = (int)7082;
+	public int DCSIncomingGameGUIUDP { get; set; } = (int)5068;
+	public int DCSLOSIncomingUDP { get; set; } = (int)9085;
+	public int DCSAutoConnectUDP { get; set; } = (int)5069;
 	
-	[ConfigurationProperty("AutomaticGainControl", DefaultValue = true, IsRequired = true)]
-	public bool AutomaticGainControl { get; set; }
-	[ConfigurationProperty("AGCTarget", DefaultValue = (int)30000, IsRequired = true)]
-	public int AGCTarget { get; set; }
-	[ConfigurationProperty("AGCDecrement", DefaultValue = (int)-60, IsRequired = true)]
-	public int AGCDecrement { get; set; }
-	[ConfigurationProperty("AGCLevelMax", DefaultValue = (int)68, IsRequired = true)]
-	public int AGCLevelMax { get; set; }
+	public bool AutomaticGainControl { get; set; } = true;
+	public int AGCTarget { get; set; } = (int)30000;
+	public int AGCDecrement { get; set; } = (int)-60;
+	public int AGCLevelMax { get; set; } = (int)68;
 	
-	[ConfigurationProperty("Denoise", DefaultValue = true, IsRequired = true)]
-	public bool Denoise { get; set; }
-	[ConfigurationProperty("DenoiseAttenuation", DefaultValue = (int)-30, IsRequired = true)]
-	public int DenoiseAttenuation { get; set; }
+	public bool Denoise { get; set; } = true;
+	public int DenoiseAttenuation { get; set; } = (int)-30;
 	
-	[ConfigurationProperty("LastSeenName", DefaultValue = "", IsRequired = true)]
-	public string LastSeenName { get; set; }
+	public string LastSeenName { get; set; } = string.Empty;
 	
-	[ConfigurationProperty("CheckForBetaUpdates", DefaultValue = false, IsRequired = true)]
-	public bool CheckForBetaUpdates { get; set; }
+	public bool CheckForBetaUpdates { get; set; } = false;
 	
-	[ConfigurationProperty("AllowMultipleInstances", DefaultValue = false, IsRequired = true)]
-	public bool AllowMultipleInstances { get; set; }
+	public bool AllowMultipleInstances { get; set; } = false;
 	
-	[ConfigurationProperty("DisableWindowVisibilityCheck", DefaultValue = false, IsRequired = true)]
-	public bool DisableWindowVisibilityCheck { get; set; }
-	[ConfigurationProperty("PlayConnectionSounds", DefaultValue = true, IsRequired = true)]
-	public bool PlayConnectionSounds { get; set; }
+	public bool DisableWindowVisibilityCheck { get; set; } = false;
+
+	public bool PlayConnectionSounds { get; set; } = true;
+
+	public bool RequireAdmin { get; set; } = true;
 	
-	[ConfigurationProperty("RequireAdmin", DefaultValue = true, IsRequired = true)]
-	public bool RequireAdmin { get; set; }
+	public string CurrentProfileName  { get; set; } = "Default";
+
+	public bool AutoSelectSettingsProfile { get; set; } = false;
 	
-	[ConfigurationProperty("CurrentProfileName", DefaultValue = "Default", IsRequired = true)]
-	public string CurrentProfileName  { get; set; }
+	public int LotATCIncomingUDP { get; set; } = (int)10710;
+	public int LotATCOutgoingUDP { get; set; } = (int)10711;
+	public int LotATCHeightOffset { get; set; } = (int)50;
 	
-	[ConfigurationProperty("AutoSelectSettingsProfile", DefaultValue = false, IsRequired = true)]
-	public bool AutoSelectSettingsProfile { get; set; }
+	public int VAICOMIncomingUDP { get; set; } = (int)33501;
+	public bool VAICOMTXInhibitEnabled { get; set; } = false;
+	public bool ShowTransmitterName { get; set; } = true;
 	
-	[ConfigurationProperty("LotATCIncomingUDP", DefaultValue = (int)10710, IsRequired = true)]
-	public int LotATCIncomingUDP { get; set; }
-	[ConfigurationProperty("LotATCOutgoingUDP", DefaultValue = (int)10711, IsRequired = true)]
-	public int LotATCOutgoingUDP { get; set; }
-	[ConfigurationProperty("LotATCHeightOffset", DefaultValue = (int)50, IsRequired = true)]
-	public int LotATCHeightOffset { get; set; }
+	public int IdleTimeOut { get; set; } = (int)600;
 	
-	[ConfigurationProperty("VAICOMIncomingUDP", DefaultValue = (int)33501, IsRequired = true)]
-	public int VAICOMIncomingUDP { get; set; }
-	[ConfigurationProperty("VAICOMTXInhibitEnabled", DefaultValue = false, IsRequired = true)]
-	public bool VAICOMTXInhibitEnabled { get; set; }
-	[ConfigurationProperty("ShowTransmitterName", DefaultValue = true, IsRequired = true)]
-	public bool ShowTransmitterName { get; set; }
+	public bool AllowRecording { get; set; } = false;
+	public bool RecordAudio { get; set; } = false;
+	public bool SingleFileMixdown { get; set; } = false;
+	public int RecordingQuality { get; set; } = (int)3;
+	public bool DisallowedAudioTone { get; set; } = false;
 	
-	[ConfigurationProperty("IdleTimeOut", DefaultValue = (int)600, IsRequired = true)]
-	public int IdleTimeOut { get; set; }
+	public bool VOX { get; set; } = false;
+	public int VOXMode { get; set; } = (int)3;
+	public int VOXMinimumTime { get; set; } = (int)300;
+	public double VOXMinimumDB { get; set; } = (double)-59.0;
 	
-	[ConfigurationProperty("AllowRecording", DefaultValue = false, IsRequired = true)]
-	public bool AllowRecording { get; set; }
-	[ConfigurationProperty("RecordAudio", DefaultValue = false, IsRequired = true)]
-	public bool RecordAudio { get; set; }
-	[ConfigurationProperty("SingleFileMixdown", DefaultValue = false, IsRequired = true)]
-	public bool SingleFileMixdown { get; set; }
-	[ConfigurationProperty("RecordingQuality", DefaultValue = 3, IsRequired = true)]
-	public int RecordingQuality { get; set; }
-	[ConfigurationProperty("DisallowedAudioTone", DefaultValue = false, IsRequired = true)]
-	public bool DisallowedAudioTone { get; set; }
-	
-	[ConfigurationProperty("VOX", DefaultValue = false, IsRequired = true)]
-	public bool VOX { get; set; }
-	[ConfigurationProperty("VOXMode", DefaultValue = (int)3, IsRequired = true)]
-	public int VOXMode { get; set; }
-	[ConfigurationProperty("VOXMinimumTime", DefaultValue = (int)300, IsRequired = true)]
-	public int VOXMinimumTime { get; set; }
-	[ConfigurationProperty("VOXMinimumDB", DefaultValue = (double)-59.0, IsRequired = true)]
-	public double VOXMinimumDB { get; set; }
-	
-	[ConfigurationProperty("AllowXInputController", DefaultValue = false, IsRequired = true)]
-	public bool AllowXInputController { get; set; }
-	[ConfigurationProperty("LastPresetsFolder", DefaultValue = "", IsRequired = true)]
-	public string LastPresetsFolder { get; set; }
+	public bool AllowXInputController { get; set; } = false;
+	public string LastPresetsFolder { get; set; } = string.Empty;
 }
