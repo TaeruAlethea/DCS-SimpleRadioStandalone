@@ -59,7 +59,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	[ObservableProperty]
 	private SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 	
-	[ObservableProperty] ISrsSettings _srsSettings;
+	[ObservableProperty] private ISrsSettings _srsSettings;
 
 	public MainWindowViewModel()
 	{
