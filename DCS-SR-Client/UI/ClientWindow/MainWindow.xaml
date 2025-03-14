@@ -365,7 +365,7 @@
 	                        <StackPanel Orientation="Vertical"
 	                                    HorizontalAlignment="Stretch"
 	                                    VerticalAlignment="Stretch" >
-		                        <local:InputBindingControl2 InputName="Special Intercom Select & PTT"
+		                        <local:InputBindingControl2 InputName="Special Intercom Select\PTT"
 		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputIntercomPtt}"/>
 		                        <local:InputBindingControl2 InputName="Toggle IDENT"
 		                                                    DataContext="{Binding SrsSettings.CurrentProfile.TransponderIdent}"/>
@@ -1197,7 +1197,7 @@
                                                 Maximum="200"
                                                 Value="{Binding SrsSettings.CurrentProfile.NatoFmToneVolume}"
                                                 Minimum="0"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding SrsSettings.CurrentProfile.NatoFmTone}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
