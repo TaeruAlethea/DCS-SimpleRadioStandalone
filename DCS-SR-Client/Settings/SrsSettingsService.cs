@@ -82,6 +82,7 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 		
 		_profileSettings.Add(profileName, newProfile);
 		CurrentProfileName = $"{profileName}";
+		OnPropertyChanged(nameof(CurrentProfileName));
 	}
 
 	[RelayCommand] private void RenameProfile(string profileName)
@@ -92,6 +93,7 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 		_profileSettings.Remove(oldProfileName);
 		
 		CurrentProfileName = $"{profileName}";
+		OnPropertyChanged(nameof(CurrentProfileName));
 	}
 
 	[RelayCommand] private void DuplicateProfile(string profileName)
@@ -100,6 +102,7 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 		
 		_profileSettings.Add(profileName, newProfile);
 		CurrentProfileName = $"{profileName}";
+		OnPropertyChanged(nameof(CurrentProfileName));
 	}
 
 	[RelayCommand] private void DeleteProfile(string profileName)
@@ -107,6 +110,7 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 		if (profileName == "default") { return; }
 		_profileSettings.Remove(profileName);
 		CurrentProfileName = "default";
+		OnPropertyChanged(nameof(CurrentProfileName));
 	}
 
 	private bool isSaving = false; // quick and dirty locking to avoid spamming saves.
