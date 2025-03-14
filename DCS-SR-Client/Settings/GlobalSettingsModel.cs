@@ -16,7 +16,7 @@ public partial class GlobalSettingsModel : ObservableObject
 	[ObservableProperty] private bool _autoConnectPrompt = false;
 	[ObservableProperty] private bool _autoConnectMismatchPrompt = true;
 	[ObservableProperty] private bool _radioOverlayTaskbarHide = false;
-	[ObservableProperty] private bool _refocusDCS = false;
+	[ObservableProperty] private bool _refocusDcs = false;
 	[ObservableProperty] private bool _expandControls = false;
 	
 	[ObservableProperty] private bool _minimiseToTray = false;
@@ -78,7 +78,7 @@ public partial class GlobalSettingsModel : ObservableObject
 
 	[ObservableProperty] private bool _requireAdmin = true;
 	
-	[ObservableProperty] private string _currentProfileName  = "Default";
+	[ObservableProperty] private string _currentProfileName  = "default";
 
 	[ObservableProperty] private bool _autoSelectSettingsProfile = false;
 	
@@ -93,9 +93,9 @@ public partial class GlobalSettingsModel : ObservableObject
 	[ObservableProperty] private int _idleTimeOut = (int)600;
 	
 	[ObservableProperty] private bool _allowRecording = false;
-	[ObservableProperty] private bool _aecordAudio = false;
+	[ObservableProperty] private bool _recordAudio = false;
 	[ObservableProperty] private bool _singleFileMixdown = false;
-	[ObservableProperty] private int _secordingQuality = (int)3;
+	[ObservableProperty] private int _recordingQuality = (int)3;
 	[ObservableProperty] private bool _disallowedAudioTone = false;
 	
 	[ObservableProperty] private bool _vox = false;

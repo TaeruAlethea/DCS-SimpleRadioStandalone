@@ -13,7 +13,6 @@ public partial class ProfileSettingsModel : ObservableObject, ICloneable
 		base.OnPropertyChanging(e);
 	}
 	
-	[ObservableProperty] private string _profileName = "Default";
 	[ObservableProperty] private bool _radioEffects = true;
 	[ObservableProperty] private bool _radioEffectsClipping = false;
 	[ObservableProperty] private bool _radioEncryptionEffects = true;
