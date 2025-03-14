@@ -6,9 +6,10 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
 public interface ISrsSettings
 {
-	GlobalSettingsModel GlobalSettings { get; }
-	ProfileSettingsModel CurrentProfile { get; }
+	GlobalSettingsModel GlobalSettings { get; set; }
+	ProfileSettingsModel CurrentProfile { get; set; }
 	List<string> ProfileNames { get; }
+	string CurrentProfileName { get; set; }
 	
 	IRelayCommand<string> CreateProfileCommand { get; }
 	IRelayCommand<string> RenameProfileCommand { get; }

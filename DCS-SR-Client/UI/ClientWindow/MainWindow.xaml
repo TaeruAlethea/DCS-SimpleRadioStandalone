@@ -500,7 +500,7 @@
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.VOXEnabled}" />
                                     <ToggleButton Grid.Row="0" Grid.Column="1"
-                                                  IsChecked="{Binding SrsSettings.GlobalSettings.VOX}"
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.Vox}"
                                                   ToolTip="{x:Static p:Resources.ToolTipVOXButton}"
                                                   ToolTipService.ShowOnDisabled="True" />
 
@@ -516,9 +516,9 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="2000"
-                                                Value="{Binding SrsSettings.GlobalSettings.VOXMinimumTime}"
+                                                Value="{Binding SrsSettings.GlobalSettings.VoxMinimumTime}"
                                                 Minimum="0"
-                                                IsEnabled="{Binding SrsSettings.GlobalSettings.VOX}"/>
+                                                IsEnabled="{Binding SrsSettings.GlobalSettings.Vox}"/>
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -549,10 +549,10 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="3"
-                                                Value="{Binding SrsSettings.GlobalSettings.VOXMode}"
+                                                Value="{Binding SrsSettings.GlobalSettings.VoxMode}"
                                                 Minimum="0"
                                                 ToolTip="{x:Static p:Resources.ToolTipVOXSensitivity}"
-                                                IsEnabled="{Binding SrsSettings.GlobalSettings.VOX}" />
+                                                IsEnabled="{Binding SrsSettings.GlobalSettings.Vox}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -578,9 +578,9 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="0"
-                                                Value="{Binding SrsSettings.GlobalSettings.VOXMinimumDB}"
+                                                Value="{Binding SrsSettings.GlobalSettings.VoxMinimumDb}"
                                                 Minimum="-96"
-                                                IsEnabled="{Binding SrsSettings.GlobalSettings.VOX}" />
+                                                IsEnabled="{Binding SrsSettings.GlobalSettings.Vox}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -737,7 +737,7 @@
                                     <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.VAICOMTXInhibitEnabled}" />
                                     <ToggleButton Grid.Row="4" Grid.Column="1"
-                                                  IsChecked="{Binding SrsSettings.GlobalSettings.VAICOMTXInhibitEnabled}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.VaicomTxInhibitEnabled}"/>
 
                                     <Label Grid.Row="5" Grid.Column="0"
                                            Content="{x:Static p:Resources.AllowAnonymousUsage}" />
@@ -790,7 +790,7 @@
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Top" Margin="5" Padding="5"
                                       ItemsSource="{Binding SrsSettings.ProfileNames}"
-                                      SelectedValue="{Binding SrsSettings.GlobalSettings.CurrentProfileName}" 
+                                      SelectedValue="{Binding SrsSettings.CurrentProfileName}" 
                                       SelectionChanged="ControlsProfile_OnSelectionChanged"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                                 <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CreateProfile}" Click="CreateProfile" />
@@ -872,7 +872,7 @@
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioSwitchIsPTT}" />
                                     <ToggleButton Grid.Row="0" Grid.Column="1"
-                                                  IsChecked="{Binding SrsSettings.CurrentProfile.AllowDcsPtt}" />
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.RadioSwitchIsPtt}" />
 
                                     <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.AutoSelectChannel}" />

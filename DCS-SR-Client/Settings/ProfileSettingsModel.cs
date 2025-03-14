@@ -1,111 +1,119 @@
 using System;
-using System.Configuration;
+using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
-public class ProfileSettingsModel : ICloneable
+public partial class ProfileSettingsModel : ObservableObject, ICloneable
 {
-	public string ProfileName { get; set; } = "Default";
-	public bool RadioEffects { get; set; } = true;
-	public bool RadioEffectsClipping { get; set; } = false;
-	public bool RadioEncryptionEffects { get; set; } = true;
-	public bool NatoFmTone { get; set; } = true;
-	public bool HaveQuickTone { get; set; } = true;
-	public bool RadioRxEffects_Start { get; set; } = true;
-	public bool RadioRxEffects_End { get; set; } = true;
+	protected override void OnPropertyChanging(PropertyChangingEventArgs e)
+	{
+		WeakReferenceMessenger.Default.Send(new SettingChangingMessage());
+		base.OnPropertyChanging(e);
+	}
 	
-	public string RadioTransmissionStartEffectName { get; set; } = "";
-	public string RadioTransmissionEndEffectName { get; set; } = "";
-	public string IntercomTransmissionStartEffectName { get; set; } = "";
-	public string IntercomTransmissionEndEffectName { get; set; } = "";
+	[ObservableProperty] private string _profileName = "Default";
+	[ObservableProperty] private bool _radioEffects = true;
+	[ObservableProperty] private bool _radioEffectsClipping = false;
+	[ObservableProperty] private bool _radioEncryptionEffects = true;
+	[ObservableProperty] private bool _natoFmTone = true;
+	[ObservableProperty] private bool _haveQuickTone = true;
+	[ObservableProperty] private bool _radioRxEffects_Start = true;
+	[ObservableProperty] private bool _radioRxEffects_End = true;
 	
-	public bool RadioTxEffects_Start { get; set; } = true;
-	public bool RadioTxEffects_End { get; set; } = true;
-	public bool MidsRadioEffect { get; set; } = true;
+	[ObservableProperty] private string _radioTransmissionStartEffectName = "";
+	[ObservableProperty] private string _radioTransmissionEndEffectName = "";
+	[ObservableProperty] private string _intercomTransmissionStartEffectName = "";
+	[ObservableProperty] private string _intercomTransmissionEndEffectName = "";
 	
-	public bool AutoSelectPresetChannel { get; set; } = true;
-	public bool AlwaysAllowHotasControls { get; set; } = false;
+	[ObservableProperty] private bool _radioTxEffectsStart = true;
+	[ObservableProperty] private bool _radioTxEffectsEnd = true;
+	[ObservableProperty] private bool _midsRadioEffect = true;
+	
+	[ObservableProperty] private bool _autoSelectPresetChannel = true;
+	[ObservableProperty] private bool _alwaysAllowHotasControls = false;
 
-	public bool AllowDcsPtt { get; set; } = true;
-	public bool RadioSwitchIsPtt { get; set; } = false;
-	public bool RadioSwitchIsPttOnlyWhenValid { get; set; } =  false;
-	public bool AlwaysAllowTransponderOverlay { get; set; } = false;
+	[ObservableProperty] private bool _allowDcsPtt = true;
+	[ObservableProperty] private bool _radioSwitchIsPtt = false;
+	[ObservableProperty] private bool _radioSwitchIsPttOnlyWhenValid =  false;
+	[ObservableProperty] private bool _alwaysAllowTransponderOverlay = false;
 
-	public float PttReleaseDelay { get; set; } = 0.0f;
-	public float PTTStartDelay { get; set; } = 0.0f;
-	public bool RadioBackgroundNoiseEffect { get; set; } = false;
+	[ObservableProperty] private float _pttReleaseDelay = 0.0f;
+	[ObservableProperty] private float _pttStartDelay = 0.0f;
+	[ObservableProperty] private bool _radioBackgroundNoiseEffect = false;
 	
-	public float NatoFmToneVolume { get; set; } = 1.2f;
-	public float HqToneVolume { get; set; } = 0.3f;
-	public float VhfNoiseVolume { get; set; } = 0.15f;
-	public float HfNoiseVolume { get; set; } = 0.15f;
-	public float UhfNoiseVolume { get; set; } = 0.15f;
-	public float FmNoiseVolume { get; set; } = 0.4f;
+	[ObservableProperty] private float _natoFmToneVolume = 1.2f;
+	[ObservableProperty] private float _hqToneVolume = 0.3f;
+	[ObservableProperty] private float _vhfNoiseVolume = 0.15f;
+	[ObservableProperty] private float _hfNoiseVolume = 0.15f;
+	[ObservableProperty] private float _uhfNoiseVolume = 0.15f;
+	[ObservableProperty] private float _fmNoiseVolume = 0.4f;
 	
-	public float AmCollisionToneVolume { get; set; } = 1.0f;
-	public bool RotaryStyleIncrement { get; set; } = false;
-	public bool AmbientCockpitNoiseEffect { get; set; } = true;
-	public float AmbientCockpitNoiseEffectVolume { get; set; } = 1.0f;
-	public bool AmbientCockpitIntercomNoiseEffect { get; set; } = false;
-	public bool DisableExpansionRadios { get; set; } = false;
-	public float VolumeIntercom { get; set; } = 0.0f;
-	public float VolumeRadio01 { get; set; } = 0.0f;
-	public float VolumeRadio02 { get; set; } = 0.0f;
-	public float VolumeRadio03 { get; set; } = 0.0f;
-	public float VolumeRadio04 { get; set; } = 0.0f;
-	public float VolumeRadio05 { get; set; } = 0.0f;
-	public float VolumeRadio06 { get; set; } = 0.0f;
-	public float VolumeRadio07 { get; set; } = 0.0f;
-	public float VolumeRadio08 { get; set; } = 0.0f;
-	public float VolumeRadio09 { get; set; } = 0.0f;
-	public float VolumeRadio10 { get; set; } = 0.0f;
+	[ObservableProperty] private float _amCollisionToneVolume = 1.0f;
+	[ObservableProperty] private bool _rotaryStyleIncrement = false;
+	[ObservableProperty] private bool _ambientCockpitNoiseEffect = true;
+	[ObservableProperty] private float _ambientCockpitNoiseEffectVolume = 1.0f;
+	[ObservableProperty] private bool _ambientCockpitIntercomNoiseEffect = false;
+	[ObservableProperty] private bool _disableExpansionRadios = false;
+	[ObservableProperty] private float _volumeIntercom = 0.0f;
+	[ObservableProperty] private float _volumeRadio01 = 0.0f;
+	[ObservableProperty] private float _volumeRadio02 = 0.0f;
+	[ObservableProperty] private float _volumeRadio03 = 0.0f;
+	[ObservableProperty] private float _volumeRadio04 = 0.0f;
+	[ObservableProperty] private float _volumeRadio05 = 0.0f;
+	[ObservableProperty] private float _volumeRadio06 = 0.0f;
+	[ObservableProperty] private float _volumeRadio07 = 0.0f;
+	[ObservableProperty] private float _volumeRadio08 = 0.0f;
+	[ObservableProperty] private float _volumeRadio09 = 0.0f;
+	[ObservableProperty] private float _volumeRadio10 = 0.0f;
 	
-	public InputSettingsModel InputIntercom { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch01 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch02 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch03 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch04 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch05 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch06 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch07 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch08 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch09 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputSwitch10 { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _inputIntercom = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch01 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch02 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch03 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch04 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch05 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch06 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch07 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch08 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch09 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputSwitch10 = new InputSettingModel();
 	
-	public InputSettingsModel RadioNext { get; set; } = new InputSettingsModel();
-	public InputSettingsModel RadioPrevious { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _radioNext = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _radioPrevious = new InputSettingModel();
 	
-	public InputSettingsModel InputIntercomPtt { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputPushToTalk { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _inputIntercomPtt = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputPushToTalk = new InputSettingModel();
 	
-	public InputSettingsModel AwacsOverlayToggle { get; set; } = new InputSettingsModel();
-	public InputSettingsModel OverlayToggle { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _awacsOverlayToggle = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _overlayToggle = new InputSettingModel();
 
-	public InputSettingsModel InputUp100 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputUp10 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputUp1 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputUp01 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputUp001 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputUp0001 { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _inputUp100 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputUp10 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputUp1 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputUp01 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputUp001 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputUp0001 = new InputSettingModel();
 
-	public InputSettingsModel InputDown100 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputDown10 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputDown1 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputDown01 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputDown001 { get; set; } = new InputSettingsModel();
-	public InputSettingsModel InputDown0001 { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _inputDown100 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputDown10 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputDown1 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputDown01 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputDown001 = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _inputDown0001 = new InputSettingModel();
 	
-	public InputSettingsModel TransponderIdent { get; set; } = new InputSettingsModel();
-	public InputSettingsModel GuardToggle { get; set; } = new InputSettingsModel();
-	public InputSettingsModel EncryptionToggle { get; set; } = new InputSettingsModel();
-	public InputSettingsModel EncryptionKeyUp { get; set; } = new InputSettingsModel();
-	public InputSettingsModel EncryptionKeyDown { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _transponderIdent = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _guardToggle = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _encryptionToggle = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _encryptionKeyUp = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _encryptionKeyDown = new InputSettingModel();
 	
-	public InputSettingsModel RadioChannelUp { get; set; } = new InputSettingsModel();
-	public InputSettingsModel RadioChannelDown { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _radioChannelUp = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _radioChannelDown = new InputSettingModel();
 	
-	public InputSettingsModel RadioVolumeUp { get; set; } = new InputSettingsModel();
-	public InputSettingsModel RadioVolumeDown { get; set; } = new InputSettingsModel();
+	[ObservableProperty] private InputSettingModel _radioVolumeUp = new InputSettingModel();
+	[ObservableProperty] private InputSettingModel _radioVolumeDown = new InputSettingModel();
 	
 	public object Clone()
 	{

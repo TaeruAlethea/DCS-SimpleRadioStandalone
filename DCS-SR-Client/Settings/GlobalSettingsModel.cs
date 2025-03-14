@@ -6,98 +6,104 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
 public partial class GlobalSettingsModel : ObservableObject
 {
-	public bool AutoConnect { get; set; } = true;
-	public bool AutoConnectPrompt { get; set; } = false;
-	public bool AutoConnectMismatchPrompt { get; set; } = true;
-	public bool RadioOverlayTaskbarHide { get; set; } = false;
-	public bool RefocusDCS { get; set; } = false;
-	public bool ExpandControls { get; set; } = false;
-	
-	public bool MinimiseToTray { get; set; } = false;
-	public bool StartMinimised { get; set; } = false;
-	
-	public string AudioInputDeviceId { get; set; } = string.Empty;
-	public string AudioOutputDeviceId { get; set; } = string.Empty;
-	public string MicAudioOutputDeviceId { get; set; } = string.Empty;
-	
-	public string LastServer { get; set; } = "127.0.0.1";
-	
-	public double MicBoost { get; set; } = (double)0.514;
-	public double SpeakerBoost { get; set; } = (double)0.514;
-	
-	public double RadioX { get; set; } = (double)300;
-	public double RadioY { get; set; } = (double)300;
-	public double RadioSize { get; set; } = (double)1.0;
-	public double RadioOpacity { get; set; } = (double)1.0;
-	
-	public double RadioWidth { get; set; } = (double)122;
-	public double RadioHeight { get; set; } = (double)270;
-	
-	public double ClientX { get; set; } = (double)200;
-	public double ClientY { get; set; } = (double)200;
-	
-	public double AwacsX { get; set; } = 0;
-	public double AwacsY { get; set; } = (double)300;
-	
-	
-	public string CliendIdShort { get; set; } = string.Empty;
-	public string ClientIdLong { get; set; } = string.Empty;
-	
-	public int DCSLOSOutgoingUDP { get; set; } = (int)9086;
-	public int DCSIncomingUDP { get; set; } = (int)9084;
-	public int CommandListenerUDP { get; set; } = (int)9040;
-	public int OutgoingDCSUDPInfo { get; set; } = (int)7080;
-	public int OutgoingDCSUDPOther { get; set; } = (int)7082;
-	public int DCSIncomingGameGUIUDP { get; set; } = (int)5068;
-	public int DCSLOSIncomingUDP { get; set; } = (int)9085;
-	public int DCSAutoConnectUDP { get; set; } = (int)5069;
-	
-	public bool AutomaticGainControl { get; set; } = true;
-	public int AGCTarget { get; set; } = (int)30000;
-	public int AGCDecrement { get; set; } = (int)-60;
-	public int AGCLevelMax { get; set; } = (int)68;
-	
-	public bool Denoise { get; set; } = true;
-	public int DenoiseAttenuation { get; set; } = (int)-30;
-	
-	public string LastSeenName { get; set; } = string.Empty;
-	
-	public bool CheckForBetaUpdates { get; set; } = false;
-	
-	public bool AllowMultipleInstances { get; set; } = false;
-	
-	public bool DisableWindowVisibilityCheck { get; set; } = false;
+	protected override void OnPropertyChanging(PropertyChangingEventArgs e)
+	{
+		WeakReferenceMessenger.Default.Send(new SettingChangingMessage());
+		base.OnPropertyChanging(e);
+	}
 
-	public bool PlayConnectionSounds { get; set; } = true;
+	[ObservableProperty] private bool _autoConnect = true;
+	[ObservableProperty] private bool _autoConnectPrompt = false;
+	[ObservableProperty] private bool _autoConnectMismatchPrompt = true;
+	[ObservableProperty] private bool _radioOverlayTaskbarHide = false;
+	[ObservableProperty] private bool _refocusDCS = false;
+	[ObservableProperty] private bool _expandControls = false;
+	
+	[ObservableProperty] private bool _minimiseToTray = false;
+	[ObservableProperty] private bool _startMinimised = false;
+	
+	[ObservableProperty] private string _audioInputDeviceId = string.Empty;
+	[ObservableProperty] private string _audioOutputDeviceId = string.Empty;
+	[ObservableProperty] private string _micAudioOutputDeviceId = string.Empty;
 
-	public bool RequireAdmin { get; set; } = true;
+	[ObservableProperty] private string _lastServer = "127.0.0.1";
 	
-	public string CurrentProfileName  { get; set; } = "Default";
+	[ObservableProperty] private double _micBoost = (double)0.514;
+	[ObservableProperty] private double _speakerBoost = (double)0.514;
+	
+	[ObservableProperty] private double _radioX = (double)300;
+	[ObservableProperty] private double _radioY = (double)300;
+	[ObservableProperty] private double _radioSize = (double)1.0;
+	[ObservableProperty] private double _radioOpacity = (double)1.0;
+	
+	[ObservableProperty] private double _radioWidth = (double)122;
+	[ObservableProperty] private double _radioHeight = (double)270;
+	
+	[ObservableProperty] private double _clientX = (double)200;
+	[ObservableProperty] private double _clientY = (double)200;
+	
+	[ObservableProperty] private double _awacsX = 0;
+	[ObservableProperty] private double _awacsY = (double)300;
+	
+	
+	[ObservableProperty] private string _cliendIdShort = string.Empty;
+	[ObservableProperty] private string _clientIdLong = string.Empty;
+	
+	[ObservableProperty] private int _dcsLosOutgoingUdp = (int)9086;
+	[ObservableProperty] private int _dcsIncomingUdp = (int)9084;
+	[ObservableProperty] private int _commandListenerUdp = (int)9040;
+	[ObservableProperty] private int _outgoingDcsUdpInfo = (int)7080;
+	[ObservableProperty] private int _outgoingDcsUdpOther = (int)7082;
+	[ObservableProperty] private int _dcsIncomingGameGuiUdp = (int)5068;
+	[ObservableProperty] private int _dcsLosIncomingUdp = (int)9085;
+	[ObservableProperty] private int _dcsAutoConnectUdp = (int)5069;
+	
+	[ObservableProperty] private bool _automaticGainControl = true;
+	[ObservableProperty] private int _agcTarget = (int)30000;
+	[ObservableProperty] private int _agcDecrement = (int)-60;
+	[ObservableProperty] private int _agcLevelMax = (int)68;
+	
+	[ObservableProperty] private bool _denoise = true;
+	[ObservableProperty] private int _denoiseAttenuation = (int)-30;
+	
+	[ObservableProperty] private string _lastSeenName = string.Empty;
+	
+	[ObservableProperty] private bool _checkForBetaUpdates = false;
+	
+	[ObservableProperty] private bool _allowMultipleInstances = false;
+	
+	[ObservableProperty] private bool _disableWindowVisibilityCheck = false;
 
-	public bool AutoSelectSettingsProfile { get; set; } = false;
+	[ObservableProperty] private bool _playConnectionSounds = true;
+
+	[ObservableProperty] private bool _requireAdmin = true;
 	
-	public int LotATCIncomingUDP { get; set; } = (int)10710;
-	public int LotATCOutgoingUDP { get; set; } = (int)10711;
-	public int LotATCHeightOffset { get; set; } = (int)50;
+	[ObservableProperty] private string _currentProfileName  = "Default";
+
+	[ObservableProperty] private bool _autoSelectSettingsProfile = false;
 	
-	public int VAICOMIncomingUDP { get; set; } = (int)33501;
-	public bool VAICOMTXInhibitEnabled { get; set; } = false;
-	public bool ShowTransmitterName { get; set; } = true;
+	[ObservableProperty] private int _lotAtcIncomingUdp = (int)10710;
+	[ObservableProperty] private int _lotAtcOutgoingUdp = (int)10711;
+	[ObservableProperty] private int _lotAtcHeightOffset = (int)50;
 	
-	public int IdleTimeOut { get; set; } = (int)600;
+	[ObservableProperty] private int _vaicomIncomingUdp = (int)33501;
+	[ObservableProperty] private bool _vaicomTxInhibitEnabled = false;
+	[ObservableProperty] private bool _showTransmitterName = true;
 	
-	public bool AllowRecording { get; set; } = false;
-	public bool RecordAudio { get; set; } = false;
-	public bool SingleFileMixdown { get; set; } = false;
-	public int RecordingQuality { get; set; } = (int)3;
-	public bool DisallowedAudioTone { get; set; } = false;
+	[ObservableProperty] private int _idleTimeOut = (int)600;
 	
-	public bool VOX { get; set; } = false;
-	public int VOXMode { get; set; } = (int)3;
-	public int VOXMinimumTime { get; set; } = (int)300;
-	public double VOXMinimumDB { get; set; } = (double)-59.0;
+	[ObservableProperty] private bool _allowRecording = false;
+	[ObservableProperty] private bool _aecordAudio = false;
+	[ObservableProperty] private bool _singleFileMixdown = false;
+	[ObservableProperty] private int _secordingQuality = (int)3;
+	[ObservableProperty] private bool _disallowedAudioTone = false;
 	
-	public bool AllowXInputController { get; set; } = false;
-	public string LastPresetsFolder { get; set; } = string.Empty;
+	[ObservableProperty] private bool _vox = false;
+	[ObservableProperty] private int _voxMode = (int)3;
+	[ObservableProperty] private int _voxMinimumTime = (int)300;
+	[ObservableProperty] private double _voxMinimumDb = (double)-59.0;
+	
+	[ObservableProperty] private bool _allowXInputController = false;
+	[ObservableProperty] private string _lastPresetsFolder = string.Empty;
 
 }

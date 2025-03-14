@@ -12,38 +12,34 @@ using Newtonsoft.Json;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
-public partial class SrsSettingsService : ObservableRecipient, IRecipient<SettingChangedMessage>, ISrsSettings
+public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 {
 	const string SettingsFileName = "./appsettings.json";
 	
 	private IConfigurationRoot _configuration;
 
 	// All Settings
-	[ObservableProperty] [NotifyPropertyChangedFor(nameof(CurrentProfile))]
+	[ObservableProperty]
 	private GlobalSettingsModel _globalSettings = new GlobalSettingsModel();
+	private List<ProfileSettingsModel> _profileSettings = new List<ProfileSettingsModel>();
 	partial void OnGlobalSettingsChanged(GlobalSettingsModel value)
 	{
-		if (GlobalSettings.CurrentProfileName != value.CurrentProfileName)
-		{
-			ProfileSettingsModel profileOfIncomingName = _profileSettings.Find(p =>
-				p.ProfileName == value.CurrentProfileName);
-			CurrentProfile = profileOfIncomingName;
-			OnPropertyChanged(nameof(CurrentProfile));
-		}
-		
-		SaveSettings(GlobalSettings, _profileSettings);
+		SaveSettings(value, _profileSettings);
 	}
-	private List<ProfileSettingsModel> _profileSettings = new List<ProfileSettingsModel>();
 	
 	// Only the Current Profile
+	[ObservableProperty] private string _currentProfileName;
+	partial void OnCurrentProfileNameChanged(string value)
+	{
+		GlobalSettings.CurrentProfileName = value;
+		CurrentProfile = _profileSettings.Find(x => x.ProfileName == value);
+	}
+
 	[ObservableProperty] private ProfileSettingsModel _currentProfile;
 	
 	public List<string> ProfileNames
 	{
-		get
-		{
-			return _profileSettings.Select(x => x.ProfileName).ToList();
-		}
+		get => _profileSettings.Select(x => x.ProfileName).ToList();
 	}
 
 	public SrsSettingsService()
@@ -57,6 +53,12 @@ public partial class SrsSettingsService : ObservableRecipient, IRecipient<Settin
 
 		_configuration.GetSection("GlobalSettings").Bind(GlobalSettings);
 		_configuration.GetSection("ProfileSettings").Bind(_profileSettings);
+		
+		WeakReferenceMessenger.Default.Register<SettingChangingMessage>(this, (r, m) =>
+		{
+			OnPropertyChanging();
+			SaveSettings(_globalSettings, _profileSettings);
+		});
 	}
 	
 	public class SettingsModel
@@ -125,18 +127,8 @@ public partial class SrsSettingsService : ObservableRecipient, IRecipient<Settin
 		File.WriteAllText(SettingsFileName, json, Encoding.UTF8);
 	}
 
-	public void Receive(SettingChangedMessage message)
-	{
-		if (message.changeType == SettingChangedMessage.SettingChangeType.Global)
-		{
-			OnPropertyChanged(nameof(GlobalSettings));
-		}
-
-		if (message.changeType == SettingChangedMessage.SettingChangeType.Profile)
-		{
-			OnPropertyChanged(nameof(CurrentProfile));
-		}
-	}
+	public void Receive(SettingChangingMessage message)
+	{ }
 }
 
 
