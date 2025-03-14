@@ -10,6 +10,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
@@ -137,6 +138,10 @@ namespace DCS_SR_Client
 
             // Services
             services.AddSingleton<ISrsSettings, SrsSettingsService>();
+            services.AddSingleton(typeof(AudioInputSingleton));
+            services.AddSingleton(typeof(AudioOutputSingleton));
+            services.AddSingleton(typeof(ClientStateSingleton));
+            services.AddSingleton(typeof(ConnectedClientsSingleton));
 
             // ViewModels
             services.AddSingleton<IMainViewModel, MainWindowViewModel>();
