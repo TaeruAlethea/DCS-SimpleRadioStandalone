@@ -14,6 +14,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NLog.Config;
@@ -72,6 +73,7 @@ namespace DCS_SR_Client
             }
             
             Services = ConfigureServices();
+            Ioc.Default.ConfigureServices(Services);
             
             SetupLogging();
 
@@ -122,7 +124,7 @@ namespace DCS_SR_Client
             InitializeComponent();
             // Boostrap the DataContext for MVVM.
             var viewModel = Services.GetRequiredService<IMainViewModel>();
-            var mainWindow = new MainWindow(viewModel)
+            var mainWindow = new MainWindow()
             {
                 DataContext = viewModel
             };
@@ -138,10 +140,10 @@ namespace DCS_SR_Client
 
             // Services
             services.AddSingleton<ISrsSettings, SrsSettingsService>();
-            services.AddSingleton(typeof(AudioInputSingleton));
-            services.AddSingleton(typeof(AudioOutputSingleton));
-            services.AddSingleton(typeof(ClientStateSingleton));
-            services.AddSingleton(typeof(ConnectedClientsSingleton));
+            services.AddSingleton(AudioInputSingleton.Instance);
+            services.AddSingleton(AudioOutputSingleton.Instance);
+            services.AddSingleton(ClientStateSingleton.Instance);
+            services.AddSingleton(ConnectedClientsSingleton.Instance);
 
             // ViewModels
             services.AddSingleton<IMainViewModel, MainWindowViewModel>();

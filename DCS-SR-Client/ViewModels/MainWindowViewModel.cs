@@ -23,6 +23,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using CommunityToolkit.Mvvm.Input;
 using NLog;
 
@@ -30,6 +31,12 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 {
+	[ObservableProperty] private ISrsSettings _srsSettings;
+	public AudioInputSingleton AudioInput { get; }
+	public AudioOutputSingleton AudioOutput { get; }
+	[ObservableProperty] private ClientStateSingleton _clientState;
+	[ObservableProperty] private ConnectedClientsSingleton _clients;
+	
 	[Obsolete("MainWindow Reference is not MVVM compliant.")]
 	//public MainWindow ToBeDepricatedMainWindow { get; init; }
 	
@@ -37,13 +44,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	
 	[ObservableProperty] private AudioManager _audioManager;
 	[ObservableProperty] private AudioPreview _audioPreview;
-	/// <remarks>Used in the XAML for DataBinding many things</remarks>
-	public AudioInputSingleton AudioInput { get; } = AudioInputSingleton.Instance;
-	/// <remarks>Used in the XAML for DataBinding output audio related UI elements</remarks>
-	public AudioOutputSingleton AudioOutput { get; } = AudioOutputSingleton.Instance;
 	
-	[ObservableProperty] private ClientStateSingleton _clientState = ClientStateSingleton.Instance;
-	[ObservableProperty] private ConnectedClientsSingleton _clients = ConnectedClientsSingleton.Instance;
 	[ObservableProperty] private SRSClientSyncHandler _client;
 	[ObservableProperty] private DCSAutoConnectHandler _dcsAutoConnectListener;
 	
@@ -59,13 +60,17 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	[ObservableProperty]
 	private SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 	
-	[ObservableProperty] private ISrsSettings _srsSettings;
-
-	public MainWindowViewModel(ISrsSettings srsSettings)
+	public MainWindowViewModel()
 	{
+		// Grab Dependencies from DI Container
+		SrsSettings = Ioc.Default.GetRequiredService<ISrsSettings>();
+		AudioInput = Ioc.Default.GetRequiredService<AudioInputSingleton>();
+		AudioOutput = Ioc.Default.GetRequiredService<AudioOutputSingleton>();
+		ClientState = Ioc.Default.GetRequiredService<ClientStateSingleton>();
+		Clients = Ioc.Default.GetRequiredService<ConnectedClientsSingleton>();
+		
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
-		_srsSettings = srsSettings;
 		
 		UpdaterChecker.CheckForUpdate(SrsSettings.GlobalSettings.CheckForBetaUpdates);
 

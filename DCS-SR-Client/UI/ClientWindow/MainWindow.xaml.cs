@@ -23,6 +23,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Common.Helpers;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Overlay;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Win32;
 using NAudio.CoreAudioApi;
 using NLog;
@@ -50,17 +51,9 @@ public partial class MainWindow : IMainWindow
     //used to debounce toggle
     private long _toggleShowHide;
     
-    /// <summary>
-    /// No Arg constructor should only be used for XAML previewing. 
-    /// </summary>
-    public MainWindow() 
+    public MainWindow()
     {
-        ViewModel = new MainWindowViewModel( new SrsSettingsService() );
-    }
-    
-    public MainWindow(IMainViewModel viewModel)
-    {
-        ViewModel = viewModel;
+        DataContext = ViewModel = Ioc.Default.GetRequiredService<IMainViewModel>();
         InitializeComponent();
 
         // Initialize ToolTip controls
