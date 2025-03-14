@@ -9,7 +9,7 @@
              d:DesignWidth="300"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance settings:InputSettingModel, IsDesignTimeCreatable=True}">
-    <Grid>
+	<Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="2*" />
@@ -22,7 +22,9 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Label Grid.Row="0" Grid.Column="0">
-	        <Label Content="{Binding InputName}" />
+	        <Label Content="{Binding Path=InputName, 
+	               	        RelativeSource={RelativeSource FindAncestor, 
+	               	        AncestorType={x:Type UserControl}}}" />
         </Label>
         <TextBox Grid.Row="0" Grid.Column="1"
                  VerticalContentAlignment="Center"
@@ -44,8 +46,14 @@
         <StackPanel Grid.Row="1" Grid.Column="0" 
                     Orientation="Vertical"
                     VerticalAlignment="Center">
-	        <Label Content="{Binding InputName}" />
-	        <Label Content="{x:Static p:Resources.InputModifier}" />
+	        <StackPanel Orientation="Horizontal"
+	                    HorizontalAlignment="Center"
+	                    VerticalAlignment="Center">
+		        <Label Content="{Binding Path=InputName, 
+													RelativeSource={RelativeSource FindAncestor, 
+													AncestorType={x:Type UserControl}}}" />
+		        <Label Content="{x:Static p:Resources.InputModifier}" />
+	        </StackPanel>
         </StackPanel>
         <TextBox Grid.Row="1" Grid.Column="1"
                  VerticalContentAlignment="Center"
