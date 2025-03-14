@@ -7,7 +7,9 @@ using System.Runtime;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Threading;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
@@ -17,6 +19,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Preferences;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -27,8 +30,10 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 {
-	private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+	[Obsolete("MainWindow Reference is not MVVM compliant.")]
+	public MainWindow ToBeDepricatedMainWindow { get; init; }
 	
+	private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 	
 	[ObservableProperty] private AudioManager _audioManager;
 	[ObservableProperty] private AudioPreview _audioPreview;
@@ -55,10 +60,16 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	private SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 	
 	[ObservableProperty] ISrsSettings _srsSettings;
-	
+
+	public MainWindowViewModel()
+	{
+		_srsSettings = new SrsSettingsService();
+	}
+
 	public MainWindowViewModel(ISrsSettings srsSettings)
 	{
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+		ToBeDepricatedMainWindow = new MainWindow(viewModel:this);
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
 		_srsSettings = srsSettings;
 		
@@ -70,7 +81,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		
 		AudioManager.SpeakerBoost = (float)SrsSettings.GlobalSettings.SpeakerBoost;
 		
-		DcsAutoConnectListener = new DCSAutoConnectHandler(AutoConnect);
+		DcsAutoConnectListener = new DCSAutoConnectHandler(ToBeDepricatedMainWindow.AutoConnect);
 
 		_updateTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
 		_updateTimer.Tick += ToBeDepricatedMainWindow.UpdateVUMeters;
@@ -271,5 +282,4 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		//stop timer
 		_updateTimer?.Stop();
 	}
-	
 }

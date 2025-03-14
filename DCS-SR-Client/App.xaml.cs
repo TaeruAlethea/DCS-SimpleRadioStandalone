@@ -10,6 +10,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
@@ -28,6 +30,35 @@ namespace DCS_SR_Client
         private System.Windows.Forms.NotifyIcon _notifyIcon;
         private bool loggingReady = false;
         private static Logger Logger = LogManager.GetCurrentClassLogger();
+     
+        /// <summary>
+        /// Gets the current <see cref="App"/> instance in use
+        /// </summary>
+        public new static App Current => (App)Application.Current;
+
+        /// <summary>
+        /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
+        /// </summary>
+        public IServiceProvider Services { get; }
+
+        /// <summary>
+        /// Configures the services for the application.
+        /// </summary>
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            // Services
+            services.AddSingleton<ISrsSettings, SrsSettingsService>();
+
+            // ViewModels
+            services.AddSingleton<IMainViewModel, MainWindowViewModel>();
+            
+            // Views
+            services.AddSingleton<IMainWindow, MainWindow>();
+            
+            return services.BuildServiceProvider();
+        }
         
         public App()
         {
@@ -317,32 +348,5 @@ namespace DCS_SR_Client
                 logger.Error((Exception) e.ExceptionObject, "Received unhandled exception, {0}", e.IsTerminating ? "exiting" : "continuing");
             }
         }
-        
-        /// <summary>
-        /// Gets the current <see cref="App"/> instance in use
-        /// </summary>
-        public new static App Current => (App)Application.Current;
-
-        /// <summary>
-        /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
-        /// </summary>
-        public IServiceProvider Services { get; }
-
-        /// <summary>
-        /// Configures the services for the application.
-        /// </summary>
-        private static IServiceProvider ConfigureServices()
-        {
-            var services = new ServiceCollection();
-
-            // Services
-            services.AddSingleton<ISrsSettings, SrsSettingsService>();
-
-            // ViewModels
-            services.AddSingleton<IMainViewModel, MainWindowViewModel>();
-            
-            return services.BuildServiceProvider();
-        }
-        
     }
 }
