@@ -40,22 +40,6 @@ namespace DCS_SR_Client
         /// Gets the <see cref="IServiceProvider"/> instance to resolve application services.
         /// </summary>
         public IServiceProvider Services { get; }
-
-        /// <summary>
-        /// Configures the services for the application.
-        /// </summary>
-        private static IServiceProvider ConfigureServices()
-        {
-            var services = new ServiceCollection();
-
-            // Services
-            services.AddSingleton<ISrsSettings, SrsSettingsService>();
-
-            // ViewModels
-            services.AddSingleton<IMainViewModel, MainWindowViewModel>();
-            
-            return services.BuildServiceProvider();
-        }
         
         public App()
         {
@@ -135,13 +119,32 @@ namespace DCS_SR_Client
             InitNotificationIcon();
             
             InitializeComponent();
-            // Boostrap the DataContext for MVVM. 
+            // Boostrap the DataContext for MVVM.
             var viewModel = Services.GetRequiredService<IMainViewModel>();
-            var mainWindow = new MainWindow(viewModel);
-            mainWindow.DataContext = viewModel;
+            var mainWindow = new MainWindow(viewModel)
+            {
+                DataContext = viewModel
+            };
             mainWindow.Show();
         }
 
+        /// <summary>
+        /// Configures the services for the application.
+        /// </summary>
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            // Services
+            services.AddSingleton<ISrsSettings, SrsSettingsService>();
+
+            // ViewModels
+            services.AddSingleton<IMainViewModel, MainWindowViewModel>();
+            
+            return services.BuildServiceProvider();
+        }
+        
+        
         private void ListArgs()
         {
             Logger.Info("Arguments:");
@@ -162,6 +165,8 @@ namespace DCS_SR_Client
             WindowsPrincipal principal = new WindowsPrincipal(WindowsIdentity.GetCurrent());
             bool hasAdministrativeRight = principal.IsInRole(WindowsBuiltInRole.Administrator);
 
+            
+            
             if (!hasAdministrativeRight && GlobalSettingsStore.Instance.GetClientSettingBool(GlobalSettingsKeys.RequireAdmin))
             {
                 Task.Factory.StartNew(() =>
