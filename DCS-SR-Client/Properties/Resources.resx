@@ -1223,4 +1223,16 @@ Requires Tx or Rx Effects On</value>
   <data name="DisableExpansionRadios" xml:space="preserve">
     <value>Disable Expansion Radios</value>
   </data>
+  <data name="ControlsHeaderExpandedRadios" xml:space="preserve">
+    <value>Expanded Radios</value>
+  </data>
+  <data name="ControlsHeaderSpecialFunctions" xml:space="preserve">
+    <value>Special Functions</value>
+  </data>
+  <data name="ControlsHeaderFreqencyControls" xml:space="preserve">
+    <value>Direct Freqency Controls</value>
+  </data>
+  <data name="ControlsHeaderMiscellaneous" xml:space="preserve">
+    <value>Miscellaneous</value>
+  </data>
 </root>

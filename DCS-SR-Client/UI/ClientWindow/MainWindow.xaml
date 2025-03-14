@@ -346,13 +346,113 @@
 	                        <Label Grid.Column="1" Content="{x:Static p:Resources.DeviceLabel}" />
 	                        <Label Grid.Column="2" Content="{x:Static p:Resources.ButtonLabel}" />
                         </Grid>
-
-                        <local:InputBindingControl2 InputName="Radio 1"
+                        <local:InputBindingControl2 InputName="Intercom"
+                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputIntercom}"/>
+                        <local:InputBindingControl2 InputName="Radio 1 Select"
                                                     DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch01}" />
-                        <local:InputBindingControl2 InputName="Radio 2"
+                        <local:InputBindingControl2 InputName="Radio 2 Select"
                                                     DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch02}" />
-                        <local:InputBindingControl2 InputName="Radio 3"
+                        <local:InputBindingControl2 InputName="Radio 3 Select"
                                                     DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch03}"/>
+                        <local:InputBindingControl2 InputName="Intercom Select"
+                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputIntercom}"/>
+                        <local:InputBindingControl2 InputName="Push To Talk"
+                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputPushToTalk}"/>
+                        <local:InputBindingControl2 InputName="Radio Overlay Toggle"
+                                                    DataContext="{Binding SrsSettings.CurrentProfile.OverlayToggle}"/>
+                        <Expander Header="{x:Static p:Resources.ControlsHeaderSpecialFunctions}" 
+                                  IsExpanded="False" >
+	                        <StackPanel Orientation="Vertical"
+	                                    HorizontalAlignment="Stretch"
+	                                    VerticalAlignment="Stretch" >
+		                        <local:InputBindingControl2 InputName="Special Intercom Select & PTT"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputIntercomPtt}"/>
+		                        <local:InputBindingControl2 InputName="Toggle IDENT"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.TransponderIdent}"/>
+		                        <local:InputBindingControl2 InputName="Toggle Guard"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.GuardToggle}"/>
+		                        <local:InputBindingControl2 InputName="Toggle Encryption"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.EncryptionToggle}"/>
+		                        <local:InputBindingControl2 InputName="Encryption Key Up"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.EncryptionKeyUp}"/>
+		                        <local:InputBindingControl2 InputName="Encryption Key Down"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.EncryptionKeyDown}"/>
+	                        </StackPanel>
+                        </Expander>
+                        
+                        <Expander Header="{x:Static p:Resources.ControlsHeaderExpandedRadios}" 
+                                  IsExpanded="False" >
+	                        <StackPanel Orientation="Vertical"
+	                                    HorizontalAlignment="Stretch"
+	                                    VerticalAlignment="Stretch" >
+	                        <local:InputBindingControl2 InputName="Radio 4"
+	                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch04}"/>
+	                        <local:InputBindingControl2 InputName="Radio 5"
+	                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch05}"/>
+	                        <local:InputBindingControl2 InputName="Radio 6"
+	                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch06}"/>
+	                        <local:InputBindingControl2 InputName="Radio 7"
+	                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch07}"/>
+	                        <local:InputBindingControl2 InputName="Radio 8"
+	                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch08}"/>
+	                        <local:InputBindingControl2 InputName="Radio 9"
+	                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch09}"/>
+	                        <local:InputBindingControl2 InputName="Radio 10"
+	                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch10}"/>
+	                        </StackPanel>
+                        </Expander>
+                        <Expander Header="{x:Static p:Resources.ControlsHeaderFreqencyControls}" 
+                                  IsExpanded="False" >
+	                        <StackPanel Orientation="Vertical"
+	                                    HorizontalAlignment="Stretch"
+	                                    VerticalAlignment="Stretch" >
+		                        <local:InputBindingControl2 InputName="Up 100MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputUp100}"/>
+		                        <local:InputBindingControl2 InputName="Up 10MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputUp10}"/>
+		                        <local:InputBindingControl2 InputName="Up 1MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputUp1}"/>
+		                        <local:InputBindingControl2 InputName="Up 0.1MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputUp01}"/>
+		                        <local:InputBindingControl2 InputName="Up 0.01MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputUp001}"/>
+		                        <local:InputBindingControl2 InputName="Up 0.001MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputUp0001}"/>
+		                        <local:InputBindingControl2 InputName="Down 100MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputDown100}"/>
+		                        <local:InputBindingControl2 InputName="Down 10MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputDown10}"/>
+		                        <local:InputBindingControl2 InputName="Down 1MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputDown1}"/>
+		                        <local:InputBindingControl2 InputName="Down 0.1MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputDown01}"/>
+		                        <local:InputBindingControl2 InputName="Down 0.01MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputDown001}"/>
+		                        <local:InputBindingControl2 InputName="Down 0.001MHz"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputDown0001}"/>
+	                        </StackPanel>
+                        </Expander>
+                        <Expander Header="{x:Static p:Resources.ControlsHeaderMiscellaneous}" 
+                                  IsExpanded="False" >
+	                        <StackPanel Orientation="Vertical"
+	                                    HorizontalAlignment="Stretch"
+	                                    VerticalAlignment="Stretch" >
+		                        <local:InputBindingControl2 InputName="Channel Up"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.RadioChannelUp}"/>
+		                        <local:InputBindingControl2 InputName="Channel Down"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.RadioChannelDown}"/>
+		                        <local:InputBindingControl2 InputName="Volume Up"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.RadioVolumeUp}"/>
+		                        <local:InputBindingControl2 InputName="Volume Down"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.RadioVolumeDown}"/>
+		                        <local:InputBindingControl2 InputName="Select Next Radio"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.RadioNext}"/>
+		                        <local:InputBindingControl2 InputName="Select Previous Radio"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.RadioPrevious}"/>
+		                        <local:InputBindingControl2 InputName="Awacs Overlay Toggle"
+		                                                    DataContext="{Binding SrsSettings.CurrentProfile.AwacsOverlayToggle}"/>
+	                        </StackPanel>
+                        </Expander>
                     </StackPanel>
                 </ScrollViewer>
 
