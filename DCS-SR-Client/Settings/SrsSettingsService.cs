@@ -58,13 +58,13 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 		_configuration.GetSection("ProfileSettings").Bind(_profileSettings);
 		
 		if (!_profileSettings.ContainsKey(GlobalSettings.CurrentProfileName)) { GlobalSettings.CurrentProfileName = "default"; }
+		OnPropertyChanged(nameof(CurrentProfileName));
 		
 		WeakReferenceMessenger.Default.Register<SettingChangingMessage>(this, (r, m) =>
 		{
 			OnPropertyChanging();
 			SaveSettings();
 		});
-
 	}
 	
 	public class SettingsModel

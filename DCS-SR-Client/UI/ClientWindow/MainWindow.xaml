@@ -1230,7 +1230,7 @@
                                                 Maximum="200"
                                                 Value="{Binding SrsSettings.CurrentProfile.HqToneVolume}"
                                                 Minimum="0"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding SrsSettings.CurrentProfile.HaveQuickTone}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -1253,7 +1253,7 @@
                                     <Label Grid.Row="12" Grid.Column="0"
                                            Content="{x:Static p:Resources.BackgroundRadioNoise}" />
                                     <ToggleButton Grid.Row="12" Grid.Column="1" 
-                                                  IsChecked="{Binding SrsSettings.CurrentProfile.RadioBackgroundNoiseEffect }"/>
+                                                  IsChecked="{Binding SrsSettings.CurrentProfile.RadioBackgroundNoiseEffect}"/>
                                     
                                     <Label Grid.Row="13" Grid.Column="0"
                                            Content="{x:Static p:Resources.UHFEffectVolume}" />
@@ -1268,7 +1268,7 @@
                                                 Maximum="200"
                                                 Value="{Binding SrsSettings.CurrentProfile.UhfNoiseVolume}"
                                                 Minimum="0"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding SrsSettings.CurrentProfile.RadioBackgroundNoiseEffect}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -1301,7 +1301,7 @@
                                                 Maximum="200"
                                                 Value="{Binding SrsSettings.CurrentProfile.VhfNoiseVolume}"
                                                 Minimum="0"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding SrsSettings.CurrentProfile.RadioBackgroundNoiseEffect}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -1334,7 +1334,7 @@
                                                 Maximum="200"
                                                 Value="{Binding SrsSettings.CurrentProfile.HfNoiseVolume}"
                                                 Minimum="0"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding SrsSettings.CurrentProfile.RadioBackgroundNoiseEffect}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -1367,7 +1367,7 @@
                                                 Maximum="200"
                                                 Value="{Binding SrsSettings.CurrentProfile.FmNoiseVolume}"
                                                 Minimum="0"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding SrsSettings.CurrentProfile.RadioBackgroundNoiseEffect}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -1410,7 +1410,7 @@
                                                 Maximum="200"
                                                 Value="{Binding SrsSettings.CurrentProfile.AmbientCockpitNoiseEffectVolume}"
                                                 Minimum="0"
-                                                IsEnabled="False" />
+                                                IsEnabled="{Binding SrsSettings.CurrentProfile.AmbientCockpitIntercomNoiseEffect}" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
