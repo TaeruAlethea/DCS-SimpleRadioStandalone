@@ -252,7 +252,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 
 		try
 		{
-			Client.Disconnect();
+			//Client.Disconnect();
 		}
 		catch (Exception)
 		{
