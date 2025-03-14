@@ -21,7 +21,7 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 
 	partial void OnGlobalSettingsChanged(GlobalSettingsModel value)
 	{
-		//SaveSettings(_configuration);
+		SaveSettings(GlobalSettings, ProfileSettings);
 	}
 
 	[ObservableProperty]
@@ -55,7 +55,14 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 
 		_configuration.GetSection("GlobalSettings").Bind(GlobalSettings);
 		_configuration.GetSection("ProfileSettings").Bind(ProfileSettings);
-		
+	}
+	
+	public class SettingsModel
+	{
+		public string SettingsVersion = "1.0";
+		public GlobalSettingsModel GlobalSettings = new GlobalSettingsModel();
+		public List<ProfileSettingsModel> ProfileSettings = new List<ProfileSettingsModel>()
+			{ new ProfileSettingsModel() };
 	}
 	
 	public Task SaveAsync()
@@ -93,11 +100,12 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 		ProfileSettings.Remove(targetProfile);
 	}
 	
-	public void SaveSettings(IConfigurationRoot configuration)
+	public void SaveSettings(GlobalSettingsModel globalSettings, List<ProfileSettingsModel> profileSettings)
 	{
 		try
 		{
-			File.WriteAllText(SettingsFileName, JsonConvert.SerializeObject(configuration, Formatting.Indented));
+			SettingsModel temp = new SettingsModel() { GlobalSettings = globalSettings, ProfileSettings = profileSettings };
+			File.WriteAllText(SettingsFileName, JsonConvert.SerializeObject(temp, Formatting.Indented));
 		}
 		catch (Exception e)
 		{
@@ -105,22 +113,11 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 			throw;
 		}
 	}
-		
-	public class SettingsModel
-	{
-		private string SettingsVersion = "1.0";
-		private GlobalSettingsModel GlobalSettings = new GlobalSettingsModel();
-		private List<ProfileSettingsModel> ProfileSettings = new List<ProfileSettingsModel>()
-			{ new ProfileSettingsModel() };
-	}
-	
+
 	
 	public void CreateNewAppSettings()
 	{
-		SettingsModel temp = new SettingsModel();
-		string Json = JsonConvert.SerializeObject(temp, SettingsModel, Formatting.Indented);
-		
-		
+		string Json = JsonConvert.SerializeObject(new SettingsModel(), Formatting.Indented);
 		File.WriteAllText(SettingsFileName, Json);
 	}
 
