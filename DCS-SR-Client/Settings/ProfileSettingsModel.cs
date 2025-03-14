@@ -14,8 +14,10 @@ public class ProfileSettingsModel : ICloneable
 	public bool RadioRxEffects_Start { get; set; } = true;
 	public bool RadioRxEffects_End { get; set; } = true;
 	
-	//todo RadioTransmissionStartSelection
-	//todo RadioTransmissionEndSelection
+	public string RadioTransmissionStartEffectName { get; set; } = "";
+	public string RadioTransmissionEndEffectName { get; set; } = "";
+	public string IntercomTransmissionStartEffectName { get; set; } = "";
+	public string IntercomTransmissionEndEffectName { get; set; } = "";
 	
 	public bool RadioTxEffects_Start { get; set; } = true;
 	public bool RadioTxEffects_End { get; set; } = true;
@@ -46,6 +48,17 @@ public class ProfileSettingsModel : ICloneable
 	public float AmbientCockpitNoiseEffectVolume { get; set; } = 1.0f;
 	public bool AmbientCockpitIntercomNoiseEffect { get; set; } = false;
 	public bool DisableExpansionRadios { get; set; } = false;
+	public float VolumeIntercom { get; set; } = 0.0f;
+	public float VolumeRadio01 { get; set; } = 0.0f;
+	public float VolumeRadio02 { get; set; } = 0.0f;
+	public float VolumeRadio03 { get; set; } = 0.0f;
+	public float VolumeRadio04 { get; set; } = 0.0f;
+	public float VolumeRadio05 { get; set; } = 0.0f;
+	public float VolumeRadio06 { get; set; } = 0.0f;
+	public float VolumeRadio07 { get; set; } = 0.0f;
+	public float VolumeRadio08 { get; set; } = 0.0f;
+	public float VolumeRadio09 { get; set; } = 0.0f;
+	public float VolumeRadio10 { get; set; } = 0.0f;
 	
 	public InputSettingsModel InputIntercom { get; set; } = new InputSettingsModel();
 	public InputSettingsModel InputSwitch01 { get; set; } = new InputSettingsModel();
