@@ -1011,8 +1011,7 @@
                                                 VerticalContentAlignment="Center"
                                                 Maximum="1000"
                                                 Value="{Binding SrsSettings.CurrentProfile.PttReleaseDelay}"
-                                                Minimum="0"
-                                                IsEnabled="False" />
+                                                Minimum="0" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
@@ -1040,8 +1039,7 @@
                                                 VerticalContentAlignment="Center"
                                                 Maximum="1000"
                                                 Value="{Binding SrsSettings.CurrentProfile.PttStartDelay}"
-                                                Minimum="0"
-                                                IsEnabled="False" />
+                                                Minimum="0" />
                                         <Grid>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="*" />
