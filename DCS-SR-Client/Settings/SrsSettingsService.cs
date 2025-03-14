@@ -27,7 +27,12 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 	[ObservableProperty]
 	[NotifyPropertyChangedFor(nameof(ProfileNames))]
 	private List<ProfileSettingsModel> _profileSettings = new List<ProfileSettingsModel>();
-	
+
+	partial void OnProfileSettingsChanged(List<ProfileSettingsModel> value)
+	{
+		SaveSettings(GlobalSettings, ProfileSettings);
+	}
+
 	public ProfileSettingsModel CurrentProfile
 	{
 		get
@@ -99,18 +104,21 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 		var targetProfile = ProfileSettings.Find(p => p.ProfileName == profileName);
 		ProfileSettings.Remove(targetProfile);
 	}
-	
+
+	private bool isSaving = false; // quick and dirty locking to avoid spamming saves.
 	public void SaveSettings(GlobalSettingsModel globalSettings, List<ProfileSettingsModel> profileSettings)
 	{
+		if (isSaving) { return; }
 		try
 		{
+			isSaving = true;
 			SettingsModel temp = new SettingsModel() { GlobalSettings = globalSettings, ProfileSettings = profileSettings };
 			File.WriteAllText(SettingsFileName, JsonConvert.SerializeObject(temp, Formatting.Indented));
+			isSaving = false;
 		}
 		catch (Exception e)
 		{
-			Console.WriteLine(e);
-			throw;
+			
 		}
 	}
 
