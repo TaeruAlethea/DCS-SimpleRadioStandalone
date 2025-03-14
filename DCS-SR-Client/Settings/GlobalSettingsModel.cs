@@ -1,8 +1,12 @@
+using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
-public class GlobalSettingsModel
+public partial class GlobalSettingsModel : ObservableObject
 {
-	public bool AutoConnect{ get; set; } = true;
+	public bool AutoConnect { get; set; } = true;
 	public bool AutoConnectPrompt { get; set; } = false;
 	public bool AutoConnectMismatchPrompt { get; set; } = true;
 	public bool RadioOverlayTaskbarHide { get; set; } = false;
@@ -95,4 +99,5 @@ public class GlobalSettingsModel
 	
 	public bool AllowXInputController { get; set; } = false;
 	public string LastPresetsFolder { get; set; } = string.Empty;
+
 }

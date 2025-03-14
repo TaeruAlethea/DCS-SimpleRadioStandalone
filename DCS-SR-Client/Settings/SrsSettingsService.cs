@@ -2,53 +2,50 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
-public partial class SrsSettingsService : ObservableObject, ISrsSettings
+public partial class SrsSettingsService : ObservableRecipient, IRecipient<SettingChangedMessage>, ISrsSettings
 {
 	const string SettingsFileName = "./appsettings.json";
 	
 	private IConfigurationRoot _configuration;
 
+	// All Settings
 	[ObservableProperty] [NotifyPropertyChangedFor(nameof(CurrentProfile))]
 	private GlobalSettingsModel _globalSettings = new GlobalSettingsModel();
-
 	partial void OnGlobalSettingsChanged(GlobalSettingsModel value)
 	{
-		SaveSettings(GlobalSettings, ProfileSettings);
-	}
-
-	[ObservableProperty]
-	[NotifyPropertyChangedFor(nameof(ProfileNames))]
-	private List<ProfileSettingsModel> _profileSettings = new List<ProfileSettingsModel>();
-
-	partial void OnProfileSettingsChanged(List<ProfileSettingsModel> value)
-	{
-		SaveSettings(GlobalSettings, ProfileSettings);
-	}
-
-	public ProfileSettingsModel CurrentProfile
-	{
-		get
+		if (GlobalSettings.CurrentProfileName != value.CurrentProfileName)
 		{
-			return ProfileSettings.Find(p => 
-				p.ProfileName == GlobalSettings.CurrentProfileName);
+			ProfileSettingsModel profileOfIncomingName = _profileSettings.Find(p =>
+				p.ProfileName == value.CurrentProfileName);
+			CurrentProfile = profileOfIncomingName;
+			OnPropertyChanged(nameof(CurrentProfile));
 		}
+		
+		SaveSettings(GlobalSettings, _profileSettings);
 	}
+	private List<ProfileSettingsModel> _profileSettings = new List<ProfileSettingsModel>();
+	
+	// Only the Current Profile
+	[ObservableProperty] private ProfileSettingsModel _currentProfile;
+	
 	public List<string> ProfileNames
 	{
 		get
 		{
-			return ProfileSettings.Select(x => x.ProfileName).ToList();
+			return _profileSettings.Select(x => x.ProfileName).ToList();
 		}
 	}
-	
+
 	public SrsSettingsService()
 	{
 		if (!File.Exists(SettingsFileName)) { CreateNewAppSettings(); }			
@@ -59,7 +56,7 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 			.Build();
 
 		_configuration.GetSection("GlobalSettings").Bind(GlobalSettings);
-		_configuration.GetSection("ProfileSettings").Bind(ProfileSettings);
+		_configuration.GetSection("ProfileSettings").Bind(_profileSettings);
 	}
 	
 	public class SettingsModel
@@ -70,22 +67,19 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 			{ new ProfileSettingsModel() };
 	}
 	
-	public Task SaveAsync()
-	{
-		throw new System.NotImplementedException();
-	}
-
 	[RelayCommand] private void CreateProfile(string profileName)
 	{
 		var newProfile = new ProfileSettingsModel{ ProfileName = profileName };
-		ProfileSettings.Add(newProfile);
+		_profileSettings.Add(newProfile);
 		GlobalSettings.CurrentProfileName = newProfile.ProfileName;
+		OnPropertyChanged(nameof(ProfileNames));
 	}
 
 	[RelayCommand] private void RenameProfile(string profileName)
 	{
 		CurrentProfile.ProfileName = profileName;
 		GlobalSettings.CurrentProfileName = profileName;
+		OnPropertyChanged(nameof(ProfileNames));
 	}
 
 	[RelayCommand] private void DuplicateProfile(string profileName)
@@ -93,16 +87,18 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 		ProfileSettingsModel newProfile = (ProfileSettingsModel)CurrentProfile.Clone();
 		newProfile.ProfileName = profileName;
 		
-		ProfileSettings.Add(newProfile);
+		_profileSettings.Add(newProfile);
 		GlobalSettings.CurrentProfileName = profileName;
+		OnPropertyChanged(nameof(ProfileNames));
 	}
 
 	[RelayCommand] private void DeleteProfile(string profileName)
 	{
 		GlobalSettings.CurrentProfileName = "default";
 		
-		var targetProfile = ProfileSettings.Find(p => p.ProfileName == profileName);
-		ProfileSettings.Remove(targetProfile);
+		var targetProfile = _profileSettings.Find(p => p.ProfileName == profileName);
+		_profileSettings.Remove(targetProfile);
+		OnPropertyChanged(nameof(ProfileNames));
 	}
 
 	private bool isSaving = false; // quick and dirty locking to avoid spamming saves.
@@ -113,7 +109,8 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 		{
 			isSaving = true;
 			SettingsModel temp = new SettingsModel() { GlobalSettings = globalSettings, ProfileSettings = profileSettings };
-			File.WriteAllText(SettingsFileName, JsonConvert.SerializeObject(temp, Formatting.Indented));
+			string json = JsonConvert.SerializeObject(temp, Formatting.Indented);
+			File.WriteAllText(SettingsFileName, json, Encoding.UTF8);
 			isSaving = false;
 		}
 		catch (Exception e)
@@ -121,13 +118,26 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 			
 		}
 	}
-
 	
 	public void CreateNewAppSettings()
 	{
-		string Json = JsonConvert.SerializeObject(new SettingsModel(), Formatting.Indented);
-		File.WriteAllText(SettingsFileName, Json);
+		string json = JsonConvert.SerializeObject(new SettingsModel(), Formatting.Indented);
+		File.WriteAllText(SettingsFileName, json, Encoding.UTF8);
 	}
 
+	public void Receive(SettingChangedMessage message)
+	{
+		if (message.changeType == SettingChangedMessage.SettingChangeType.Global)
+		{
+			OnPropertyChanged(nameof(GlobalSettings));
+		}
+
+		if (message.changeType == SettingChangedMessage.SettingChangeType.Profile)
+		{
+			OnPropertyChanged(nameof(CurrentProfile));
+		}
+	}
 }
+
+
 
