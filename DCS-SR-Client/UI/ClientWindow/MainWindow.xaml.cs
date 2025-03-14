@@ -214,57 +214,11 @@ public partial class MainWindow : IMainWindow
     {
         //switch profiles
         Logger.Info(ControlsProfile.SelectedValue as string + " - Profile now in use");
-
-        //redraw UI
-        ReloadInputBindings();
-        ReloadProfileSettings();
     }
 
     private void InitInput()
     {
         //InputManager = new InputDeviceManager(this, ToggleOverlay);
-        
-        RadioStartTransmitEffect.SelectionChanged += OnRadioStartTransmitEffectChanged;
-        RadioEndTransmitEffect.SelectionChanged += OnRadioEndTransmitEffectChanged;
-
-        IntercomStartTransmitEffect.SelectionChanged += OnIntercomStartTransmitEffectChanged;
-        IntercomEndTransmitEffect.SelectionChanged += OnIntercomEndTransmitEffectChanged;
-    }
-
-    private void OnRadioStartTransmitEffectChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (RadioStartTransmitEffect.IsEnabled)
-        {
-            GlobalSettingsStore.Instance.ProfileSettingsStore.SetClientSettingString(ProfileSettingsKeys.RadioTransmissionStartSelection, ((CachedAudioEffect)RadioStartTransmitEffect.SelectedItem).FileName);
-        }
-    }
-
-    private void OnRadioEndTransmitEffectChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (RadioEndTransmitEffect.IsEnabled)
-        {
-            GlobalSettingsStore.Instance.ProfileSettingsStore.SetClientSettingString(ProfileSettingsKeys.RadioTransmissionEndSelection, ((CachedAudioEffect)RadioEndTransmitEffect.SelectedItem).FileName);
-        }
-    }
-
-    private void OnIntercomStartTransmitEffectChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (IntercomStartTransmitEffect.IsEnabled)
-        {
-            GlobalSettingsStore.Instance.ProfileSettingsStore.SetClientSettingString(ProfileSettingsKeys.IntercomTransmissionStartSelection, ((CachedAudioEffect)IntercomStartTransmitEffect.SelectedItem).FileName);
-        }
-    }
-
-    private void OnIntercomEndTransmitEffectChanged(object sender, SelectionChangedEventArgs e)
-    {
-        if (IntercomEndTransmitEffect.IsEnabled)
-        {
-            GlobalSettingsStore.Instance.ProfileSettingsStore.SetClientSettingString(ProfileSettingsKeys.IntercomTransmissionEndSelection, ((CachedAudioEffect)IntercomEndTransmitEffect.SelectedItem).FileName);
-        }
-    }
-
-    private void ReloadInputBindings()
-    {
     }
 
     private void InitToolTips()
@@ -317,33 +271,7 @@ public partial class MainWindow : IMainWindow
             AllowAnonymousUsage.IsChecked = true;
         }
     }
-
-    private void ReloadProfileSettings()
-    {
-        RadioEndTransmitEffect.IsEnabled = false;
-        RadioEndTransmitEffect.ItemsSource = CachedAudioEffectProvider.Instance.RadioTransmissionEnd;
-        RadioEndTransmitEffect.SelectedItem = CachedAudioEffectProvider.Instance.SelectedRadioTransmissionEndEffect;
-        RadioEndTransmitEffect.IsEnabled = true;
-
-        RadioStartTransmitEffect.IsEnabled = false;
-        RadioStartTransmitEffect.SelectedIndex = 0;
-        RadioStartTransmitEffect.ItemsSource = CachedAudioEffectProvider.Instance.RadioTransmissionStart;
-        RadioStartTransmitEffect.SelectedItem = CachedAudioEffectProvider.Instance.SelectedRadioTransmissionStartEffect;
-        RadioStartTransmitEffect.IsEnabled = true;
-
-        IntercomStartTransmitEffect.IsEnabled = false;
-        IntercomStartTransmitEffect.ItemsSource = CachedAudioEffectProvider.Instance.IntercomTransmissionStart;
-        IntercomStartTransmitEffect.SelectedItem = CachedAudioEffectProvider.Instance.SelectedIntercomTransmissionStartEffect;
-        IntercomStartTransmitEffect.IsEnabled = true;
-
-        IntercomEndTransmitEffect.IsEnabled = false;
-        IntercomEndTransmitEffect.SelectedIndex = 0;
-        IntercomEndTransmitEffect.ItemsSource = CachedAudioEffectProvider.Instance.IntercomTransmissionEnd;
-        IntercomEndTransmitEffect.SelectedItem = CachedAudioEffectProvider.Instance.SelectedIntercomTransmissionEndEffect;
-        IntercomEndTransmitEffect.IsEnabled = true;
-    }
-    
-
+  
     public void SaveSelectedInputAndOutput()
     {
         //save app settings

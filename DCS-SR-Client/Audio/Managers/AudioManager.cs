@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using System.Windows;
@@ -40,7 +41,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
         private readonly CachedAudioEffectProvider _cachedAudioEffectsProvider;
-
+        
         private readonly ConcurrentDictionary<string, ClientAudioProvider> _clientsBufferedAudio =
             new ConcurrentDictionary<string, ClientAudioProvider>();
 
@@ -710,5 +711,11 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers
         {
             _radioMixingProvider[sendingOn]?.PlaySoundEffectEndTransmit(radioVolume,radioModulation);
         }
+        
+        // Exposed for UI Binding.
+        public List<string> RadioTransmissionStartEffectList => _cachedAudioEffectsProvider.RadioTransmissionStart.Select(x => x.FileName).ToList();
+        public List<string> RadioTransmissionEndEffectList => _cachedAudioEffectsProvider.RadioTransmissionEnd.Select(x => x.FileName).ToList();
+        public List<string> IntercomTransmissionStartEffectList => _cachedAudioEffectsProvider.IntercomTransmissionStart.Select(x => x.FileName).ToList();
+        public List<string> IntercomTransmissionEndEffectList => _cachedAudioEffectsProvider.IntercomTransmissionEnd.Select(x => x.FileName).ToList();
     }
 }

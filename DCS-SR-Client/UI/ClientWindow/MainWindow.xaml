@@ -1125,38 +1125,34 @@
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioStartTransmitEffect}" />
 
-                                    <ComboBox x:Name="RadioStartTransmitEffect"
-                                              Grid.Row="2" Grid.Column="1"
+                                    <ComboBox Grid.Row="2" Grid.Column="1"
                                               Width="215"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Top" />
+                                              ItemsSource="{Binding AudioManager.RadioTransmissionStartEffectList}"
+                                              SelectedValue="{Binding SrsSettings.CurrentProfile.RadioTransmissionStartEffectName}" />
 
                                     <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioEndTransmitEffect}" />
 
-                                    <ComboBox x:Name="RadioEndTransmitEffect"
-                                              Grid.Row="3" Grid.Column="1"
+                                    <ComboBox Grid.Row="3" Grid.Column="1"
                                               Width="215"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Top" />
+                                              ItemsSource="{Binding AudioManager.RadioTransmissionEndEffectList}"
+                                              SelectedValue="{Binding SrsSettings.CurrentProfile.RadioTransmissionEndEffectName}" />
 
                                     <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.IntercomStartTransmitEffect}" />
 
-                                    <ComboBox x:Name="IntercomStartTransmitEffect"
-                                              Grid.Row="4" Grid.Column="1"
+                                    <ComboBox Grid.Row="4" Grid.Column="1"
                                               Width="215"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Top" />
+                                              ItemsSource="{Binding AudioManager.IntercomTransmissionStartEffectList}"
+                                              SelectedValue="{Binding SrsSettings.CurrentProfile.IntercomTransmissionStartEffectName}" />
 
                                     <Label Grid.Row="5" Grid.Column="0"
                                            Content="{x:Static p:Resources.IntercomEndTransmitEffect}" />
 
-                                    <ComboBox x:Name="IntercomEndTransmitEffect"
-                                              Grid.Row="5" Grid.Column="1"
+                                    <ComboBox Grid.Row="5" Grid.Column="1"
                                               Width="215"
-                                              HorizontalAlignment="Center"
-                                              VerticalAlignment="Top" />
+                                              ItemsSource="{Binding AudioManager.IntercomTransmissionEndEffectList}"
+                                              SelectedValue="{Binding SrsSettings.CurrentProfile.IntercomTransmissionEndEffectName}" />
 
                                     <Label Grid.Row="6" Grid.Column="0"
                                            Content="{x:Static p:Resources.RadioEncryptionEffectsToggle}" />
