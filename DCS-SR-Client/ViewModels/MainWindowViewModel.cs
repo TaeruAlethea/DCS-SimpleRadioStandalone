@@ -65,7 +65,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	{
 		GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 		FavouriteServersViewModel = new FavouriteServersViewModel(new CsvFavouriteServerStore());
-		_srsSettings = new SrsSettingsService();
+		_srsSettings = srsSettings;
 		
 		UpdaterChecker.CheckForUpdate(SrsSettings.GlobalSettings.CheckForBetaUpdates);
 
