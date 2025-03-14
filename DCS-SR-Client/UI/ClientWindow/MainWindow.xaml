@@ -433,7 +433,7 @@
                                     <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.RefocusDCS}" />
                                     <ToggleButton Grid.Row="2" Grid.Column="1"
-                                                  IsChecked="{Binding SrsSettings.GlobalSettings.RefocusDCS}"/>
+                                                  IsChecked="{Binding SrsSettings.GlobalSettings.RefocusDcs}"/>
 
                                     <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.Minimisetotray}" />
@@ -790,7 +790,7 @@
                                       HorizontalAlignment="Center"
                                       VerticalAlignment="Top" Margin="5" Padding="5"
                                       ItemsSource="{Binding SrsSettings.ProfileNames}"
-                                      SelectedValue="{Binding SrsSettings.CurrentProfileName}" 
+                                      SelectedValue="{Binding SrsSettings.CurrentProfileName, Mode=TwoWay}"
                                       SelectionChanged="ControlsProfile_OnSelectionChanged"/>
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                                 <Button Margin="5" Padding="5" Content="{x:Static p:Resources.CreateProfile}" Click="CreateProfile" />
@@ -939,7 +939,7 @@
                                                 VerticalAlignment="Center"
                                                 VerticalContentAlignment="Center"
                                                 Maximum="1000"
-                                                Value="{Binding SrsSettings.CurrentProfile.PTTStartDelay}"
+                                                Value="{Binding SrsSettings.CurrentProfile.PttStartDelay}"
                                                 Minimum="0"
                                                 IsEnabled="False" />
                                         <Grid>
@@ -1017,9 +1017,9 @@
                                                Orientation="Vertical">
                                         <WrapPanel Orientation="Horizontal">
                                             <Label Content="{x:Static p:Resources.RadioTxStart}" />
-                                            <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.RadioTxEffects_Start}" />
+                                            <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.RadioTxEffectsStart}" />
                                             <Label Content="{x:Static p:Resources.RadioTxEnd}" />
-                                            <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.RadioTxEffects_End}" />
+                                            <ToggleButton IsChecked="{Binding SrsSettings.CurrentProfile.RadioTxEffectsEnd}" />
                                         </WrapPanel>
 
                                     </WrapPanel>

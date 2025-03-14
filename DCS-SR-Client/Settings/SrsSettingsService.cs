@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -20,26 +19,30 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 
 	// All Settings
 	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(CurrentProfileName))]
 	private GlobalSettingsModel _globalSettings = new GlobalSettingsModel();
-	private List<ProfileSettingsModel> _profileSettings = new List<ProfileSettingsModel>();
+	private Dictionary<string, ProfileSettingsModel> _profileSettings = new Dictionary<string, ProfileSettingsModel>();
+	
 	partial void OnGlobalSettingsChanged(GlobalSettingsModel value)
 	{
-		SaveSettings(value, _profileSettings);
+		SaveSettings();
 	}
-	
+	public ProfileSettingsModel CurrentProfile
+	{
+		get => _profileSettings[GlobalSettings.CurrentProfileName];
+		set => _profileSettings[GlobalSettings.CurrentProfileName] = value;
+	}
 	// Only the Current Profile
-	[ObservableProperty] private string _currentProfileName;
+	public List<string> ProfileNames => _profileSettings.Keys.ToList();
+	
+	[ObservableProperty]
+	[NotifyPropertyChangedFor(nameof(CurrentProfile))]
+	[NotifyPropertyChangedFor(nameof(ProfileNames))]
+	private string _currentProfileName = "default";
+
 	partial void OnCurrentProfileNameChanged(string value)
 	{
 		GlobalSettings.CurrentProfileName = value;
-		CurrentProfile = _profileSettings.Find(x => x.ProfileName == value);
-	}
-
-	[ObservableProperty] private ProfileSettingsModel _currentProfile;
-	
-	public List<string> ProfileNames
-	{
-		get => _profileSettings.Select(x => x.ProfileName).ToList();
 	}
 
 	public SrsSettingsService()
@@ -54,63 +57,66 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 		_configuration.GetSection("GlobalSettings").Bind(GlobalSettings);
 		_configuration.GetSection("ProfileSettings").Bind(_profileSettings);
 		
+		if (!_profileSettings.ContainsKey(GlobalSettings.CurrentProfileName)) { GlobalSettings.CurrentProfileName = "default"; }
+		
 		WeakReferenceMessenger.Default.Register<SettingChangingMessage>(this, (r, m) =>
 		{
 			OnPropertyChanging();
-			SaveSettings(_globalSettings, _profileSettings);
+			SaveSettings();
 		});
+
 	}
 	
 	public class SettingsModel
 	{
 		public string SettingsVersion = "1.0";
 		public GlobalSettingsModel GlobalSettings = new GlobalSettingsModel();
-		public List<ProfileSettingsModel> ProfileSettings = new List<ProfileSettingsModel>()
-			{ new ProfileSettingsModel() };
+		public Dictionary<string, ProfileSettingsModel> ProfileSettings =
+			new() { {"default", new ProfileSettingsModel() } };
 	}
 	
-	[RelayCommand] private void CreateProfile(string profileName)
+	[RelayCommand]
+	private void CreateProfile(string profileName)
 	{
-		var newProfile = new ProfileSettingsModel{ ProfileName = profileName };
-		_profileSettings.Add(newProfile);
-		GlobalSettings.CurrentProfileName = newProfile.ProfileName;
-		OnPropertyChanged(nameof(ProfileNames));
+		ProfileSettingsModel newProfile = new ProfileSettingsModel();
+		
+		_profileSettings.Add(profileName, newProfile);
+		CurrentProfileName = $"{profileName}";
 	}
 
 	[RelayCommand] private void RenameProfile(string profileName)
 	{
-		CurrentProfile.ProfileName = profileName;
-		GlobalSettings.CurrentProfileName = profileName;
-		OnPropertyChanged(nameof(ProfileNames));
+		string oldProfileName = CurrentProfileName;
+		ProfileSettingsModel newProfile = (ProfileSettingsModel)CurrentProfile.Clone();
+		_profileSettings.Add(profileName, newProfile);
+		_profileSettings.Remove(oldProfileName);
+		
+		CurrentProfileName = $"{profileName}";
 	}
 
 	[RelayCommand] private void DuplicateProfile(string profileName)
 	{
 		ProfileSettingsModel newProfile = (ProfileSettingsModel)CurrentProfile.Clone();
-		newProfile.ProfileName = profileName;
 		
-		_profileSettings.Add(newProfile);
-		GlobalSettings.CurrentProfileName = profileName;
-		OnPropertyChanged(nameof(ProfileNames));
+		_profileSettings.Add(profileName, newProfile);
+		CurrentProfileName = $"{profileName}";
 	}
 
 	[RelayCommand] private void DeleteProfile(string profileName)
 	{
-		GlobalSettings.CurrentProfileName = "default";
-		
-		var targetProfile = _profileSettings.Find(p => p.ProfileName == profileName);
-		_profileSettings.Remove(targetProfile);
-		OnPropertyChanged(nameof(ProfileNames));
+		if (profileName == "default") { return; }
+		_profileSettings.Remove(profileName);
+		CurrentProfileName = "default";
 	}
 
 	private bool isSaving = false; // quick and dirty locking to avoid spamming saves.
-	public void SaveSettings(GlobalSettingsModel globalSettings, List<ProfileSettingsModel> profileSettings)
+	public void SaveSettings()
 	{
 		if (isSaving) { return; }
 		try
 		{
 			isSaving = true;
-			SettingsModel temp = new SettingsModel() { GlobalSettings = globalSettings, ProfileSettings = profileSettings };
+			SettingsModel temp = new SettingsModel() { GlobalSettings = GlobalSettings, ProfileSettings = _profileSettings };
 			string json = JsonConvert.SerializeObject(temp, Formatting.Indented);
 			File.WriteAllText(SettingsFileName, json, Encoding.UTF8);
 			isSaving = false;
