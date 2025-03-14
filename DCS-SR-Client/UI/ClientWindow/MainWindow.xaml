@@ -1465,108 +1465,282 @@
 	                                
                                     <Label Grid.Row="0" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio1Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio1Config"
-                                                                Grid.Row="0"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio1Channel}" />
-
-                                    <Label Grid.Row="1"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <StackPanel Grid.Row="0" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio01}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
+	                                
+                                    <Label Grid.Row="1" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio2Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio2Config"
-                                                                Grid.Row="1"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio2Channel}" />
+                                    <StackPanel Grid.Row="1" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio02}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
 
-                                    <Label Grid.Row="2"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="2" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio3Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio3Config"
-                                                                Grid.Row="2"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio3Channel}" />
-                                    <Label Grid.Row="3"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <StackPanel Grid.Row="2" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio03}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
+                                    
+                                    <Label Grid.Row="3" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio4Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio4Config"
-                                                                Grid.Row="3"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio4Channel}" />
-                                    <Label Grid.Row="4"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <StackPanel Grid.Row="3" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio04}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
+                                    
+                                    <Label Grid.Row="4" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio5Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio5Config"
-                                                                Grid.Row="4"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio5Channel}" />
-                                    <Label Grid.Row="5"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <StackPanel Grid.Row="4" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio05}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
+                                    
+                                    <Label Grid.Row="5" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio6Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio6Config"
-                                                                Grid.Row="5"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio6Channel}" />
-                                    <Label Grid.Row="6"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <StackPanel Grid.Row="5" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio07}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
+                                    
+                                    <Label Grid.Row="6" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio7Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio7Config"
-                                                                Grid.Row="6"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio7Channel}" />
-                                    <Label Grid.Row="7"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <StackPanel Grid.Row="6" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio07}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
+                                    
+                                    <Label Grid.Row="7" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio8Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio8Config"
-                                                                Grid.Row="7"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio8Channel}" />
-                                    <Label Grid.Row="8"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <StackPanel Grid.Row="7" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio08}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
+                                    
+                                    <Label Grid.Row="8" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio9Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio9Config"
-                                                                Grid.Row="8"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio9Channel}" />
-                                    <Label Grid.Row="9"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <StackPanel Grid.Row="8" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio09}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
+                                    
+                                    <Label Grid.Row="9" Grid.Column="0"
                                            Content="{x:Static p:Resources.Radio10Config}" />
-                                    <local:RadioChannelConfigUi x:Name="Radio10Config"
-                                                                Grid.Row="9"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.Radio10Channel}" />
+                                    <StackPanel Grid.Row="9" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceRadio10}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
 
-                                    <Label Grid.Row="10"
-                                           Grid.Column="0"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
+                                    <Label Grid.Row="10" Grid.Column="0"
                                            Content="{x:Static p:Resources.IntercomConfig}" />
-                                    <local:RadioChannelConfigUi x:Name="IntercomConfig"
-                                                                Grid.Row="10"
-                                                                Grid.Column="1"
-                                                                ProfileSettingKey="{x:Static settings:ProfileSettingsKeys.IntercomChannel}" />
+                                    <StackPanel Grid.Row="10" Grid.Column="1" 
+                                                Margin="3" Orientation="Vertical">
+	                                    <Slider Maximum="1.0"
+	                                            Minimum="-1.0"
+	                                            Value="{Binding SrsSettings.CurrentProfile.BalanceIntercom}" 
+	                                            TickPlacement="BottomRight"
+	                                            SmallChange="0.1" 
+	                                            LargeChange="0.3"
+	                                            IsSnapToTickEnabled="True"
+	                                            TickFrequency="0.1">
+	                                    </Slider>
+	                                    <Grid>
+		                                    <Grid.ColumnDefinitions>
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+			                                    <ColumnDefinition Width="*" />
+		                                    </Grid.ColumnDefinitions>
+		                                    <Label Grid.Column="0" FontSize="10" Content="{x:Static p:Resources.RadioChannelLeft}" HorizontalAlignment="Left" ></Label>
+		                                    <Label Grid.Column="1" FontSize="10" Content="{x:Static p:Resources.RadioChannelEqual}" HorizontalAlignment="Center" ></Label>
+		                                    <Label Grid.Column="2" FontSize="10" Content="{x:Static p:Resources.RadioChannelRight}" HorizontalAlignment="Right" ></Label>
+	                                    </Grid>
+                                    </StackPanel>
                                 </Grid>
                             </GroupBox>
                         </Grid>
                     </GroupBox>
-
                 </StackPanel>
             </ScrollViewer>
         </TabItem>
