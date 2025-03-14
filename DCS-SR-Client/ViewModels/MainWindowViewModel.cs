@@ -222,7 +222,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		}
 
 		ClientState.IsConnectionErrored = connectionError;
-		/*
+		/* Todo: Fix this
 		ToBeDepricatedMainWindow.StartStop.Content = Properties.Resources.StartStop;
 		ToBeDepricatedMainWindow.StartStop.IsEnabled = true;
 		ToBeDepricatedMainWindow.Mic.IsEnabled = true;
