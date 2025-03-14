@@ -93,7 +93,7 @@ namespace DCS_SR_Client
                     }
                 }
 
-                if (GlobalSettingsStore.Instance.GetClientSettingBool(GlobalSettingsKeys.AllowMultipleInstances) || allowMultiple)
+                if (Services.GetRequiredService<ISrsSettings>().GlobalSettings.AllowMultipleInstances || allowMultiple)
                 {
                     Logger.Warn("Another SRS instance is already running, allowing multiple instances due to config setting");
                 }
@@ -114,7 +114,7 @@ namespace DCS_SR_Client
             }
 #endif
 
-            RequireAdmin();
+            RequireAdmin(Services.GetRequiredService<ISrsSettings>());
 
             InitNotificationIcon();
             
@@ -155,9 +155,9 @@ namespace DCS_SR_Client
             }
         }
 
-        private void RequireAdmin()
+        private void RequireAdmin(ISrsSettings SettingsService)
         {
-            if (!GlobalSettingsStore.Instance.GetClientSettingBool(GlobalSettingsKeys.RequireAdmin))
+            if (!SettingsService.GlobalSettings.RequireAdmin)
             {
                 return;
             }
@@ -167,7 +167,7 @@ namespace DCS_SR_Client
 
             
             
-            if (!hasAdministrativeRight && GlobalSettingsStore.Instance.GetClientSettingBool(GlobalSettingsKeys.RequireAdmin))
+            if (!hasAdministrativeRight && SettingsService.GlobalSettings.RequireAdmin)
             {
                 Task.Factory.StartNew(() =>
                 {
