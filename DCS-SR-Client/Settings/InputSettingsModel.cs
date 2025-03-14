@@ -6,15 +6,16 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
 public class InputSettingsModel : ConfigurationSection, ICloneable
 {
-	public InputModel Primary { get; set; }
-	public InputModel Modifier { get; set; }
+	public string InputName { get; set; } = "InputName";
+	public InputModel Primary { get; set; } = new InputModel();
+	public InputModel Modifier { get; set; } = new InputModel();
 	
 	public class InputModel : ConfigurationSection, ICloneable
 	{
 		[ConfigurationProperty("Device Guid", DefaultValue = "", IsRequired = true)]
 		public Guid Guid { get; internal set; }
 	
-		[ConfigurationProperty("Device Name", DefaultValue = "", IsRequired = false)]
+		[ConfigurationProperty("Device Name", DefaultValue = "None", IsRequired = false)]
 		public string DeviceName { get; set; }
 	
 		[ConfigurationProperty("Button", DefaultValue = (int)0, IsRequired = true)]

@@ -9,7 +9,7 @@
                       xmlns:settings="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Settings"
                       xmlns:converters="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Utils.ValueConverters"
                       xmlns:viewModels="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels"
-					  xmlns:p="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Properties"
+                  xmlns:p="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Properties"
                       Title="{x:Static p:Resources.ClientWindowTitle}"
                       Width="550"
                       Height="710"
@@ -326,304 +326,32 @@
 
         <TabItem Header="{x:Static p:Resources.ControlsTab}">
             <GroupBox x:Name="ControlsGroupBox" Header="{x:Static p:Resources.ControlsHeader}">
-
                 <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Visible">
-                    <StackPanel>
+                    <StackPanel Orientation="Vertical"
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Stretch">
                         <Button Content="{x:Static p:Resources.RescanInputDevices}" 
                                 Click="RescanInputDevices"
                                 Margin="5" Width="200" />
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="1*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-
-
-                            <Label x:Name="DeviceLabel"
-                                   Grid.Row="0"
-                                   Grid.Column="1"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.DeviceLabel}" />
-                            <Label x:Name="ButtonLabel"
-                                   Grid.Row="0"
-                                   Grid.Column="2"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="{x:Static p:Resources.ButtonLabel}" />
-
-                            <local:InputBindingControl x:Name="Radio1"
-                                                       Grid.Column="0" Grid.Row="1"
-                                                       Grid.ColumnSpan="5" 
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch1}"
-                                                       InputName="Radio 1" />
-                            <local:InputBindingControl x:Name="Radio2"
-                                                       Grid.Column="0" Grid.Row="2"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch2}"
-                                                       InputName="Radio 2" />
-                            <local:InputBindingControl x:Name="Radio3"
-                                                       Grid.Column="0" Grid.Row="3"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch3}"
-                                                       InputName="Radio 3" />
-                            <local:InputBindingControl x:Name="PushToTalk"
-                                                       Grid.Column="0" Grid.Row="4"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Ptt}"
-                                                       InputName="Common PTT" />
-                            <local:InputBindingControl x:Name="Intercom"
-                                                       Grid.Column="0" Grid.Row="5"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Intercom}"
-                                                       InputName="Intercom Select" />
-
-                            <local:InputBindingControl x:Name="IntercomPushToTalk"
-                                                       Grid.Column="0" Grid.Row="6"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.IntercomPTT}"
-                                                       InputName="Special Intercom Select &amp; PTT" />
-
-                            <local:InputBindingControl x:Name="RadioOverlay"
-                                                       Grid.Column="0" Grid.Row="7"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.OverlayToggle}"
-                                                       InputName="Overlay Toggle" />
-
-                            <local:InputBindingControl x:Name="Radio4"
-                                                       Grid.Column="0" Grid.Row="8"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch4}"
-                                                       InputName="Radio 4" />
-                            <local:InputBindingControl x:Name="Radio5"
-                                                       Grid.Column="0" Grid.Row="9"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch5}"
-                                                       InputName="Radio 5" />
-                            <local:InputBindingControl x:Name="Radio6"
-                                                       Grid.Column="0" Grid.Row="10"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch6}"
-                                                       InputName="Radio 6" />
-
-                            <local:InputBindingControl x:Name="Radio7"
-                                                       Grid.Column="0" Grid.Row="11"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch7}"
-                                                       InputName="Radio 7" />
-
-                            <local:InputBindingControl x:Name="Radio8"
-                                                       Grid.Column="0" Grid.Row="12"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch8}"
-                                                       InputName="Radio 8" />
-
-                            <local:InputBindingControl x:Name="Radio9"
-                                                       Grid.Column="0" Grid.Row="13"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch9}"
-                                                       InputName="Radio 9" />
-
-                            <local:InputBindingControl x:Name="Radio10"
-                                                       Grid.Column="0" Grid.Row="14"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Switch10}"
-                                                       InputName="Radio 10" />
-
-
-                            <local:InputBindingControl x:Name="Up100"
-                                                       Grid.Column="0" Grid.Row="15"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Up100}"
-                                                       InputName="Up 100MHz" />
-
-                            <local:InputBindingControl x:Name="Up10"
-                                                       Grid.Column="0" Grid.Row="16"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Up10}"
-                                                       InputName="Up 10MHz" />
-
-                            <local:InputBindingControl x:Name="Up1"
-                                                       Grid.Column="0" Grid.Row="17"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Up1}"
-                                                       InputName="Up 1MHz" />
-
-                            <local:InputBindingControl x:Name="Up01"
-                                                       Grid.Column="0" Grid.Row="18"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Up01}"
-                                                       InputName="Up 0.1MHz" />
-
-                            <local:InputBindingControl x:Name="Up001"
-                                                       Grid.Column="0" Grid.Row="19"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Up001}"
-                                                       InputName="Up 0.01MHz" />
-
-                            <local:InputBindingControl x:Name="Up0001"
-                                                       Grid.Column="0" Grid.Row="20"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Up0001}"
-                                                       InputName="Up 0.001MHz" />
-
-
-                            <local:InputBindingControl x:Name="Down100"
-                                                       Grid.Column="0" Grid.Row="21"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Down100}"
-                                                       InputName="Down 100MHz" />
-
-                            <local:InputBindingControl x:Name="Down10"
-                                                       Grid.Column="0" Grid.Row="22"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Down10}"
-                                                       InputName="Down 10MHz" />
-
-                            <local:InputBindingControl x:Name="Down1"
-                                                       Grid.Column="0" Grid.Row="23"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Down1}"
-                                                       InputName="Down 1MHz" />
-
-                            <local:InputBindingControl x:Name="Down01"
-                                                       Grid.Column="0" Grid.Row="24"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Down01}"
-                                                       InputName="Down 0.1MHz" />
-
-                            <local:InputBindingControl x:Name="Down001"
-                                                       Grid.Column="0" Grid.Row="25"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Down001}"
-                                                       InputName="Down 0.01MHz" />
-
-                            <local:InputBindingControl x:Name="Down0001"
-                                                       Grid.Column="0" Grid.Row="26"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.Down0001}"
-                                                       InputName="Down 0.001MHz" />
-
-                            <local:InputBindingControl x:Name="ToggleGuard"
-                                                       Grid.Column="0" Grid.Row="27"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.ToggleGuard}"
-                                                       InputName="Toggle Guard" />
-
-                            <local:InputBindingControl x:Name="NextRadio"
-                                                       Grid.Column="0" Grid.Row="28"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.NextRadio}"
-                                                       InputName="Next Radio" />
-
-
-                            <local:InputBindingControl x:Name="PreviousRadio"
-                                                       Grid.Column="0" Grid.Row="29"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.PreviousRadio}"
-                                                       InputName="Previous Radio" />
-
-                            <local:InputBindingControl x:Name="ToggleEncryption"
-                                                       Grid.Column="0" Grid.Row="30"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.ToggleEncryption}"
-                                                       InputName="Toggle Encryption" />
-
-                            <local:InputBindingControl x:Name="EncryptionKeyIncrease"
-                                                       Grid.Column="0" Grid.Row="31"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.EncryptionKeyIncrease}"
-                                                       InputName="Encryption Key Increase" />
-
-                            <local:InputBindingControl x:Name="EncryptionKeyDecrease"
-                                                       Grid.Column="0" Grid.Row="32"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.EncryptionKeyDecrease}"
-                                                       InputName="Encryption Key Decrease" />
-
-                            <local:InputBindingControl x:Name="RadioChannelUp"
-                                                       Grid.Column="0" Grid.Row="33"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.RadioChannelUp}"
-                                                       InputName="Radio Channel Up" />
-
-                            <local:InputBindingControl x:Name="RadioChannelDown"
-                                                       Grid.Column="0" Grid.Row="34"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.RadioChannelDown}"
-                                                       InputName="Radio Channel Down" />
-
-                            <local:InputBindingControl x:Name="TransponderIdent"
-                                                       Grid.Column="0" Grid.Row="35"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.TransponderIDENT}"
-                                                       InputName="Transponder IDENT" />
-
-                            <local:InputBindingControl x:Name="RadioVolumeUp"
-                                                       Grid.Column="0" Grid.Row="36"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.RadioVolumeUp}"
-                                                       InputName="Radio Volume Up" />
-
-                            <local:InputBindingControl x:Name="RadioVolumeDown"
-                                                       Grid.Column="0" Grid.Row="37"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.RadioVolumeDown}"
-                                                       InputName="Radio Volume Down" />
-
-                            <local:InputBindingControl x:Name="AwacsOverlayToggle"
-                                                       Grid.Column="0" Grid.Row="38"
-                                                       Grid.ColumnSpan="5"
-                                                       ControlInputBinding="{x:Static settings:InputBinding.AwacsOverlayToggle}"
-                                                       InputName="AWACS Overlay Toggle" />
-
-
+                        <Grid >
+	                        <Grid.ColumnDefinitions>
+		                        <ColumnDefinition Width="2*" />
+		                        <ColumnDefinition Width="2*" />
+		                        <ColumnDefinition Width="1*" />
+		                        <ColumnDefinition Width="1*" />
+		                        <ColumnDefinition Width="1*" />
+	                        </Grid.ColumnDefinitions>
+	                        
+	                        <Label Grid.Column="1" Content="{x:Static p:Resources.DeviceLabel}" />
+	                        <Label Grid.Column="2" Content="{x:Static p:Resources.ButtonLabel}" />
                         </Grid>
 
+                        <local:InputBindingControl2 InputName="Radio 1"
+                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch01}" />
+                        <local:InputBindingControl2 InputName="Radio 2"
+                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch02}" />
+                        <local:InputBindingControl2 InputName="Radio 3"
+                                                    DataContext="{Binding SrsSettings.CurrentProfile.InputSwitch03}"/>
                     </StackPanel>
                 </ScrollViewer>
 

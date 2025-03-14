@@ -44,7 +44,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
     public partial class MainWindow : MetroWindow
     {
         private readonly IMainViewModel ViewModel;
-        
+ 
         public delegate void ReceivedAutoConnect(string address, int port);
         public delegate void ToggleOverlayCallback(bool uiButton, bool awacs);
 
@@ -58,7 +58,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         //used to debounce toggle
         private long _toggleShowHide;
         
-
         public MainWindow(IMainViewModel viewModel)
         {
             DataContext = ViewModel = viewModel;
@@ -231,166 +230,13 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         private void InitInput()
         {
-            InputManager = new InputDeviceManager(this, ToggleOverlay);
+            //InputManager = new InputDeviceManager(this, ToggleOverlay);
             
             RadioStartTransmitEffect.SelectionChanged += OnRadioStartTransmitEffectChanged;
             RadioEndTransmitEffect.SelectionChanged += OnRadioEndTransmitEffectChanged;
 
             IntercomStartTransmitEffect.SelectionChanged += OnIntercomStartTransmitEffectChanged;
             IntercomEndTransmitEffect.SelectionChanged += OnIntercomEndTransmitEffectChanged;
-
-            Radio1.InputName = Properties.Resources.InputRadio1;
-            Radio1.ControlInputBinding = InputBinding.Switch1;
-            Radio1.InputDeviceManager = InputManager;
-
-            Radio2.InputName = Properties.Resources.InputRadio2;
-            Radio2.ControlInputBinding = InputBinding.Switch2;
-            Radio2.InputDeviceManager = InputManager;
-
-            Radio3.InputName = Properties.Resources.InputRadio3;
-            Radio3.ControlInputBinding = InputBinding.Switch3;
-            Radio3.InputDeviceManager = InputManager;
-
-            PushToTalk.InputName = Properties.Resources.InputPTT;
-            PushToTalk.ControlInputBinding = InputBinding.Ptt;
-            PushToTalk.InputDeviceManager = InputManager;
-
-            Intercom.InputName = Properties.Resources.InputIntercom;
-            Intercom.ControlInputBinding = InputBinding.Intercom;
-            Intercom.InputDeviceManager = InputManager;
-
-            IntercomPushToTalk.InputName = Properties.Resources.InputIntercomPTT;
-            IntercomPushToTalk.ControlInputBinding = InputBinding.IntercomPTT;
-            IntercomPushToTalk.InputDeviceManager = InputManager;
-
-            RadioOverlay.InputName = Properties.Resources.InputRadioOverlay;
-            RadioOverlay.ControlInputBinding = InputBinding.OverlayToggle;
-            RadioOverlay.InputDeviceManager = InputManager;
-
-            AwacsOverlayToggle.InputName = Properties.Resources.InputAwacsOverlay;
-            AwacsOverlayToggle.ControlInputBinding = InputBinding.AwacsOverlayToggle;
-            AwacsOverlayToggle.InputDeviceManager = InputManager;
-
-            Radio4.InputName = Properties.Resources.InputRadio4;
-            Radio4.ControlInputBinding = InputBinding.Switch4;
-            Radio4.InputDeviceManager = InputManager;
-
-            Radio5.InputName = Properties.Resources.InputRadio5;
-            Radio5.ControlInputBinding = InputBinding.Switch5;
-            Radio5.InputDeviceManager = InputManager;
-
-            Radio6.InputName = Properties.Resources.InputRadio6;
-            Radio6.ControlInputBinding = InputBinding.Switch6;
-            Radio6.InputDeviceManager = InputManager;
-
-            Radio7.InputName = Properties.Resources.InputRadio7;
-            Radio7.ControlInputBinding = InputBinding.Switch7;
-            Radio7.InputDeviceManager = InputManager;
-
-            Radio8.InputName = Properties.Resources.InputRadio8;
-            Radio8.ControlInputBinding = InputBinding.Switch8;
-            Radio8.InputDeviceManager = InputManager;
-
-            Radio9.InputName = Properties.Resources.InputRadio9;
-            Radio9.ControlInputBinding = InputBinding.Switch9;
-            Radio9.InputDeviceManager = InputManager;
-
-            Radio10.InputName = Properties.Resources.InputRadio10;
-            Radio10.ControlInputBinding = InputBinding.Switch10;
-            Radio10.InputDeviceManager = InputManager;
-
-            Up100.InputName = Properties.Resources.InputUp100;
-            Up100.ControlInputBinding = InputBinding.Up100;
-            Up100.InputDeviceManager = InputManager;
-
-            Up10.InputName = Properties.Resources.InputUp10;
-            Up10.ControlInputBinding = InputBinding.Up10;
-            Up10.InputDeviceManager = InputManager;
-
-            Up1.InputName = Properties.Resources.InputUp1;
-            Up1.ControlInputBinding = InputBinding.Up1;
-            Up1.InputDeviceManager = InputManager;
-
-            Up01.InputName = Properties.Resources.InputUp01;
-            Up01.ControlInputBinding = InputBinding.Up01;
-            Up01.InputDeviceManager = InputManager;
-
-            Up001.InputName = Properties.Resources.InputUp001;
-            Up001.ControlInputBinding = InputBinding.Up001;
-            Up001.InputDeviceManager = InputManager;
-
-            Up0001.InputName = Properties.Resources.InputUp0001;
-            Up0001.ControlInputBinding = InputBinding.Up0001;
-            Up0001.InputDeviceManager = InputManager;
-
-
-            Down100.InputName = Properties.Resources.InputDown100;
-            Down100.ControlInputBinding = InputBinding.Down100;
-            Down100.InputDeviceManager = InputManager;
-
-            Down10.InputName = Properties.Resources.InputDown10;
-            Down10.ControlInputBinding = InputBinding.Down10;
-            Down10.InputDeviceManager = InputManager;
-
-            Down1.InputName = Properties.Resources.InputDown1;
-            Down1.ControlInputBinding = InputBinding.Down1;
-            Down1.InputDeviceManager = InputManager;
-
-            Down01.InputName = Properties.Resources.InputDown01;
-            Down01.ControlInputBinding = InputBinding.Down01;
-            Down01.InputDeviceManager = InputManager;
-
-            Down001.InputName = Properties.Resources.InputDown001;
-            Down001.ControlInputBinding = InputBinding.Down001;
-            Down001.InputDeviceManager = InputManager;
-
-            Down0001.InputName = Properties.Resources.InputDown0001;
-            Down0001.ControlInputBinding = InputBinding.Down0001;
-            Down0001.InputDeviceManager = InputManager;
-
-            ToggleGuard.InputName = Properties.Resources.InputToggleGuard;
-            ToggleGuard.ControlInputBinding = InputBinding.ToggleGuard;
-            ToggleGuard.InputDeviceManager = InputManager;
-
-            NextRadio.InputName = Properties.Resources.InputNextRadio;
-            NextRadio.ControlInputBinding = InputBinding.NextRadio;
-            NextRadio.InputDeviceManager = InputManager;
-
-            PreviousRadio.InputName = Properties.Resources.InputPreviousRadio;
-            PreviousRadio.ControlInputBinding = InputBinding.PreviousRadio;
-            PreviousRadio.InputDeviceManager = InputManager;
-
-            ToggleEncryption.InputName = Properties.Resources.InputToggleEncryption;
-            ToggleEncryption.ControlInputBinding = InputBinding.ToggleEncryption;
-            ToggleEncryption.InputDeviceManager = InputManager;
-
-            EncryptionKeyIncrease.InputName = Properties.Resources.InputEncryptionIncrease;
-            EncryptionKeyIncrease.ControlInputBinding = InputBinding.EncryptionKeyIncrease;
-            EncryptionKeyIncrease.InputDeviceManager = InputManager;
-
-            EncryptionKeyDecrease.InputName = Properties.Resources.InputEncryptionDecrease;
-            EncryptionKeyDecrease.ControlInputBinding = InputBinding.EncryptionKeyDecrease;
-            EncryptionKeyDecrease.InputDeviceManager = InputManager;
-
-            RadioChannelUp.InputName = Properties.Resources.InputRadioChannelUp;
-            RadioChannelUp.ControlInputBinding = InputBinding.RadioChannelUp;
-            RadioChannelUp.InputDeviceManager = InputManager;
-
-            RadioChannelDown.InputName = Properties.Resources.InputRadioChannelDown;
-            RadioChannelDown.ControlInputBinding = InputBinding.RadioChannelDown;
-            RadioChannelDown.InputDeviceManager = InputManager;
-
-            TransponderIdent.InputName = Properties.Resources.InputTransponderIDENT;
-            TransponderIdent.ControlInputBinding = InputBinding.TransponderIDENT;
-            TransponderIdent.InputDeviceManager = InputManager;
-
-            RadioVolumeUp.InputName = Properties.Resources.InputRadioVolumeUp;
-            RadioVolumeUp.ControlInputBinding = InputBinding.RadioVolumeUp;
-            RadioVolumeUp.InputDeviceManager = InputManager;
-
-            RadioVolumeDown.InputName = Properties.Resources.InputRadioVolumeDown;
-            RadioVolumeDown.ControlInputBinding = InputBinding.RadioVolumeDown;
-            RadioVolumeDown.InputDeviceManager = InputManager;
         }
 
         private void OnRadioStartTransmitEffectChanged(object sender, SelectionChangedEventArgs e)
@@ -427,43 +273,6 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
         private void ReloadInputBindings()
         {
-            Radio1.LoadInputSettings();
-            Radio2.LoadInputSettings();
-            Radio3.LoadInputSettings();
-            PushToTalk.LoadInputSettings();
-            Intercom.LoadInputSettings();
-            IntercomPushToTalk.LoadInputSettings();
-            RadioOverlay.LoadInputSettings();
-            Radio4.LoadInputSettings();
-            Radio5.LoadInputSettings();
-            Radio6.LoadInputSettings();
-            Radio7.LoadInputSettings();
-            Radio8.LoadInputSettings();
-            Radio9.LoadInputSettings();
-            Radio10.LoadInputSettings();
-            Up100.LoadInputSettings();
-            Up10.LoadInputSettings();
-            Up1.LoadInputSettings();
-            Up01.LoadInputSettings();
-            Up001.LoadInputSettings();
-            Up0001.LoadInputSettings();
-            Down100.LoadInputSettings();
-            Down10.LoadInputSettings();
-            Down1.LoadInputSettings();
-            Down01.LoadInputSettings();
-            Down001.LoadInputSettings();
-            Down0001.LoadInputSettings();
-            ToggleGuard.LoadInputSettings();
-            NextRadio.LoadInputSettings();
-            PreviousRadio.LoadInputSettings();
-            ToggleEncryption.LoadInputSettings();
-            EncryptionKeyIncrease.LoadInputSettings();
-            EncryptionKeyDecrease.LoadInputSettings();
-            RadioChannelUp.LoadInputSettings();
-            RadioChannelDown.LoadInputSettings();
-            RadioVolumeUp.LoadInputSettings();
-            RadioVolumeDown.LoadInputSettings();
-            AwacsOverlayToggle.LoadInputSettings();
         }
 
         private void ReloadRadioAudioChannelSettings()
