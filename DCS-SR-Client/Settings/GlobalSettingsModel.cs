@@ -2,7 +2,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
 public class GlobalSettingsModel
 {
-	public bool AutoConnect { get; set; } = true;
+	public bool AutoConnect{ get; set; } = true;
 	public bool AutoConnectPrompt { get; set; } = false;
 	public bool AutoConnectMismatchPrompt { get; set; } = true;
 	public bool RadioOverlayTaskbarHide { get; set; } = false;

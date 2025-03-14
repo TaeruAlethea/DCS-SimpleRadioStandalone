@@ -12,6 +12,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
 public partial class SrsSettingsService : ObservableObject, ISrsSettings
 {
+	const string SettingsFileName = "./appsettings.json";
+	
 	private IConfigurationRoot _configuration;
 
 	[ObservableProperty] [NotifyPropertyChangedFor(nameof(CurrentProfile))]
@@ -19,7 +21,7 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 
 	partial void OnGlobalSettingsChanged(GlobalSettingsModel value)
 	{
-		SaveSettings(_configuration);
+		//SaveSettings(_configuration);
 	}
 
 	[ObservableProperty]
@@ -44,11 +46,11 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 	
 	public SrsSettingsService()
 	{
-		if (!File.Exists("settings.json")) { CreateNewAppSettings(); }			
-		if (File.ReadAllBytes("appsettings.json").Length <= 10) { CreateNewAppSettings(); }
+		if (!File.Exists(SettingsFileName)) { CreateNewAppSettings(); }			
+		if (File.ReadAllBytes(SettingsFileName).Length <= 10) { CreateNewAppSettings(); }
 		
 		_configuration = new ConfigurationBuilder()
-			.AddJsonFile("appsettings.json", reloadOnChange: false, optional: false)
+			.AddJsonFile(SettingsFileName, reloadOnChange: false, optional: false)
 			.Build();
 
 		_configuration.GetSection("GlobalSettings").Bind(GlobalSettings);
@@ -95,7 +97,7 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 	{
 		try
 		{
-			File.WriteAllText("appsettings.json", JsonConvert.SerializeObject(configuration, Formatting.Indented));
+			File.WriteAllText(SettingsFileName, JsonConvert.SerializeObject(configuration, Formatting.Indented));
 		}
 		catch (Exception e)
 		{
@@ -103,20 +105,24 @@ public partial class SrsSettingsService : ObservableObject, ISrsSettings
 			throw;
 		}
 	}
-	
-	public void CreateNewAppSettings()
-	{
-		string newSettings = JsonConvert.SerializeObject(new SettingsModel());
 		
-		File.WriteAllText("appsettings.json", JsonConvert.SerializeObject(newSettings, Formatting.Indented));
-	}
-	
-	class SettingsModel
+	public class SettingsModel
 	{
-		private string SettingsVersion= string.Empty;
+		private string SettingsVersion = "1.0";
 		private GlobalSettingsModel GlobalSettings = new GlobalSettingsModel();
 		private List<ProfileSettingsModel> ProfileSettings = new List<ProfileSettingsModel>()
 			{ new ProfileSettingsModel() };
 	}
+	
+	
+	public void CreateNewAppSettings()
+	{
+		SettingsModel temp = new SettingsModel();
+		string Json = JsonConvert.SerializeObject(temp, SettingsModel, Formatting.Indented);
+		
+		
+		File.WriteAllText(SettingsFileName, Json);
+	}
+
 }
 
