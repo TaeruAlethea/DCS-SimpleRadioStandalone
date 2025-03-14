@@ -7,13 +7,17 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Win32;
 using Newtonsoft.Json;
+using NLog;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 
 public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 {
 	const string SettingsFileName = "./appsettings.json";
+	
+	private readonly Logger Logger = LogManager.GetCurrentClassLogger();
 	
 	private IConfigurationRoot _configuration;
 
@@ -30,8 +34,13 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 	public ProfileSettingsModel CurrentProfile
 	{
 		get => _profileSettings[GlobalSettings.CurrentProfileName];
-		set => _profileSettings[GlobalSettings.CurrentProfileName] = value;
+		set
+		{
+			Logger.Info(GlobalSettings.CurrentProfileName + " - Profile now in use");
+			_profileSettings[GlobalSettings.CurrentProfileName] = value;
+		}
 	}
+
 	// Only the Current Profile
 	public List<string> ProfileNames => _profileSettings.Keys.ToList();
 	
@@ -56,6 +65,10 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 
 		_configuration.GetSection("GlobalSettings").Bind(GlobalSettings);
 		_configuration.GetSection("ProfileSettings").Bind(_profileSettings);
+		
+		var objValue = Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\DCS-SR-Standalone", "SRSAnalyticsOptOut", "FALSE");
+		if (objValue != null && objValue == "TRUE") { GlobalSettings.AllowAnonymousUsage = true; }
+		else { GlobalSettings.AllowAnonymousUsage = false; }
 		
 		if (!_profileSettings.ContainsKey(GlobalSettings.CurrentProfileName)) { GlobalSettings.CurrentProfileName = "default"; }
 		OnPropertyChanged(nameof(CurrentProfileName));

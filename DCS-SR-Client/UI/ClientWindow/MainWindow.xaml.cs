@@ -56,14 +56,8 @@ public partial class MainWindow : IMainWindow
         DataContext = ViewModel = Ioc.Default.GetRequiredService<IMainViewModel>();
         InitializeComponent();
 
-        // Initialize ToolTip controls
-        ToolTips.Init();
-
         // Initialise sounds
         Sounds.Init();
-
-        // Set up tooltips that are always defined
-        InitToolTips();
 
         WindowStartupLocation = WindowStartupLocation.Manual;
         Title = Title + " - " + UpdaterChecker.VERSION;
@@ -82,14 +76,6 @@ public partial class MainWindow : IMainWindow
         }
 
         Analytics.Log("Client", "Startup", ViewModel.SrsSettings.GlobalSettings.ClientIdLong);
-
-        InitSettingsScreen();
-
-        ReloadProfile();
-
-        InitInput();
-        
-        UpdatePresetsFolderLabel();
 
         if ((SpeakerBoostLabel != null) && (SpeakerBoost != null))
         {
@@ -209,24 +195,11 @@ public partial class MainWindow : IMainWindow
                 args.Handled = true;
             });
     }
-
-    void ReloadProfile()
-    {
-        //switch profiles
-        Logger.Info(ControlsProfile.SelectedValue as string + " - Profile now in use");
-    }
-
-    private void InitInput()
-    {
-        //InputManager = new InputDeviceManager(this, ToggleOverlay);
-    }
-
-    private void InitToolTips()
-    {
-        ExternalAwacsModePassword.ToolTip = ToolTips.ExternalAWACSModePassword;
-        //ExternalAwacsModeName.ToolTip = ToolTips.ExternalAWACSModeName;
-        ConnectExternalAwacsMode.ToolTip = ToolTips.ExternalAWACSMode;
-    }
+    
+    // private void InitInput()
+    // {
+    //     InputManager = new InputDeviceManager(this, ToggleOverlay);
+    // }
 
     public InputDeviceManager InputManager { get; set; }
 
@@ -257,19 +230,6 @@ public partial class MainWindow : IMainWindow
         }
         
         ConnectedClientsSingleton.Instance.NotifyAll();
-    }
-
-    private void InitSettingsScreen()
-    {
-        var objValue = Registry.GetValue("HKEY_CURRENT_USER\\SOFTWARE\\DCS-SR-Standalone", "SRSAnalyticsOptOut", "FALSE");
-        if (objValue == null || (string)objValue == "TRUE")
-        {
-            AllowAnonymousUsage.IsChecked = false;
-        }
-        else
-        {
-            AllowAnonymousUsage.IsChecked = true;
-        }
     }
   
     public void SaveSelectedInputAndOutput()
@@ -395,7 +355,6 @@ public partial class MainWindow : IMainWindow
 
     protected override void OnClosing(CancelEventArgs e)
     {
-        //save window position
         base.OnClosing(e);
         
         ViewModel.StopCommand.Execute(true);
@@ -923,24 +882,8 @@ public partial class MainWindow : IMainWindow
 
     }
 
-    private void UpdatePresetsFolderLabel()
-    {
-        var presetsFolder = ViewModel.SrsSettings.GlobalSettings.LastPresetsFolder;
-        if (!string.IsNullOrWhiteSpace(presetsFolder))
-        {
-            PresetsFolderLabel.Content = Path.GetFileName(presetsFolder);
-            PresetsFolderLabel.ToolTip = presetsFolder;
-        }
-        else
-        {
-            PresetsFolderLabel.Content = "(default)";
-            PresetsFolderLabel.ToolTip = Directory.GetCurrentDirectory();
-        }
-    }
-
     private void CopyProfile(object sender, RoutedEventArgs e)
     {
-        var current = ControlsProfile.SelectedValue as string;
         var inputProfileWindow = new InputProfileWindow.InputProfileWindow(name =>
         {
             if (name.Trim().Length > 0)
@@ -952,18 +895,7 @@ public partial class MainWindow : IMainWindow
         inputProfileWindow.Owner = this;
         inputProfileWindow.ShowDialog();
     }
-
-    private void CurrentPosition_OnClick(object sender, MouseButtonEventArgs e)
-    {
-        try
-        {
-            var pos = ViewModel.ClientState.PlayerCoalitionLocationMetadata.LngLngPosition;
-
-            Process.Start($"https://maps.google.com/maps?q=loc:{pos.lat},{pos.lng}");
-        }
-        catch { }
-    }
-
+    
     private void ShowClientList_OnClick(object sender, RoutedEventArgs e)
     {
         if ((_clientListWindow == null) || !_clientListWindow.IsVisible ||
@@ -1022,31 +954,14 @@ public partial class MainWindow : IMainWindow
     private void PresetsFolderBrowseButton_Click(object sender, RoutedEventArgs e)
     {
         var selectPresetsFolder = new System.Windows.Forms.FolderBrowserDialog();
-        selectPresetsFolder.SelectedPath = PresetsFolderLabel.ToolTip.ToString();
         if (selectPresetsFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
         {
             ViewModel.SrsSettings.GlobalSettings.LastPresetsFolder = selectPresetsFolder.SelectedPath;
-            UpdatePresetsFolderLabel();
         }
     }
 
     private void PresetsFolderResetButton_Click(object sender, RoutedEventArgs e)
     {
         ViewModel.SrsSettings.GlobalSettings.LastPresetsFolder = string.Empty;
-        UpdatePresetsFolderLabel();
-    }
-
-    private void PasswordBox_PasswordChanged(object sender, RoutedEventArgs e)
-    {
-        if (ViewModel != null)
-        {
-            // Special Case Binding
-            ViewModel.ServerAddress.EamCoalitionPassword = ((PasswordBox)sender).Password;
-        } 
-    }
-
-    private void ControlsProfile_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        
     }
 }

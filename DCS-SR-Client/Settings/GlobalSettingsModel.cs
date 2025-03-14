@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 
@@ -77,6 +78,7 @@ public partial class GlobalSettingsModel : ObservableObject
 	[ObservableProperty] private bool _playConnectionSounds = true;
 
 	[ObservableProperty] private bool _requireAdmin = true;
+	[ObservableProperty] private bool _allowAnonymousUsage = false;
 	
 	[ObservableProperty] private string _currentProfileName  = "default";
 
@@ -104,6 +106,7 @@ public partial class GlobalSettingsModel : ObservableObject
 	[ObservableProperty] private double _voxMinimumDb = (double)-59.0;
 	
 	[ObservableProperty] private bool _allowXInputController = false;
-	[ObservableProperty] private string _lastPresetsFolder = string.Empty;
+	[ObservableProperty] private string _lastPresetsFolder = Directory.GetCurrentDirectory();
+	[ObservableProperty] private string _lastPresetsFile = "(Default)";
 
 }
