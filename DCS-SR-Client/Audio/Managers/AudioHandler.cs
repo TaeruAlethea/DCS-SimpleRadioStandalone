@@ -24,8 +24,9 @@ public partial class AudioHandler : ObservableObject, IAudioHandler
 
 	public bool IsPreviewing { get; private set; } = false; // True when Preview is source.
 	public bool IsActive { get; private set; } = false; // True when AudioManager is source.
-	public bool IsMicAvailable { get; private set; } = false;
-	
+
+	public bool IsMicAvailable => AudioInput.MicrophoneAvailable;
+
 	public List<string> InputDevices
 	{
 		get
@@ -104,17 +105,20 @@ public partial class AudioHandler : ObservableObject, IAudioHandler
 	[RelayCommand]
 	private void StartPreview()
 	{
-
+		
 		if (!AudioInput.MicrophoneAvailable) { return; }
 		try
 		{
 			AudioPreview = new AudioPreview();
 			AudioPreview.StartPreview(AudioOutput.WindowsN);
+			IsPreviewing = true;
 		}
 		catch (Exception ex)
 		{
 			_logger.Error(ex, "Unable to preview audio - likely output device error - Pick another. Error:" + ex.Message);
+			IsPreviewing = false;
 		}
+		OnPropertyChanging();
 	}
 
 	[RelayCommand]
@@ -122,6 +126,8 @@ public partial class AudioHandler : ObservableObject, IAudioHandler
 	{
 		AudioPreview.StopEncoding();
 		AudioPreview = null;
+		IsPreviewing = false;
+		OnPropertyChanging();
 	}
 
 	[RelayCommand]
