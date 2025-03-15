@@ -14,6 +14,7 @@ using SharpConfig;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 {
+    [Obsolete]
     public enum GlobalSettingsKeys
     {
         MinimiseToTray,
@@ -104,7 +105,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 
         LastPresetsFolder
     }
-
+    [Obsolete]
     public enum InputBinding
     {
         Intercom = 100,
@@ -221,7 +222,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         AwacsOverlayToggle = 137,
         ModifierAwacsOverlayToggle = 237
     }
-    
+    [Obsolete]
     public partial class GlobalSettingsStore : ObservableObject
     {
         private static readonly string CFG_FILE_NAME = "global.cfg";

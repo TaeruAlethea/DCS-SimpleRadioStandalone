@@ -11,6 +11,7 @@ using SharpConfig;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 {
+    [Obsolete]
     public enum ProfileSettingsKeys
     {
         Radio1Channel,
@@ -71,7 +72,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
         AmbientCockpitIntercomNoiseEffect,
         DisableExpansionRadios
     }
-
+    
+    [Obsolete]
     public partial class ProfileSettingsStore : ObservableObject
     {
         private static readonly object _lock = new object();

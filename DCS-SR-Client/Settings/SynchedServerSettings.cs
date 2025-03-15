@@ -7,6 +7,7 @@ using NLog;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Settings
 {
+    [Obsolete]
     public class SyncedServerSettings
     {
         private readonly Logger Logger = LogManager.GetCurrentClassLogger();

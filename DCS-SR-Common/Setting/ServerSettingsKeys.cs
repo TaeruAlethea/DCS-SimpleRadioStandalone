@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Common.Setting
 {
+    [Obsolete]
     public enum ServerSettingsKeys
     {
         SERVER_PORT = 0,
