@@ -21,7 +21,7 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 	
 	private IConfigurationRoot _configuration;
 
-	// All Settings
+	// Global Application Settings
 	[ObservableProperty]
 	[NotifyPropertyChangedFor(nameof(CurrentProfileName))]
 	private GlobalSettingsModel _globalSettings = new GlobalSettingsModel();
@@ -48,12 +48,19 @@ public partial class SrsSettingsService : ObservableRecipient, ISrsSettings
 	[NotifyPropertyChangedFor(nameof(CurrentProfile))]
 	[NotifyPropertyChangedFor(nameof(ProfileNames))]
 	private string _currentProfileName = "default";
-
+	
 	partial void OnCurrentProfileNameChanged(string value)
 	{
 		GlobalSettings.CurrentProfileName = value;
 	}
 
+	// Connected Server Settings
+	/// <summary>
+	/// This is only kept in memory and not written to file.
+	/// On Each connection to a server, this will be changed.
+	/// </summary>
+	[ObservableProperty] private ServerSettingsModel _currentServerSettings = new ServerSettingsModel();
+	
 	public SrsSettingsService()
 	{
 		if (!File.Exists(SettingsFileName)) { CreateNewAppSettings(); }			
