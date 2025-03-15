@@ -37,7 +37,6 @@ public partial class AudioHandler : ObservableObject, IAudioHandler
 	partial void OnCurrentInputDeviceChanged(string value)
 	{
 		SrsSettings.GlobalSettings.AudioInputDeviceId = value;
-		WeakReferenceMessenger.Default.Send(new SettingChangingMessage());
 	}
 
 	public List<string> OutputDevices
@@ -51,7 +50,6 @@ public partial class AudioHandler : ObservableObject, IAudioHandler
 	partial void OnCurrentOutputDeviceChanged(string value)
 	{
 		SrsSettings.GlobalSettings.AudioOutputDeviceId = value;
-		WeakReferenceMessenger.Default.Send(new SettingChangingMessage());
 	}
 
 	public List<string> SideToneDevices
@@ -65,7 +63,6 @@ public partial class AudioHandler : ObservableObject, IAudioHandler
 	partial void OnCurrentSideToneDeviceChanged(string value)
 	{
 		SrsSettings.GlobalSettings.SideToneDeviceId = value;
-		WeakReferenceMessenger.Default.Send(new SettingChangingMessage());
 	}
 
 	public float InputUV
