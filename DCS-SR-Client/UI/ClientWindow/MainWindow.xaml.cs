@@ -8,7 +8,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
@@ -306,7 +308,16 @@ public partial class MainWindow : IMainWindow
 
     private void PreviewAudio(object sender, RoutedEventArgs e)
     {
-        ViewModel.AudioHandler.StartPreviewCommand.Execute(true);
+        if (ViewModel.AudioHandler.IsPreviewing)
+        {
+            Preview.Content = Properties.Resources.PreviewAudio;
+            ViewModel.AudioHandler.StopPreviewCommand.Execute(true);
+        }
+        else
+        {
+            Preview.Content = Properties.Resources.PreviewAudioStop;
+            ViewModel.AudioHandler.StartPreviewCommand.Execute(true);
+        }
     }
 
     public void UpdateUICallback()
