@@ -55,23 +55,9 @@
                             HorizontalAlignment="Center"
                             Click="PreviewAudio"
                             ToolTipService.ShowOnDisabled="True"
-                            Content="{x:Static p:Resources.PreviewAudio}"
                             IsEnabled="{Binding AudioHandler.IsMicAvailable}"
-                            ToolTip="{Binding AudioHandler.IsMicAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" >
-											<Button.Style>
-												<Style TargetType="{x:Type Button}" BasedOn="{StaticResource SrsButtonStyle}">
-			                    <Style.Triggers>
-				                    <DataTrigger Binding="{Binding AudioHandler.IsPreviewing}" Value="{StaticResource TrueValue}">
-					                    <Setter Property="Content" Value="{x:Static p:Resources.PreviewAudio}" />
-					                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent2}" />
-				                    </DataTrigger>
-				                    <DataTrigger Binding="{Binding AudioHandler.IsPreviewing}" Value="{StaticResource FalseValue}">
-					                    <Setter Property="Content" Value="{x:Static p:Resources.PreviewAudioStop}" />
-				                    </DataTrigger>
-			                    </Style.Triggers>
-		                    </Style>
-	                    </Button.Style>
-                    </Button>
+                            Content="{x:Static p:Resources.PreviewAudio}"
+                            ToolTip="{Binding AudioHandler.IsMicAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
 
                     <Label x:Name="SpeakerLabel"
                            HorizontalAlignment="Center"
