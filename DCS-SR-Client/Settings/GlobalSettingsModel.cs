@@ -25,7 +25,7 @@ public partial class GlobalSettingsModel : ObservableObject
 	
 	[ObservableProperty] private string _audioInputDeviceId = string.Empty;
 	[ObservableProperty] private string _audioOutputDeviceId = string.Empty;
-	[ObservableProperty] private string _micAudioOutputDeviceId = string.Empty;
+	[ObservableProperty] private string _sideToneDeviceId = string.Empty;
 
 	[ObservableProperty] private string _lastServer = "127.0.0.1";
 	

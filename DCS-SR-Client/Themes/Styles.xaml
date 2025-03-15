@@ -228,7 +228,8 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    <Style TargetType="{x:Type Button}"
+    <Style x:Key="SrsButtonStyle"
+           TargetType="{x:Type Button}"
            BasedOn="{StaticResource MahApps.Styles.Button}">
         <Setter Property="FontSize" Value="10" />
         <Setter Property="BorderThickness" Value="2" />

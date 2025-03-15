@@ -5,13 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Runtime;
 using System.Runtime.CompilerServices;
-using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 using System.Windows.Threading;
-using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS;
@@ -19,7 +13,6 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Preferences;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
-using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -32,8 +25,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 {
 	[ObservableProperty] private ISrsSettings _srsSettings;
-	public AudioInputSingleton AudioInput { get; }
-	public AudioOutputSingleton AudioOutput { get; }
+
 	[ObservableProperty] private ClientStateSingleton _clientState;
 	[ObservableProperty] private ConnectedClientsSingleton _clients;
 	
@@ -41,9 +33,8 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	//public MainWindow ToBeDepricatedMainWindow { get; init; }
 	
 	private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-	
-	[ObservableProperty] private AudioManager _audioManager;
-	[ObservableProperty] private AudioPreview _audioPreview;
+
+	[ObservableProperty] private IAudioHandler _audioHandler = new AudioHandler();
 	
 	[ObservableProperty] private SRSClientSyncHandler _client;
 	[ObservableProperty] private DCSAutoConnectHandler _dcsAutoConnectListener;
@@ -64,8 +55,6 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 	{
 		// Grab Dependencies from DI Container
 		SrsSettings = Ioc.Default.GetRequiredService<ISrsSettings>();
-		AudioInput = Ioc.Default.GetRequiredService<AudioInputSingleton>();
-		AudioOutput = Ioc.Default.GetRequiredService<AudioOutputSingleton>();
 		ClientState = Ioc.Default.GetRequiredService<ClientStateSingleton>();
 		Clients = Ioc.Default.GetRequiredService<ConnectedClientsSingleton>();
 		
@@ -74,11 +63,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		
 		UpdaterChecker.CheckForUpdate(SrsSettings.GlobalSettings.CheckForBetaUpdates);
 
-		
-		_audioManager = new AudioManager(AudioOutput.WindowsN);
 		Guid = ClientStateSingleton.Instance.ShortGUID;
-		
-		AudioManager.SpeakerBoost = (float)SrsSettings.GlobalSettings.SpeakerBoost;
 		
 		//DcsAutoConnectListener = new DCSAutoConnectHandler(ToBeDepricatedMainWindow.AutoConnect);
 
@@ -243,7 +228,7 @@ public partial class MainWindowViewModel : ObservableObject, IMainViewModel
 		*/
 		try
 		{
-			AudioManager.StopEncoding();
+			AudioHandler.AudioManager.StopEncoding();
 		}
 		catch (Exception)
 		{

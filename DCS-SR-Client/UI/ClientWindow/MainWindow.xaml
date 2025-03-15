@@ -37,27 +37,41 @@
                     <ComboBox x:Name="Mic"
                               Width="250"
                               HorizontalAlignment="Center"
-                              ItemsSource="{Binding Path=AudioInput.InputAudioDevices}"
-                              SelectedItem="{Binding Path=AudioInput.SelectedAudioInput, Mode=TwoWay}"
-                              ToolTip="{Binding Path=AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
+                              ItemsSource="{Binding AudioHandler.InputDevices}"
+                              SelectedItem="{Binding AudioHandler.CurrentInputDevice}"
+                              ToolTip="{Binding AudioHandler.IsMicAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
                     <ProgressBar Name="MicVu"
                                  HorizontalAlignment="Center"
                                  Width="150"
                                  Height="20"
                                  Margin="5"
-                                 Value="-96.6"
+                                 Value="{Binding AudioHandler.InputUV, Mode=OneWay}"
                                  Maximum="0"
                                  Minimum="-96.6"
-                                 ToolTip="{Binding Path=AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
+                                 ToolTip="{Binding AudioHandler.IsMicAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
 
                     <Button x:Name="Preview"
                             Margin="5"
                             HorizontalAlignment="Center"
                             Click="PreviewAudio"
-                            Content="{x:Static p:Resources.PreviewAudio}"
                             ToolTipService.ShowOnDisabled="True"
-                            IsEnabled="{Binding AudioInput.MicrophoneAvailable}"
-                            ToolTip="{Binding Path=AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
+                            Content="{x:Static p:Resources.PreviewAudio}"
+                            IsEnabled="{Binding AudioHandler.IsMicAvailable}"
+                            ToolTip="{Binding AudioHandler.IsMicAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" >
+											<Button.Style>
+												<Style TargetType="{x:Type Button}" BasedOn="{StaticResource SrsButtonStyle}">
+			                    <Style.Triggers>
+				                    <DataTrigger Binding="{Binding AudioHandler.IsPreviewing}" Value="{StaticResource TrueValue}">
+					                    <Setter Property="Content" Value="{x:Static p:Resources.PreviewAudio}" />
+					                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent2}" />
+				                    </DataTrigger>
+				                    <DataTrigger Binding="{Binding AudioHandler.IsPreviewing}" Value="{StaticResource FalseValue}">
+					                    <Setter Property="Content" Value="{x:Static p:Resources.PreviewAudioStop}" />
+				                    </DataTrigger>
+			                    </Style.Triggers>
+		                    </Style>
+	                    </Button.Style>
+                    </Button>
 
                     <Label x:Name="SpeakerLabel"
                            HorizontalAlignment="Center"
@@ -65,16 +79,14 @@
                     <UniformGrid Rows="1"
                                  HorizontalAlignment="Stretch"
                                  Margin="5">
-                        <ComboBox x:Name="Speakers"
-                                  HorizontalAlignment="Stretch"
+                        <ComboBox HorizontalAlignment="Stretch"
                                   Margin="5"
-                                  ItemsSource="{Binding Path=AudioOutput.OutputAudioDevices}"
-                                  SelectedItem="{Binding Path=AudioOutput.SelectedAudioOutput, Mode=TwoWay}" />
-                        <ComboBox x:Name="MicOutput"
-                                  HorizontalAlignment="Stretch"
+                                  ItemsSource="{Binding AudioHandler.OutputDevices}"
+                                  SelectedItem="{Binding Path=AudioHandler.CurrentOutputDevice}" />
+                        <ComboBox HorizontalAlignment="Stretch"
                                   Margin="5"
-                                  ItemsSource="{Binding Path=AudioOutput.MicOutputAudioDevices}"
-                                  SelectedItem="{Binding Path=AudioOutput.SelectedMicAudioOutput, Mode=TwoWay}" />
+                                  ItemsSource="{Binding Path=AudioHandler.SideToneDevices}"
+                                  SelectedItem="{Binding Path=AudioHandler.CurrentSideToneDevice}" />
                     </UniformGrid>
 
 
@@ -88,13 +100,12 @@
                                 Maximum="1.0"
                                 Minimum="0.0"
                                 IsMoveToPointEnabled="true"
-                                Value="{Binding Path=AudioManager.SpeakerBoost}" />
+                                Value="{Binding Path=AudioHandler.AudioManager.SpeakerBoost}" />
 																<!-- TODO: Verify that NAudio is happy with a raw float like this. It seems to work, but may have quietly changed the functionality. -->
-                        <ProgressBar Name="SpeakerVu"
-                                     Width="150"
+                        <ProgressBar Width="150"
                                      Height="20"
                                      Margin="5"
-                                     Value="-96.6"
+                                     Value="{Binding AudioHandler.OutputUV, Mode=OneWay}"
                                      Maximum="0"
                                      Minimum="-96.6" />
                     </UniformGrid>
@@ -104,9 +115,11 @@
                                 Orientation="Horizontal">
                         <Label HorizontalAlignment="Center" Content="{x:Static p:Resources.SpeakerBoost}" />
 
-                        <Label x:Name="SpeakerBoostLabel"
-                               HorizontalAlignment="Center"
-                               Content="{x:Static p:Resources.SpeakerBoostLabel}" />
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center" >
+	                        <TextBlock Text="{Binding AudioHandler.AudioManager.SpeakerBoost, Mode=OneWay}" />
+	                        <TextBlock Text="%"/>
+                        </TextBlock>
                     </StackPanel>
 
                     <Label HorizontalAlignment="Center"
@@ -154,7 +167,7 @@
                                 HorizontalAlignment="Center"
                                 Command="{Binding ConnectCommand}"
                                 Content="{x:Static p:Resources.StartStop}"
-                                ToolTip="{Binding AudioInput.MicrophoneAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
+                                ToolTip="{Binding AudioHandler.IsMicAvailable, Converter={StaticResource MicAvailabilityTooltipConverter}}" />
                         <Button x:Name="ToggleServerSettings"
                                 Width="140"
                                 Margin="5"

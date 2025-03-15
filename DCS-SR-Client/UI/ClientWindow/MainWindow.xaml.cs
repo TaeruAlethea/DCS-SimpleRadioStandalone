@@ -8,9 +8,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Documents;
-using System.Windows.Input;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
@@ -37,7 +35,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
 public partial class MainWindow : IMainWindow
 {
     private IMainViewModel ViewModel { get; set; }
-
+    
     public delegate void ReceivedAutoConnect(string address, int port);
     public delegate void ToggleOverlayCallback(bool uiButton, bool awacs);
 
@@ -76,11 +74,6 @@ public partial class MainWindow : IMainWindow
         }
 
         Analytics.Log("Client", "Startup", ViewModel.SrsSettings.GlobalSettings.ClientIdLong);
-
-        if ((SpeakerBoostLabel != null) && (SpeakerBoost != null))
-        {
-            SpeakerBoostLabel.Content = VolumeConversionHelper.ConvertLinearDiffToDB( ViewModel.AudioManager.SpeakerBoost);
-        }
         
         InitFlowDocument();
     }
@@ -202,80 +195,10 @@ public partial class MainWindow : IMainWindow
     // }
 
     public InputDeviceManager InputManager { get; set; }
-
-    public void UpdateVUMeters(object sender, EventArgs e)
-    {
-        if (ViewModel.AudioPreview != null)
-        {
-            // Only update mic volume output if an audio input device is available - sometimes the value can still change, leaving the user with the impression their mic is working after all
-            if (ViewModel.AudioInput.MicrophoneAvailable)
-            {
-                MicVu.Value = ViewModel.AudioPreview.MicMax;
-            }
-            SpeakerVu.Value = ViewModel.AudioPreview.SpeakerMax;
-        }
-        else if (ViewModel.AudioManager  != null)
-        {
-            // Only update mic volume output if an audio input device is available - sometimes the value can still change, leaving the user with the impression their mic is working after all
-            if (ViewModel.AudioInput.MicrophoneAvailable)
-            {
-                MicVu.Value = ViewModel.AudioManager.MicMax;
-            }
-            SpeakerVu.Value = ViewModel.AudioManager.SpeakerMax;
-        }
-        else
-        {
-            MicVu.Value = -100;
-            SpeakerVu.Value = -100;
-        }
-        
-        ConnectedClientsSingleton.Instance.NotifyAll();
-    }
-  
-    public void SaveSelectedInputAndOutput()
-    {
-        //save app settings
-        // Only save selected microphone if one is actually available, resulting in a crash otherwise
-        if (ViewModel.AudioInput.MicrophoneAvailable)
-        {
-            if (ViewModel.AudioInput.SelectedAudioInput.Value == null)
-            {
-                ViewModel.SrsSettings.GlobalSettings.AudioInputDeviceId = "default";
-            }
-            else
-            {
-                var input = ((MMDevice)ViewModel.AudioInput.SelectedAudioInput.Value).ID;
-                ViewModel.SrsSettings.GlobalSettings.AudioInputDeviceId = input;
-            }
-        }
-
-        if (ViewModel.AudioOutput.SelectedAudioOutput.Value == null)
-        {
-            ViewModel.SrsSettings.GlobalSettings.AudioOutputDeviceId = "default";
-        }
-        else
-        {
-            var output = (MMDevice)ViewModel.AudioOutput.SelectedAudioOutput.Value;
-            ViewModel.SrsSettings.GlobalSettings.AudioOutputDeviceId = output.ID;
-        }
-
-        //check if we have optional output
-        if (ViewModel.AudioOutput.SelectedMicAudioOutput.Value != null)
-        {
-            var micOutput = (MMDevice)ViewModel.AudioOutput.SelectedMicAudioOutput.Value;
-            ViewModel.SrsSettings.GlobalSettings.MicAudioOutputDeviceId = micOutput.ID;
-        }
-        else
-        {
-            ViewModel.SrsSettings.GlobalSettings.MicAudioOutputDeviceId = "";
-        }
-
-        ShowMicPassthroughWarning();
-    }
-
+    
     private void ShowMicPassthroughWarning()
     {
-        if (ViewModel.SrsSettings.GlobalSettings.MicAudioOutputDeviceId == 
+        if (ViewModel.SrsSettings.GlobalSettings.SideToneDeviceId == 
             ViewModel.SrsSettings.GlobalSettings.AudioOutputDeviceId)
         {
             MessageBox.Show(Properties.Resources.MsgBoxMicPassthruText, Properties.Resources.MsgBoxMicPassthru, MessageBoxButton.OK,
@@ -317,7 +240,7 @@ public partial class MainWindow : IMainWindow
 
                     ViewModel.SrsSettings.GlobalSettings.LastServer = ServerIp.Text;
 
-                    ViewModel.AudioManager.StartEncoding(ViewModel.Guid, InputManager,
+                    ViewModel.AudioHandler.AudioManager.StartEncoding(ViewModel.Guid, InputManager,
                         ViewModel.ResolvedIp, ViewModel.Port);
                 }
                 catch (Exception ex)
@@ -359,8 +282,7 @@ public partial class MainWindow : IMainWindow
         
         ViewModel.StopCommand.Execute(true);
 
-        ViewModel.AudioPreview?.StopEncoding();
-        ViewModel.AudioPreview = null;
+        ViewModel.AudioHandler.AudioManager?.StopEncoding();
 
         _radioOverlayWindow?.Close();
         _radioOverlayWindow = null;
@@ -384,38 +306,7 @@ public partial class MainWindow : IMainWindow
 
     private void PreviewAudio(object sender, RoutedEventArgs e)
     {
-        if (ViewModel.AudioPreview == null)
-        {
-            if (!ViewModel.AudioInput.MicrophoneAvailable)
-            {
-                Logger.Info("Unable to preview audio, no valid audio input device available or selected");
-                return;
-            }
-
-            //get device
-            try
-            {
-                SaveSelectedInputAndOutput();
-
-                ViewModel.AudioPreview = new AudioPreview();
-                ViewModel.AudioPreview.SpeakerBoost = VolumeConversionHelper.ConvertVolumeSliderToScale((float)SpeakerBoost.Value);
-                ViewModel.AudioPreview.StartPreview(ViewModel.AudioOutput.WindowsN);
-
-                Preview.Content = Properties.Resources.PreviewAudioStop;
-            }
-            catch (Exception ex)
-            {
-                Logger.Error(ex,
-                    "Unable to preview audio - likely output device error - Pick another. Error:" + ex.Message);
-
-            }
-        }
-        else
-        {
-            Preview.Content = Preview.Content = Properties.Resources.PreviewAudio;
-            ViewModel.AudioPreview.StopEncoding();
-            ViewModel.AudioPreview = null;
-        }
+        ViewModel.AudioHandler.StartPreviewCommand.Execute(true);
     }
 
     public void UpdateUICallback()
