@@ -10,12 +10,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using MahApps.Metro.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
 using NLog.Targets.Wrappers;
 using Sentry;
+using SharpConfig;
 
 namespace DCS_SR_Client
 {
@@ -28,6 +31,8 @@ namespace DCS_SR_Client
         private bool loggingReady = false;
         private static Logger Logger = LogManager.GetCurrentClassLogger();
 
+        public IServiceProvider Services { get; }
+        
         public App()
         {
             //Thread.CurrentThread.CurrentUICulture = new CultureInfo("zh-CN");
@@ -58,6 +63,9 @@ namespace DCS_SR_Client
                 Environment.Exit(1);
             }
 
+            Services = ConfigureServices();
+            Ioc.Default.ConfigureServices(Services);
+            
             SetupLogging();
 
             ListArgs();
@@ -106,6 +114,19 @@ namespace DCS_SR_Client
 
         }
 
+        /// <summary>
+        /// Configures the services for the application.
+        /// </summary>
+        private static IServiceProvider ConfigureServices()
+        {
+            var services = new ServiceCollection();
+
+            // Services
+            services.AddSingleton<ISettingStore, SettingStore>();
+            
+            return services.BuildServiceProvider();
+        }
+        
         private void ListArgs()
         {
             Logger.Info("Arguments:");
