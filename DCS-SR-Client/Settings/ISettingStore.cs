@@ -2,7 +2,6 @@
 
 public interface ISettingStore
 {
-    public GlobalSettingsModel GlobalSettingsModel { get; }
-    public ProfileSettingsModel ProfileSettingsModel { get; }
-    public ServerSettingsModel ServerSettingsModel { get; }
+    public GlobalSettingsStore GlobalSettingsStore { get; }
+    public SyncedServerSettings SyncedServerSettings { get; }
 }

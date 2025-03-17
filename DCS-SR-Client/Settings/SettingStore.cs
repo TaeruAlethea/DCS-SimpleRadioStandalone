@@ -2,7 +2,6 @@
 
 public class SettingStore : ISettingStore
 {
-    public GlobalSettingsModel GlobalSettingsModel { get; }
-    public ProfileSettingsModel ProfileSettingsModel { get; }
-    public ServerSettingsModel ServerSettingsModel { get; }
+    public GlobalSettingsStore GlobalSettingsStore => GlobalSettingsStore.Instance;
+    public SyncedServerSettings SyncedServerSettings => SyncedServerSettings.Instance;
 }
