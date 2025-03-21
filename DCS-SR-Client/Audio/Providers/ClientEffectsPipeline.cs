@@ -9,6 +9,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.DSP;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Setting;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using MathNet.Filtering;
 using NAudio.Dsp;
 
@@ -63,7 +64,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Providers
         
         public ClientEffectsPipeline()
         {
-            profileSettings = Settings.GlobalSettingsStore.Instance.ProfileSettingsStore;
+            profileSettings = 
+                Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore;;
             serverSettings =  SyncedServerSettings.Instance;
 
             _filters = new OnlineFilter[2];

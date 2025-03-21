@@ -7,6 +7,7 @@ using System.Windows.Input;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Preferences;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Utils;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites
 {
@@ -14,7 +15,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.ClientWindow.Favourites
     {
         private readonly ObservableCollection<ServerAddress> _addresses = new ObservableCollection<ServerAddress>();
         private readonly IFavouriteServerStore _favouriteServerStore;
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+        private GlobalSettingsStore _globalSettings => Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
 
         public FavouriteServersViewModel(IFavouriteServerStore favouriteServerStore)
         {

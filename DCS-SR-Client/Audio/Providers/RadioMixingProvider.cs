@@ -6,6 +6,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Recording;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using NAudio.Utils;
 using NAudio.Wave;
 
@@ -19,8 +20,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Providers
 
         private ClientEffectsPipeline pipeline = new ClientEffectsPipeline();
 
-        private readonly Settings.ProfileSettingsStore profileSettings =
-            Settings.GlobalSettingsStore.Instance.ProfileSettingsStore;
+        private ProfileSettingsStore profileSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore;
 
         private float[] mixBuffer;
         private float[] secondaryMixBuffer;

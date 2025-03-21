@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 {
@@ -34,7 +35,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         {
             ChannelSelector.IsEnabled = false;
 
-            ChannelSelector.Value = GlobalSettingsStore.Instance.ProfileSettingsStore.GetClientSettingFloat(ProfileSettingKey);
+            ChannelSelector.Value = Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore.GetClientSettingFloat(ProfileSettingKey);
 
             ChannelSelector.IsEnabled = true;
         }
@@ -44,7 +45,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             //the selected value changes when 
             if (ChannelSelector.IsEnabled)
             {
-                GlobalSettingsStore.Instance.ProfileSettingsStore.SetClientSettingFloat(ProfileSettingKey,(float) ChannelSelector.Value);
+                Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore.SetClientSettingFloat(ProfileSettingKey,(float) ChannelSelector.Value);
             }
         }
     }

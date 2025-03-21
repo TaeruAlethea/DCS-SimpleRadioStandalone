@@ -10,6 +10,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.DCSState;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Newtonsoft.Json;
 using NLog;
 
@@ -34,7 +35,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS
         private readonly UDPCommandHandler _udpCommandHandler; 
         private readonly DCSRadioSyncHandler _dcsRadioSyncHandler;
 
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
 
         public delegate void ClientSideUpdate();
         public delegate void SendRadioUpdate();

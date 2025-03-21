@@ -14,6 +14,7 @@ using static Ciribob.DCS.SimpleRadio.Standalone.Common.RadioInformation;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Recording;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using System.Collections.Generic;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client
 {
@@ -40,7 +41,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client
         private bool ambientCockpitEffectEnabled = true;
         private bool ambientCockpitIntercomEffectEnabled = true;
 
-        private ProfileSettingsStore settingsStore = GlobalSettingsStore.Instance.ProfileSettingsStore;
+        private ProfileSettingsStore settingsStore =>
+            Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore;
         private double lastLoaded = 0;
 
         public ClientAudioProvider(bool passThrough = false)

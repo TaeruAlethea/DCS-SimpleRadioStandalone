@@ -19,6 +19,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Helpers;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Setting;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using FragLabs.Audio.Codecs;
 using NLog;
 using static Ciribob.DCS.SimpleRadio.Standalone.Common.RadioInformation;
@@ -43,7 +44,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
         private readonly int _port;
         private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
 
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+        private GlobalSettingsStore _globalSettings => Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
 
         private readonly CancellationTokenSource _stopFlag = new CancellationTokenSource();
 
@@ -133,7 +134,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
             var decoderThread = new Thread(UdpAudioDecode);
             decoderThread.Start();
 
-            var settings = GlobalSettingsStore.Instance;
+            var settings = Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
             _inputManager.StartDetectPtt(pressed =>
             {
                 var radios = _clientStateSingleton.DcsPlayerRadioInfo;

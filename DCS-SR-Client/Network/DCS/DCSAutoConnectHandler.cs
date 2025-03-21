@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Threading;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using NLog;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS
@@ -51,8 +52,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS
                 {
                     try
                     {
-                        var localEp = new IPEndPoint(IPAddress.Any,
-                            GlobalSettingsStore.Instance.GetNetworkSetting(GlobalSettingsKeys.DCSAutoConnectUDP));
+                        var localEp = new IPEndPoint(IPAddress.Any, Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore
+                            .GetNetworkSetting(GlobalSettingsKeys.DCSAutoConnectUDP));
                         _dcsUdpListener = new UdpClient(localEp);
                         break;
                     }

@@ -14,6 +14,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Helpers;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Easy.MessageHub;
 using FragLabs.Audio.Codecs;
 using NAudio.CoreAudioApi;
@@ -81,7 +82,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers
         private WasapiOut _micWaveOut;
         private BufferedWaveProvider _micWaveOutBuffer;
 
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
         private Preprocessor _speex;
         private readonly bool windowsN;
 
@@ -387,7 +389,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers
                             // _beforeWaveFile.Write(pcmBytes, 0, pcmBytes.Length);
 
                             if (clientAudio != null && (_micWaveOutBuffer != null 
-                                                        || GlobalSettingsStore.Instance.GetClientSettingBool(GlobalSettingsKeys.RecordAudio)))
+                                                        || Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore
+                                                            .GetClientSettingBool(GlobalSettingsKeys.RecordAudio)))
                             {
 
                                 //todo see if we can fix the resample / opus decode

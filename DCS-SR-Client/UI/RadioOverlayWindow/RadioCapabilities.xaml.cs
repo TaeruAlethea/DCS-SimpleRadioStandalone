@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.RadioOverlayWindow
 {
@@ -44,7 +45,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI.RadioOverlayWindow
         {
             var radioInfo = ClientStateSingleton.Instance.DcsPlayerRadioInfo;
 
-            var profile = GlobalSettingsStore.Instance.ProfileSettingsStore;
+            var profile = Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore;
 
             try
             {

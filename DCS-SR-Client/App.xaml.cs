@@ -87,7 +87,8 @@ namespace DCS_SR_Client
                     }
                 }
 
-                if (GlobalSettingsStore.Instance.GetClientSettingBool(GlobalSettingsKeys.AllowMultipleInstances) || allowMultiple)
+                if (Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore
+                        .GetClientSettingBool(GlobalSettingsKeys.AllowMultipleInstances) || allowMultiple)
                 {
                     Logger.Warn("Another SRS instance is already running, allowing multiple instances due to config setting");
                 }
@@ -139,7 +140,7 @@ namespace DCS_SR_Client
 
         private void RequireAdmin()
         {
-            if (!GlobalSettingsStore.Instance.GetClientSettingBool(GlobalSettingsKeys.RequireAdmin))
+            if (!Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore.GetClientSettingBool(GlobalSettingsKeys.RequireAdmin))
             {
                 return;
             }

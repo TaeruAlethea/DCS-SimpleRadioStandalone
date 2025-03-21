@@ -13,6 +13,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Setting;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Newtonsoft.Json;
 using NLog;
 
@@ -23,7 +24,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS
         private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
         private readonly ConnectedClientsSingleton _clients = ConnectedClientsSingleton.Instance;
         private readonly string _guid;
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore; 
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private volatile bool _stop = false;
         private UdpClient _dcsLOSListener;

@@ -10,6 +10,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.RadioOverlayWindow.PresetChan
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.DCSState;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
 {
@@ -150,7 +151,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons
             IsConnected = false;
             ExternalAWACSModelSelected = false;
 
-            LastSeenName = Settings.GlobalSettingsStore.Instance.GetClientSetting(Settings.GlobalSettingsKeys.LastSeenName).RawValue;
+            LastSeenName = Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore.GetClientSetting(Settings.GlobalSettingsKeys.LastSeenName).RawValue;
         }
 
         public static ClientStateSingleton Instance

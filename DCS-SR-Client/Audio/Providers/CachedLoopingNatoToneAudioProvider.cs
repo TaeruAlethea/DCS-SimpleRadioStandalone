@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using NAudio.Wave;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Providers
@@ -38,7 +39,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Providers
         {
             int read = source.Read(buffer, offset, count);
 
-            if (!GlobalSettingsStore.Instance.ProfileSettingsStore.GetClientSettingBool(ProfileSettingsKeys.NATOTone) || _audioEffectShort == null)
+            if (!Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore
+                    .GetClientSettingBool(ProfileSettingsKeys.NATOTone) || _audioEffectShort == null)
             {
                 return read;
             }

@@ -16,6 +16,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.DCSState;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Setting;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Newtonsoft.Json;
 using NLog;
 
@@ -26,8 +27,11 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.LotATC
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly long UPDATE_SYNC_RATE = 5*1000 * 10000; //There are 10,000 ticks in a millisecond, or 10 million ticks in a second. Update every 5 seconds
         private UdpClient _lotATCPositionListener;
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
-        private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
+        private SyncedServerSettings _serverSettings => 
+            Ioc.Default.GetRequiredService<ISettingStore>().SyncedServerSettings;
         private volatile bool _stop = false;
         private readonly ClientStateSingleton _clientStateSingleton;
         private readonly DCSRadioSyncManager.ClientSideUpdate _clientSideUpdate;

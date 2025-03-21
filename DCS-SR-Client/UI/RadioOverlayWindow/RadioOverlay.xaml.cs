@@ -14,6 +14,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.UI;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.UI.RadioOverlayWindow;
 using NLog;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Overlay
 {
@@ -32,7 +33,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Overlay
 
         private readonly ClientStateSingleton _clientStateSingleton = ClientStateSingleton.Instance;
 
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
 
         private readonly double _originalMinHeight;
 

@@ -11,6 +11,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
 {
@@ -18,7 +19,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private UdpClient _udpCommandListener;
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
         private volatile bool _stop  = false;
 
         public void Start()

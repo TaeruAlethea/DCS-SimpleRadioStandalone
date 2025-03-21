@@ -11,6 +11,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.DCSState;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Setting;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Newtonsoft.Json;
 using NLog;
 
@@ -20,12 +21,16 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.DCS
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly DCSRadioSyncManager.ClientSideUpdate _clientSideUpdate;
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
         private volatile bool _stop = false;
         private UdpClient _dcsGameGuiUdpListener;
 
         private ClientStateSingleton _clientStateSingleton = ClientStateSingleton.Instance;
-        private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+
+        private SyncedServerSettings _serverSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().SyncedServerSettings;
 
         public DCSGameGuiHandler(DCSRadioSyncManager.ClientSideUpdate clientSideUpdate)
         {

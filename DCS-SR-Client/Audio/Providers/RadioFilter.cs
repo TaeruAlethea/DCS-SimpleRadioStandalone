@@ -1,4 +1,5 @@
 ﻿using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using MathNet.Filtering;
 using MathNet.Filtering.FIR;
 using MathNet.Filtering.Windowing;
@@ -14,7 +15,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.DSP
         private OnlineFilter[] _filters;
         //    private Stopwatch _stopwatch;
 
-        private Settings.GlobalSettingsStore _globalSettings = Settings.GlobalSettingsStore.Instance;
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
 
         public RadioFilter(ISampleProvider sampleProvider)
         {

@@ -15,6 +15,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.DCSState;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Setting;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using Newtonsoft.Json;
 using NLog;
 
@@ -24,8 +25,12 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Network.VAICOM
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private UdpClient _vaicomUDPListener;
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
-        private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
+
+        private SyncedServerSettings _serverSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().SyncedServerSettings;
         private volatile bool _stop = false;
         private readonly ClientStateSingleton _clientStateSingleton;
 

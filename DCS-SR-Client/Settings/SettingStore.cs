@@ -3,5 +3,6 @@
 public class SettingStore : ISettingStore
 {
     public GlobalSettingsStore GlobalSettingsStore => GlobalSettingsStore.Instance;
+    public ProfileSettingsStore ProfileSettingsStore => GlobalSettingsStore.ProfileSettingsStore;
     public SyncedServerSettings SyncedServerSettings => SyncedServerSettings.Instance;
 }

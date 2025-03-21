@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
 using Ciribob.DCS.SimpleRadio.Standalone.Common;
+using CommunityToolkit.Mvvm.DependencyInjection;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers
 {
@@ -43,7 +44,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Audio.Managers
         {
             get
             {
-                var selectedTone = GlobalSettingsStore.Instance.ProfileSettingsStore
+                var selectedTone = Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore
                     .GetClientSettingString(ProfileSettingsKeys.RadioTransmissionStartSelection).ToLowerInvariant();
 
                 foreach (var startEffect in RadioTransmissionStart)

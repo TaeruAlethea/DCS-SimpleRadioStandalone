@@ -35,6 +35,7 @@ using Ciribob.DCS.SimpleRadio.Standalone.Common;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Helpers;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Network;
 using Ciribob.DCS.SimpleRadio.Standalone.Overlay;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using MahApps.Metro.Controls;
 using Microsoft.Win32;
 using NAudio.CoreAudioApi;
@@ -79,7 +80,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         private ServerAddress _serverAddress;
         private readonly DelegateCommand _connectCommand;
 
-        private readonly GlobalSettingsStore _globalSettings = GlobalSettingsStore.Instance;
+        private GlobalSettingsStore _globalSettings =>
+            Ioc.Default.GetRequiredService<ISettingStore>().GlobalSettingsStore;
 
         /// <remarks>Used in the XAML for DataBinding many things</remarks>
         public ClientStateSingleton ClientState { get; } = ClientStateSingleton.Instance;
@@ -93,7 +95,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
         /// <remarks>Used in the XAML for DataBinding output audio related UI elements</remarks>
         public AudioOutputSingleton AudioOutput { get; } = AudioOutputSingleton.Instance;
 
-        private readonly SyncedServerSettings _serverSettings = SyncedServerSettings.Instance;
+        private SyncedServerSettings _serverSettings => 
+            Ioc.Default.GetRequiredService<ISettingStore>().SyncedServerSettings;
 
         public MainWindow()
         {

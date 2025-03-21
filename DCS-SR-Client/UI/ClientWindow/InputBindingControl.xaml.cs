@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Settings;
+using CommunityToolkit.Mvvm.DependencyInjection;
 using SharpDX.DirectInput;
 
 namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
@@ -37,7 +38,8 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
             ModifierLabel.Content = InputName + " " + Properties.Resources.InputModifier;
             ModifierBinding = (InputBinding)((int)ControlInputBinding) + 100; //add 100 gets the enum of the modifier
 
-            var currentInputProfile = GlobalSettingsStore.Instance.ProfileSettingsStore.GetCurrentInputProfile();
+            var currentInputProfile = Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore
+                .GetCurrentInputProfile();
 
             if (currentInputProfile != null)
             {
@@ -85,7 +87,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.UI
 
                 device.InputBind = ControlInputBinding;
 
-                GlobalSettingsStore.Instance.ProfileSettingsStore.SetControlSetting(device);
+                Ioc.Default.GetRequiredService<ISettingStore>().ProfileSettingsStore.SetControlSetting(device);
             });
         }
 
