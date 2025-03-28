@@ -17,25 +17,30 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 	
-	<StackPanel>
-		<TabControl>
-			<TabItem Header="General">
-				<TextBlock>General</TextBlock>
-			</TabItem>
-			<TabItem Header="Controls">
-				<TextBlock>Controls</TextBlock>
-			</TabItem>
-			<TabItem Header="Favourites">
-				<TextBlock>Favourites</TextBlock>
-			</TabItem>
-			<TabItem Header="Settings">
-				<TextBlock>Settings</TextBlock>
-			</TabItem>
-			<TabItem Header="Help">
-				<TextBlock>Help</TextBlock>
-			</TabItem>
-		</TabControl>
-		
-		<TextBlock>Help</TextBlock>
+		<StackPanel Orientation="Vertical">
+		<DockPanel Dock="Top" VerticalAlignment="Stretch">
+			<TabControl>
+				<TabItem Header="General">
+					<TextBlock>General</TextBlock>
+				</TabItem>
+				<TabItem Header="Controls">
+					<TextBlock>Controls</TextBlock>
+				</TabItem>
+				<TabItem Header="Favourites">
+					<TextBlock>Favourites</TextBlock>
+				</TabItem>
+				<TabItem Header="Settings">
+					<TextBlock>Settings</TextBlock>
+				</TabItem>
+				<TabItem Header="Help">
+					<TextBlock>Help</TextBlock>
+				</TabItem>
+			</TabControl>
+		</DockPanel>
+			
+			
+		<DockPanel Dock="Bottom">
+			<TextBlock>Help</TextBlock>
+		</DockPanel>
 	</StackPanel>
 </Window>
