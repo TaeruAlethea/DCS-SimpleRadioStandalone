@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace AvaloniaApplication1.Views;
 
-public partial class GeneralUserControl : UserControl
+public partial class TitleBar : UserControl
 {
-	public GeneralUserControl()
+	public TitleBar()
 	{
 		InitializeComponent();
 	}

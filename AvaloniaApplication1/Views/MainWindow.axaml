@@ -3,44 +3,50 @@
         xmlns:vm="using:AvaloniaApplication1.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:AvaloniaApplication1.Views"
+        mc:Ignorable="d"
         x:Class="AvaloniaApplication1.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaApplication1"
         Width="550" Height="710"
-        CanResize="False"
-        mc:Ignorable="d" d:DesignWidth="550" d:DesignHeight="*">
+        CanResize="False" 
+        WindowStartupLocation="CenterOwner"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaToDecorationsHint="True">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-	
-		<StackPanel Orientation="Vertical">
-		<DockPanel Dock="Top" VerticalAlignment="Stretch">
-			<TabControl>
-				<TabItem Header="General">
-					<TextBlock>General</TextBlock>
-				</TabItem>
-				<TabItem Header="Controls">
-					<TextBlock>Controls</TextBlock>
-				</TabItem>
-				<TabItem Header="Favourites">
-					<TextBlock>Favourites</TextBlock>
-				</TabItem>
-				<TabItem Header="Settings">
-					<TextBlock>Settings</TextBlock>
-				</TabItem>
-				<TabItem Header="Help">
-					<TextBlock>Help</TextBlock>
-				</TabItem>
-			</TabControl>
-		</DockPanel>
-			
-			
-		<DockPanel Dock="Bottom">
-			<TextBlock>Help</TextBlock>
-		</DockPanel>
+
+	<StackPanel Orientation="Vertical">
+		<views:TitleBar/>
+		<TabControl DockPanel.Dock="Top" Padding="5">
+			<TabItem Header="General">
+				<StackPanel Orientation="Vertical">
+					<Label Background="{DynamicResource ThemeAccentBrush2}"
+					       Foreground="{DynamicResource Text}">SETUP</Label>
+					<Border BorderThickness="2" 
+					        BorderBrush="{DynamicResource ThemeAccentBrush2}"
+					        Padding="5">
+						<views:GeneralPanel/>
+					</Border>
+				</StackPanel>
+			</TabItem>
+			<TabItem Header="Controls">
+				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</TabItem>
+			<TabItem Header="Favourites">
+				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</TabItem>
+			<TabItem Header="Settings">
+				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</TabItem>
+			<TabItem Header="Help">
+				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</TabItem>
+		</TabControl>
 	</StackPanel>
 </Window>
