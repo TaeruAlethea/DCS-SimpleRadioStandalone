@@ -3,22 +3,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" 
-             x:Class="AvaloniaApplication1.Views.TitleBar"
-             Width="550" Height="30"
+             x:Class="AvaloniaApplication1.Views.StatusBar"
+             Width="550" Height="25"
              Background="{DynamicResource ThemeAccentBrush2}">
 	
 	<DockPanel HorizontalAlignment="Stretch">
 		<StackPanel DockPanel.Dock="Left" VerticalAlignment="Center">
 			<Label>Status:</Label>
 		</StackPanel>
-		
-		<UniformGrid DockPanel.Dock="Right" Rows="1" HorizontalAlignment="Right">
-			<Button Width="35"
-			        FontWeight="ExtraBold" 
-			        Background="{DynamicResource ThemeAccentBrush2}">🗕</Button>
-			<Button Width="35"
-			        FontWeight="ExtraBold" 
-			        Background="{DynamicResource ThemeAccentBrush2}">✖</Button>
-		</UniformGrid>
 	</DockPanel>
 </UserControl>

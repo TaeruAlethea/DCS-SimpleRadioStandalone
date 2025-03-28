@@ -10,10 +10,7 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="AvaloniaApplication1"
         Width="550" Height="710"
-        CanResize="False" 
-        WindowStartupLocation="CenterOwner"
-        ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaToDecorationsHint="True">
+        CanResize="False">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -21,16 +18,13 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-	<StackPanel Orientation="Vertical">
-		<views:TitleBar/>
+	<DockPanel>
 		<TabControl DockPanel.Dock="Top" Padding="5">
 			<TabItem Header="General">
 				<StackPanel Orientation="Vertical">
-					<Label Background="{DynamicResource ThemeAccentBrush2}"
-					       Foreground="{DynamicResource Text}">SETUP</Label>
-					<Border BorderThickness="2" 
-					        BorderBrush="{DynamicResource ThemeAccentBrush2}"
-					        Padding="5">
+					<Border Padding="5"
+					        BorderThickness="2" 
+					        BorderBrush="{DynamicResource ThemeAccentBrush2}">
 						<views:GeneralPanel/>
 					</Border>
 				</StackPanel>
@@ -48,5 +42,7 @@
 				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 			</TabItem>
 		</TabControl>
-	</StackPanel>
+		
+		<views:StatusBar DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
+	</DockPanel>
 </Window>

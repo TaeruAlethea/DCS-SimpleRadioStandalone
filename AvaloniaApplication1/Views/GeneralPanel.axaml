@@ -63,22 +63,18 @@
 			</StackPanel>
 		</UniformGrid>
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-			<StackPanel Orientation="Vertical">
+			<HeaderedContentControl Header="Server">
 				<Image/>
-				<Label>Server</Label>
-			</StackPanel>
-			<StackPanel Orientation="Vertical">
+			</HeaderedContentControl>
+			<HeaderedContentControl Header="VOIP">
 				<Image/>
-				<Label>Server</Label>
-			</StackPanel>
-			<StackPanel Orientation="Vertical">
+			</HeaderedContentControl>
+			<HeaderedContentControl Header="Game">
 				<Image/>
-				<Label>Server</Label>
-			</StackPanel>
-			<StackPanel Orientation="Vertical">
+			</HeaderedContentControl>
+			<HeaderedContentControl Header="LotAtc">
 				<Image/>
-				<Label>Server</Label>
-			</StackPanel>
+			</HeaderedContentControl>
 		</StackPanel>
 		<Button>Please Support SRS Through Patreon</Button>
 	</StackPanel>
