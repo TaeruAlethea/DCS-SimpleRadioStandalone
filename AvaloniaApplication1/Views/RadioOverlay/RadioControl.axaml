@@ -1,0 +1,73 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="150"
+             x:Class="AvaloniaApplication1.Views.RadioOverlay.RadioControl"
+             Width="300" Height="150">
+	<TabControl>
+		<TabItem>
+			<TabItem.Header>
+				<TextBlock>Radio</TextBlock>
+			</TabItem.Header>
+			<StackPanel Orientation="Vertical">
+				<StackPanel Orientation="Horizontal" Spacing="5">
+					<Button/>
+					<Button/>
+					<Button/>
+					<Button/>
+					<Button/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal" Spacing="1">
+					<TextBox Width="60"/>
+					<TextBlock>AM</TextBlock>
+					<TextBlock>G</TextBlock>
+					<TextBlock>CH1</TextBlock>
+					<Ellipse DockPanel.Dock="Right" 
+					         x:Name="RadioActive"
+					         Width="10"
+					         Height="10"
+					         Margin="2"
+					         HorizontalAlignment="Right"
+					         Fill="#FF9900" 
+					         Stroke="Black"/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal" Spacing="5">
+					<Button/>
+					<Button/>
+					<Button/>
+					<Button/>
+					<Button/>
+				</StackPanel>
+				<StackPanel Orientation="Horizontal">
+					<Slider Width="60" />
+					<ToggleButton>RT</ToggleButton>
+					<ToggleButton>ST</ToggleButton>
+				</StackPanel>
+			</StackPanel>
+		</TabItem>
+		<TabItem>
+			<TabItem.Header>
+				<TextBlock>Cypher</TextBlock>
+			</TabItem.Header>
+			<StackPanel Orientation="Vertical">
+				<Label>Encryption Key</Label>
+				<StackPanel Orientation="Horizontal">
+					<ButtonSpinner ButtonSpinnerLocation="Right" Width="60">
+						123
+					</ButtonSpinner>
+					<Button>Enable</Button>
+				</StackPanel>
+			</StackPanel>
+		</TabItem>
+		<TabItem>
+			<TabItem.Header>
+				<TextBlock>Chnl</TextBlock>
+			</TabItem.Header>
+			<StackPanel Orientation="Vertical">
+				<ComboBox />
+				<Button>Reload</Button>
+			</StackPanel>
+		</TabItem>
+	</TabControl>
+</UserControl>

@@ -1,0 +1,24 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="160" d:DesignHeight="40"
+             x:Class="AvaloniaApplication1.Views.RadioOverlay.IntercomControl"
+             Width="160" Height="40">
+	<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+		<DockPanel HorizontalAlignment="Stretch">
+			<Label DockPanel.Dock="Left" HorizontalAlignment="Left">INTERCOM</Label>
+			<Ellipse DockPanel.Dock="Right" 
+			         x:Name="RadioActive"
+			         Width="10"
+			         Height="10"
+			         Margin="2"
+			         HorizontalAlignment="Right"
+			         Fill="#FF9900" 
+			         Stroke="Black"/>
+		</DockPanel>
+		<UniformGrid HorizontalAlignment="Stretch">
+			<Slider HorizontalAlignment="Stretch"/>
+		</UniformGrid>
+	</StackPanel>
+</UserControl>

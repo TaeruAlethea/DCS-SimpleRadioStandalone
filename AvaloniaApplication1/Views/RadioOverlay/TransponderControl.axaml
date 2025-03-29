@@ -1,0 +1,29 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="160" d:DesignHeight="80"
+             x:Class="AvaloniaApplication1.Views.RadioOverlay.TransponderControl"
+             Width="160" Height="80">
+	<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+		<DockPanel HorizontalAlignment="Stretch">
+			<Label DockPanel.Dock="Left" HorizontalAlignment="Left">TRANSPONDER</Label>
+			<Ellipse DockPanel.Dock="Right" 
+			         x:Name="RadioActive"
+			         Width="10"
+			         Height="10"
+			         Margin="2"
+			         HorizontalAlignment="Right"
+			         Fill="#FF9900" 
+			         Stroke="Black"/>
+		</DockPanel>
+		<UniformGrid>
+			<TextBox Watermark="Mode 1" />
+			<TextBox Watermark="Mode 2" />
+			<TextBox Watermark="Mode 3" />
+			<ToggleButton>M4</ToggleButton>
+			<ToggleButton>IDENT</ToggleButton>
+			<ToggleButton>Power</ToggleButton>
+		</UniformGrid>
+	</StackPanel>
+</UserControl>
