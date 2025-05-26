@@ -9,6 +9,7 @@ using System.Windows;
 using System.Windows.Forms;
 using Ciribob.DCS.SimpleRadio.Standalone.Client.Singletons;
 using Ciribob.DCS.SimpleRadio.Standalone.Common.Settings;
+using ControlzEx.Theming;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -281,6 +282,17 @@ public partial class App : Application
         ClientStateSingleton.Instance.Close();
     }
 
+    protected override void OnStartup(StartupEventArgs e)
+    {
+        base.OnStartup(e);
+
+        string themeBase = "Light";
+        if (GlobalSettingsStore.Instance.GetClientSettingBool(GlobalSettingsKeys.DarkMode)) { themeBase = "Dark"; }
+
+        string themeAccent = "Blue"; //GlobalSettingsStore.Instance.GetClientSetting(GlobalSettingsKeys.AccentColor).ToString();
+        ThemeManager.Current.ChangeTheme(this, $"{themeBase}.{themeAccent}");
+    }
+    
     private void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
     {
         if (loggingReady)

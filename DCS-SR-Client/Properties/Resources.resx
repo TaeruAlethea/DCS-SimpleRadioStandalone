@@ -1238,4 +1238,10 @@ Requires Tx or Rx Effects On</value>
     <data name="DisableExpansionRadios" xml:space="preserve">
     <value>Disable Expansion Radios</value>
   </data>
+    <data name="ThemeDarkMode" xml:space="preserve">
+      <value>Dark Mode</value>
+    </data>
+    <data name="ThemeAccentColor" xml:space="preserve">
+      <value>Theme Accent Color</value>
+    </data>
 </root>

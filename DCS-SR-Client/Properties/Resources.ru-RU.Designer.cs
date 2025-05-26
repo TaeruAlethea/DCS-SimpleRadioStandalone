@@ -2874,6 +2874,24 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Theme Accent Color.
+        /// </summary>
+        public static string ThemeAccentColor {
+            get {
+                return ResourceManager.GetString("ThemeAccentColor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark Mode.
+        /// </summary>
+        public static string ThemeDarkMode {
+            get {
+                return ResourceManager.GetString("ThemeDarkMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Показать настройки сервера.
         /// </summary>
         public static string ToggleServerSettings {

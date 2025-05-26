@@ -18,6 +18,8 @@ public enum GlobalSettingsKeys
     ExpandControls,
     AutoConnectPrompt, //message about auto connect
     RadioOverlayTaskbarHide,
+    DarkMode, //Boolean
+    AccentColor, //String, Color Name
 
     AudioInputDeviceId,
     AudioOutputDeviceId,
@@ -245,6 +247,8 @@ public class GlobalSettingsStore
         { GlobalSettingsKeys.RadioOverlayTaskbarHide.ToString(), "false" },
         { GlobalSettingsKeys.RefocusDCS.ToString(), "false" },
         { GlobalSettingsKeys.ExpandControls.ToString(), "false" },
+        { GlobalSettingsKeys.DarkMode.ToString(), "true" },
+        { GlobalSettingsKeys.AccentColor.ToString(), "Blue" },
 
         { GlobalSettingsKeys.MinimiseToTray.ToString(), "false" },
         { GlobalSettingsKeys.StartMinimised.ToString(), "false" },

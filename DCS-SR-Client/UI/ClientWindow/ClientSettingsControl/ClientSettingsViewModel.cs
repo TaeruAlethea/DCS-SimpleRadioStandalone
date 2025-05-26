@@ -239,6 +239,37 @@ public class ClientSettingsViewModel : PropertyChangedBaseClass, IHandle<NewUnit
         }
     }
 
+    public bool ThemeDarkMode
+    {
+        get => _globalSettings.GetClientSettingBool(GlobalSettingsKeys.DarkMode);
+        set
+        {
+            _globalSettings.SetClientSetting(GlobalSettingsKeys.DarkMode, value);
+            NotifyPropertyChanged();
+        }
+    }
+
+    /*
+    public List<string> AccentColorsList
+    {
+        get => new List<string>()
+        {
+            "Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet",
+            "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna"
+        };
+    }
+
+    public string ThemeAccentColor
+    {
+        get => _globalSettings.GetClientSetting(GlobalSettingsKeys.AccentColor).ToString();
+        set
+        {
+            _globalSettings.SetClientSetting(GlobalSettingsKeys.AccentColor, value);
+            NotifyPropertyChanged();
+        }
+    }
+    */
+    
     public bool VOXEnabled
     {
         get => _globalSettings.GetClientSettingBool(GlobalSettingsKeys.VOX);
