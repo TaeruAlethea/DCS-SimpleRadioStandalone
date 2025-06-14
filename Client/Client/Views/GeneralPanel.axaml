@@ -1,0 +1,81 @@
+﻿<Panel xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="530"
+             x:Class="Client.Views.GeneralPanel" Margin="5">
+	
+	<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+		<HeaderedContentControl Header="Microphone">
+			<ComboBox/>
+		</HeaderedContentControl>
+		<ProgressBar/>
+		<Button>Preview</Button>
+		<UniformGrid Columns="2" Rows="2">
+			<HeaderedContentControl Header="Output">
+				<ComboBox/>
+			</HeaderedContentControl>
+			<HeaderedContentControl Header="Sidetone">
+				<ComboBox/>
+			</HeaderedContentControl>
+			<Slider/> <ProgressBar/>
+		</UniformGrid>
+		<Label>Server</Label>
+		<UniformGrid Columns="2">
+			<ComboBox/>
+			<Grid ColumnDefinitions="7*,1*">
+				<ComboBox Grid.Column="0" />
+				<Button Grid.Column="1">⛭</Button>
+			</Grid>
+		</UniformGrid>
+		<Button>Connect</Button>
+		<UniformGrid Columns="2">
+			<Button>Server Settings</Button>
+			<Button>Client List</Button>
+			<Button>Toggle Radio Overlay</Button>
+			<Button>Toggle AWACS Overlay</Button>
+		</UniformGrid>
+		<Grid ColumnDefinitions="6*,3*,1*">
+			<Button Grid.Column="1">Browse Presets Folder...</Button>
+			<Button Grid.Column="2">Reset</Button>
+		</Grid>
+		<Expander Header="ExternalAwacsMode" ExpandDirection="Down">
+			<StackPanel Orientation="Vertical">
+				<UniformGrid Columns="2">
+					<Label>EAM Coalition Password</Label> <Label>EAM Name</Label>
+					<ComboBox/> <ComboBox/>
+				</UniformGrid>
+				<Button>Connect External AWACS Mode (EAM)</Button>
+			</StackPanel>
+		</Expander>
+		<UniformGrid Columns="2">
+			<StackPanel Orientation="Horizontal">
+				<Label>Current Profile:</Label> <Label>Default</Label>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label>Unit:</Label> <Label>N/A</Label>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label>Connected Clients:</Label> <Label>N/A</Label>
+			</StackPanel>
+			<StackPanel Orientation="Horizontal">
+				<Label>Current Position:</Label> <Label>N/A</Label>
+			</StackPanel>
+		</UniformGrid>
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+			<HeaderedContentControl Header="Server">
+				<Image/>
+			</HeaderedContentControl>
+			<HeaderedContentControl Header="VOIP">
+				<Image/>
+			</HeaderedContentControl>
+			<HeaderedContentControl Header="Game">
+				<Image/>
+			</HeaderedContentControl>
+			<HeaderedContentControl Header="LotAtc">
+				<Image/>
+			</HeaderedContentControl>
+		</StackPanel>
+		<Button>Please Support SRS Through Patreon</Button>
+	</StackPanel>
+</Panel>

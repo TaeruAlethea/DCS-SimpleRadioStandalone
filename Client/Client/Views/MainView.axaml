@@ -3,7 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Client.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:views="clr-namespace:Client.Views"
+             mc:Ignorable="d" d:DesignHeight="710"
              x:Class="Client.Views.MainView"
              x:DataType="vm:MainViewModel">
   <Design.DataContext>
@@ -12,5 +13,31 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<DockPanel>
+		<TabControl DockPanel.Dock="Top" Padding="5">
+			<TabItem Header="General">
+				<StackPanel Orientation="Vertical">
+					<Border Padding="5"
+					        BorderThickness="2" 
+					        BorderBrush="{DynamicResource ThemeAccentBrush2}">
+						<views:GeneralPanel/>
+					</Border>
+				</StackPanel>
+			</TabItem>
+			<TabItem Header="Controls">
+				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</TabItem>
+			<TabItem Header="Favourites">
+				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</TabItem>
+			<TabItem Header="Settings">
+				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</TabItem>
+			<TabItem Header="Help">
+				<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+			</TabItem>
+		</TabControl>
+		
+		<views:StatusBar DockPanel.Dock="Bottom" VerticalAlignment="Bottom" />
+	</DockPanel>
 </UserControl>
