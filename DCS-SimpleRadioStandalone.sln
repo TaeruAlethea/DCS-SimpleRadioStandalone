@@ -36,6 +36,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		DCS-SR-Client\awacs-radios.json = DCS-SR-Client\awacs-radios.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client\Client.csproj", "{AFA8F9F4-CCD5-4A24-B097-2954755D84C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Android", "Client\Client.Android\Client.Android.csproj", "{5B098476-8524-4F35-BA8D-A93C4FD62670}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop", "Client\Client.Desktop\Client.Desktop.csproj", "{5C420E12-FA54-40C8-8871-73043920606E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.iOS", "Client\Client.iOS\Client.iOS.csproj", "{FAE8AD1F-BA0D-4056-B34B-0A345020D548}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Browser", "Client\Client.Browser\Client.Browser.csproj", "{43873EC8-2140-46B6-90BA-7146D8A557ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -82,5 +92,25 @@ Global
 		{B4E223EC-B160-003C-F262-F249FBC7AC2A}.Debug|x64.Build.0 = Debug|x64
 		{B4E223EC-B160-003C-F262-F249FBC7AC2A}.Release|x64.ActiveCfg = Release|x64
 		{B4E223EC-B160-003C-F262-F249FBC7AC2A}.Release|x64.Build.0 = Release|x64
+		{AFA8F9F4-CCD5-4A24-B097-2954755D84C9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AFA8F9F4-CCD5-4A24-B097-2954755D84C9}.Debug|x64.Build.0 = Debug|Any CPU
+		{AFA8F9F4-CCD5-4A24-B097-2954755D84C9}.Release|x64.ActiveCfg = Release|Any CPU
+		{AFA8F9F4-CCD5-4A24-B097-2954755D84C9}.Release|x64.Build.0 = Release|Any CPU
+		{5B098476-8524-4F35-BA8D-A93C4FD62670}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5B098476-8524-4F35-BA8D-A93C4FD62670}.Debug|x64.Build.0 = Debug|Any CPU
+		{5B098476-8524-4F35-BA8D-A93C4FD62670}.Release|x64.ActiveCfg = Release|Any CPU
+		{5B098476-8524-4F35-BA8D-A93C4FD62670}.Release|x64.Build.0 = Release|Any CPU
+		{5C420E12-FA54-40C8-8871-73043920606E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5C420E12-FA54-40C8-8871-73043920606E}.Debug|x64.Build.0 = Debug|Any CPU
+		{5C420E12-FA54-40C8-8871-73043920606E}.Release|x64.ActiveCfg = Release|Any CPU
+		{5C420E12-FA54-40C8-8871-73043920606E}.Release|x64.Build.0 = Release|Any CPU
+		{FAE8AD1F-BA0D-4056-B34B-0A345020D548}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FAE8AD1F-BA0D-4056-B34B-0A345020D548}.Debug|x64.Build.0 = Debug|Any CPU
+		{FAE8AD1F-BA0D-4056-B34B-0A345020D548}.Release|x64.ActiveCfg = Release|Any CPU
+		{FAE8AD1F-BA0D-4056-B34B-0A345020D548}.Release|x64.Build.0 = Release|Any CPU
+		{43873EC8-2140-46B6-90BA-7146D8A557ED}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{43873EC8-2140-46B6-90BA-7146D8A557ED}.Debug|x64.Build.0 = Debug|Any CPU
+		{43873EC8-2140-46B6-90BA-7146D8A557ED}.Release|x64.ActiveCfg = Release|Any CPU
+		{43873EC8-2140-46B6-90BA-7146D8A557ED}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
