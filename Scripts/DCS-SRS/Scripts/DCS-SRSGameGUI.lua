@@ -105,8 +105,8 @@ SRS.sendUpdate = function(playerID)
 
 	local _jsonUpdate = SRS.JSON:encode(_update).." \n"
 	--SRS.log("Update -  Slot  ID:"..playerID.." Name: ".._update.name.." Side: ".._update.side)
-	socket.try(SRS.UDPSendSocket:sendto(_jsonUpdate, "127.0.0.1", 5068))
-	socket.try(SRS.UDPSendSocket:sendto(_jsonUpdate, "127.0.0.1", 9087))
+    socket.try(SRS.UDPSendSocket:sendto(_jsonUpdate, "127.0.0.1", 5068)) -- To the Desktop Client
+    socket.try(SRS.UDPSendSocket:sendto(_jsonUpdate, "127.0.0.1", 9087)) -- To DCS-SimpleRadioStandalone.lua
 end
 
 SRS.MESSAGE_PATTERN_OLDER = "This server is running SRS on - ([%w%.%-_:]+)" -- DO NOT MODIFY!!!
