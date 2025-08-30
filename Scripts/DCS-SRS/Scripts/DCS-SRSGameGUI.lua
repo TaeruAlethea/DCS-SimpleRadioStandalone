@@ -103,11 +103,6 @@ SRS.sendUpdate = function(playerID)
 		end
 	end
 
-	local _jsonUpdate = SRS.JSON:encode(_update).." \n"
-	--SRS.log("Update -  Slot  ID:"..playerID.." Name: ".._update.name.." Side: ".._update.side)
-    socket.try(SRS.UDPSendSocket:sendto(_jsonUpdate, "127.0.0.1", 5068)) -- To the Desktop Client
-    socket.try(SRS.UDPSendSocket:sendto(_jsonUpdate, "127.0.0.1", 9087)) -- To DCS-SimpleRadioStandalone.lua
-	
 	local _date = DCS.getCurrentMission()["mission"]["date"]
     local _timeUpdate = {
         Year = _date["Year"],
@@ -116,9 +111,13 @@ SRS.sendUpdate = function(playerID)
         Start_time = DCS.getCurrentMission()["mission"]["start_time"],
 	    Model_time = DCS.getModelTime()
 	}
+
+	-- SRS.log(_jsonTimeUpdate)
+    local _jsonUpdate = SRS.JSON:encode(_update) .. " \n"
     local _jsonTimeUpdate = SRS.JSON:encode(_timeUpdate) .. " \n"
-	SRS.log(_jsonTimeUpdate)
-    socket.try(SRS.UDPSendSocket:sendto(_jsonTimeUpdate, "127.0.0.1", 5068)) -- To the Desktop Client
+	-- SRS.log("Update -  Slot  ID:"..playerID.." Name: ".._update.name.." Side: ".._update.side)
+    socket.try(SRS.UDPSendSocket:sendto(_jsonUpdate .. ", " .. _jsonTimeUpdate, "127.0.0.1", 5068)) -- To the Desktop Client
+    socket.try(SRS.UDPSendSocket:sendto(_jsonUpdate, "127.0.0.1", 9087)) -- To DCS-SimpleRadioStandalone.lua
 end
 
 SRS.MESSAGE_PATTERN_OLDER = "This server is running SRS on - ([%w%.%-_:]+)" -- DO NOT MODIFY!!!

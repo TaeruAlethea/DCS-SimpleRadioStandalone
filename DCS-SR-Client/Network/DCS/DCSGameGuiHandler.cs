@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -63,10 +65,11 @@ public class DCSGameGuiHandler
                             {
                                 IncludeFields = true,
                             });
-
+                    
                     if (updatedPlayerInfo != null)
                     {
-
+                        Console.WriteLine(@"PlayerData was valid");
+                        
                         var currentInfo = _clientStateSingleton.PlayerCoaltionLocationMetadata;
 
                         var changed = !updatedPlayerInfo.Equals(currentInfo);
@@ -97,6 +100,16 @@ public class DCSGameGuiHandler
                         });
                         
                         _clientStateSingleton.DcsGameGuiLastReceived = DateTime.Now.Ticks;
+                    }
+
+                    
+                    DCSTimeUpdate newTimeUpdate = JsonSerializer.Deserialize<DCSTimeUpdate>(Encoding.UTF8.GetString(
+                        bytes, 0, bytes.Length), new JsonSerializerOptions(){ IncludeFields = true, });
+                    
+                    if (newTimeUpdate != null)
+                    {
+                        Console.WriteLine(newTimeUpdate.Year.ToString());
+                        //Debug.WriteLine(DCSTimeUpdate.Iso8691Builder(newTimeUpdate).ToString(CultureInfo.InvariantCulture));
                     }
                 }
                 catch (SocketException e)

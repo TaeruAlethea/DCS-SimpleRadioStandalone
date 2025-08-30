@@ -77,7 +77,7 @@ public sealed class ClientStateSingleton : PropertyChangedBaseClass, IHandle<TCP
 
     public DCSPlayerRadioInfo DcsPlayerRadioInfo { get; }
     public DCSPlayerSideInfo PlayerCoaltionLocationMetadata { get; set; }
-
+    
     // Timestamp the last UDP Game GUI broadcast was received from DCS, used for determining active game connection
     public long DcsGameGuiLastReceived { get; set; }
 
