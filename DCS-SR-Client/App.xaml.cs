@@ -143,9 +143,6 @@ public partial class App : Application
                 };
                 try
                 {
-                    //TODO fix process start
-                    var p = Process.Start(startInfo);
-
                     //shutdown this process as another has started
                     Dispatcher?.BeginInvoke(new Action(() =>
                     {
@@ -160,8 +157,11 @@ public partial class App : Application
                         {
                             // ignored
                         }
-
+                        
+                        //TODO fix process start
+                        var p = Process.Start(startInfo);
                         Environment.Exit(0);
+
                     }));
                 }
                 catch (Win32Exception)
