@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
+using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -143,7 +144,11 @@ public partial class App : Application
                 };
                 try
                 {
-                    //shutdown this process as another has started
+                    
+                    //TODO fix process start
+                    var p = Process.Start(startInfo);
+                    
+                    //shutdown this process as another will be started
                     Dispatcher?.BeginInvoke(new Action(() =>
                     {
                         if (_notifyIcon != null)
@@ -157,12 +162,15 @@ public partial class App : Application
                         {
                             // ignored
                         }
-                        
-                        //TODO fix process start
-                        var p = Process.Start(startInfo);
-                        Environment.Exit(0);
-
                     }));
+                    
+                    try
+                    {
+                        Environment.Exit(0);
+                    }
+                    catch (SecurityException e)
+                    {
+                    }
                 }
                 catch (Win32Exception)
                 {
