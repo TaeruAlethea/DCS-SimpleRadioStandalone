@@ -8,8 +8,35 @@
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-
+    <Application.Resources>
+        <Style>
+            
+        </Style>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="Properties/GlobalStyles.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+             
+    
     <Application.Styles>
-        <SimpleTheme  />
+        <FluentTheme DensityStyle="Compact">
+            <FluentTheme.Palettes>
+                <!-- Palette for Light theme variant -->
+                <ColorPaletteResources x:Key="Light" Accent="DeepSkyBlue" RegionColor="White" ErrorText="Red" />
+                <!-- Palette for Dark theme variant -->
+                <ColorPaletteResources x:Key="Dark" Accent="Crimson" RegionColor="Black" ErrorText="Yellow" />
+            </FluentTheme.Palettes>
+        </FluentTheme>
+        
     </Application.Styles>
+             
+<TrayIcon.Icons>
+    <TrayIcons>
+        <local:TrayIconMenu Icon="/Assets/audio-headset.ico"
+                            ToolTipText="Simple Radio Standalone"/>
+    </TrayIcons>
+</TrayIcon.Icons>
+             
 </Application>

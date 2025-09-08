@@ -2,8 +2,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Views"
              xmlns:vm="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" 
+             d:DesignWidth="550" d:DesignHeight="710"
              x:Class="Ciribob.DCS.SimpleRadio.Standalone.Client.Views.MainView"
              x:DataType="vm:MainViewModel">
   <Design.DataContext>
@@ -11,6 +13,28 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <vm:MainViewModel />
   </Design.DataContext>
-
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	
+	<TabControl Padding="5">
+		<TabItem Header="General">
+			<StackPanel Orientation="Vertical">
+				<Border Padding="5"
+				        BorderThickness="5" 
+				        BorderBrush="{DynamicResource ThemeAccentBrush}">
+					<views:GeneralView/>
+				</Border>
+			</StackPanel>
+		</TabItem>
+		<TabItem Header="Controls">
+			<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		</TabItem>
+		<TabItem Header="Favourites">
+			<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		</TabItem>
+		<TabItem Header="Settings">
+			<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		</TabItem>
+		<TabItem Header="Help">
+			<TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+		</TabItem>
+	</TabControl>
 </UserControl>
