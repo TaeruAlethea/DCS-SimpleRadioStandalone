@@ -4,10 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:views="clr-namespace:Ciribob.DCS.SimpleRadio.Standalone.Client.Views"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Ciribob.DCS.SimpleRadio.Standalone.Client.Views.MainWindow"
+        mc:Ignorable="d" 
+        Icon="/Assets/audio-headset.ico"
         Width="550" Height="710"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="Client">
+        d:DesignWidth="550" d:DesignHeight="710"
+        CanResize="False" >
+        
         <views:MainView />
 </Window>
