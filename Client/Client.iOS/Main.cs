@@ -1,6 +1,6 @@
 using UIKit;
 
-namespace Client.iOS;
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.iOS;
 
 public class Application
 {

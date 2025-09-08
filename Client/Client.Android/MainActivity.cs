@@ -3,7 +3,7 @@ using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
 
-namespace Client.Android;
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Android;
 
 [Activity(
 	Label = "Client.Android",

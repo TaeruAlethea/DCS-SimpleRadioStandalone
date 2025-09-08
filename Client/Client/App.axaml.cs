@@ -1,14 +1,14 @@
-using System;
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
-using Client.ViewModels;
-using Client.Views;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.Views;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Client;
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client;
 
 public partial class App : Application
 {
@@ -19,6 +19,10 @@ public partial class App : Application
 
 	public override void OnFrameworkInitializationCompleted()
 	{
+		Properties.Resources.Culture = CultureInfo.CurrentUICulture;
+		ServiceProvider services = ConfigureServices();
+		
+		
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
 			// Line below is needed to remove Avalonia data validation.
@@ -26,7 +30,7 @@ public partial class App : Application
 			BindingPlugins.DataValidators.RemoveAt(0);
 			desktop.MainWindow = new MainWindow
 			{
-				DataContext = new MainViewModel()
+				DataContext = services.GetRequiredService<MainViewModel>()
 			};
 		}
 		else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
@@ -40,11 +44,11 @@ public partial class App : Application
 		base.OnFrameworkInitializationCompleted();
 	}
 
-	public static IServiceProvider ConfigureServices()
+	public static ServiceProvider ConfigureServices()
 	{
 		var services = new ServiceCollection();
 		
-		services.AddSingleton<MainViewModel>();
+		services.AddTransient<MainViewModel>();
 		
 		return services.BuildServiceProvider();
 	}

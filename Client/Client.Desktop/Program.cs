@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia;
 
-namespace Client.Desktop;
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Desktop;
 
 sealed class Program
 {

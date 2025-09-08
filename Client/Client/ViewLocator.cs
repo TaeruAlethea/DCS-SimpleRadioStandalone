@@ -1,9 +1,9 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-using Client.ViewModels;
+using Ciribob.DCS.SimpleRadio.Standalone.Client.ViewModels;
 
-namespace Client;
+namespace Ciribob.DCS.SimpleRadio.Standalone.Client;
 
 public class ViewLocator : IDataTemplate
 {

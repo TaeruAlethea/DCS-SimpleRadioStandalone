@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Browser;
-using Client;
+using Ciribob.DCS.SimpleRadio.Standalone.Client;
 
 [assembly: SupportedOSPlatform("browser")]
 
