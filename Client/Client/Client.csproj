@@ -36,4 +36,12 @@
 	    <DependentUpon>Resources.resx</DependentUpon>
 	  </Compile>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Resource Include="Assets\audio-headset.ico" />
+	  <Resource Include="Assets\status-connected.png" />
+	  <Resource Include="Assets\status-disconnected-error.png" />
+	  <Resource Include="Assets\status-disconnected-game.png" />
+	  <Resource Include="Assets\status-disconnected.png" />
+	</ItemGroup>
 </Project>
