@@ -1443,6 +1443,43 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Max Gain (dB).
+        /// </summary>
+        public static string MicAGCMaxDB {
+            get {
+                return ResourceManager.GetString("MicAGCMaxDB", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amount of volume &apos;boost&apos; your voice gets. Recommended: 40dB.
+        /// </summary>
+        public static string MicAGCMaxDBToolTip {
+            get {
+                return ResourceManager.GetString("MicAGCMaxDBToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target Level (&quot;loudness&quot;).
+        /// </summary>
+        public static string MicAGCTargetLevel {
+            get {
+                return ResourceManager.GetString("MicAGCTargetLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to How much amplitude your voice will occupy.
+        ///Recommended: 8000.
+        /// </summary>
+        public static string MicAGCTargetLevelToolTip {
+            get {
+                return ResourceManager.GetString("MicAGCTargetLevelToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Microphone Noise Suppression .
         /// </summary>
         public static string MicDenoise {
@@ -1497,9 +1534,9 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SRS Requires admin rights to be able to read keyboard input in the background. 
-        ///
-        ///If you do not use any keyboard binds you can disable SRS Admin Privileges. 
+        ///   Looks up a localized string similar to SRS should NOT require admin rights unless you have a really specific setup that demands it.
+        ///    
+        ///    Are you SURE you NEED SRS to have admin rights?
         ///
         ///For this setting to take effect SRS must be restarted.
         /// </summary>
@@ -1825,6 +1862,15 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AM.
+        /// </summary>
+        public static string OverlayAM {
+            get {
+                return ResourceManager.GetString("OverlayAM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Available in Cockpit.
         /// </summary>
         public static string OverlayAvailableCockpit {
@@ -1924,11 +1970,29 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to FM.
+        /// </summary>
+        public static string OverlayFM {
+            get {
+                return ResourceManager.GetString("OverlayFM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to HOTAS Controls.
         /// </summary>
         public static string OverlayHotasControls {
             get {
                 return ResourceManager.GetString("OverlayHotasControls", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to HQ.
+        /// </summary>
+        public static string OverlayHQ {
+            get {
+                return ResourceManager.GetString("OverlayHQ", resourceCulture);
             }
         }
         
@@ -1951,7 +2015,7 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to MIDS.
+        ///   Looks up a localized string similar to DL.
         /// </summary>
         public static string OverlayMIDS {
             get {
@@ -2019,6 +2083,15 @@ namespace Ciribob.DCS.SimpleRadio.Standalone.Client.Properties {
         public static string OverlayRadioTab {
             get {
                 return ResourceManager.GetString("OverlayRadioTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SG.
+        /// </summary>
+        public static string OverlaySG {
+            get {
+                return ResourceManager.GetString("OverlaySG", resourceCulture);
             }
         }
         

@@ -409,12 +409,18 @@ public class ClientSettingsViewModel : PropertyChangedBaseClass, IHandle<NewUnit
         get => _globalSettings.GetClientSettingBool(GlobalSettingsKeys.RequireAdmin);
         set
         {
-            _globalSettings.SetClientSetting(GlobalSettingsKeys.RequireAdmin, value);
-
-            MessageBox.Show(Application.Current.MainWindow,
+            if (value)
+            {
+                var choice = MessageBox.Show(Application.Current.MainWindow,
                 Resources.MsgBoxAdminText,
-                Resources.MsgBoxAdmin, MessageBoxButton.OK, MessageBoxImage.Warning);
+                Resources.MsgBoxAdmin, MessageBoxButton.YesNo, MessageBoxImage.Stop);
 
+                if (choice != MessageBoxResult.Yes)
+                {
+                    value = false;
+                }
+            }
+            _globalSettings.SetClientSetting(GlobalSettingsKeys.RequireAdmin, value);
             NotifyPropertyChanged();
         }
     }
@@ -469,6 +475,26 @@ public class ClientSettingsViewModel : PropertyChangedBaseClass, IHandle<NewUnit
         set
         {
             _globalSettings.SetClientSetting(GlobalSettingsKeys.AGC, value);
+            NotifyPropertyChanged();
+        }
+    }
+
+    public int MicAGCMaxDB
+    {
+        get => _globalSettings.GetClientSettingInt(GlobalSettingsKeys.AGCLevelMax);
+        set
+        {
+            _globalSettings.SetClientSetting(GlobalSettingsKeys.AGCLevelMax, value);
+            NotifyPropertyChanged();
+        }
+    }
+
+    public int MicAGCTarget
+    {
+        get => _globalSettings.GetClientSettingInt(GlobalSettingsKeys.AGCTarget);
+        set
+        {
+            _globalSettings.SetClientSetting(GlobalSettingsKeys.AGCTarget, value);
             NotifyPropertyChanged();
         }
     }
